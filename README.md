@@ -11,11 +11,29 @@ SPDX-License-Identifier: CC-BY-4.0
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=GenomicDataInfrastructure_gdi-userportal-access-management-service&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=GenomicDataInfrastructure_gdi-userportal-access-management-service)
 [![GitHub contributors](https://img.shields.io/github/contributors/GenomicDataInfrastructure/gdi-userportal-access-management-service)](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service/graphs/contributors)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
-# gdi-userportal-access-management-service
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+<div style="display: flex; justify-content: center; padding: 20px;">
+  <img src="gdi_logo.svg" alt="Genomic Data Infrastructure Logo" width="300">
+</div>
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+# GDI User Portal - Access Management Service
+
+The GDI User Portal Access Request Service is a crucial component of the Genomic Data Infrastructure (GDI) project, which aims to facilitate access to genomic, phenotypic, and clinical data across Europe. The GDI project is committed to establishing a federated, sustainable, and secure infrastructure to enable seamless data access. Leveraging the outcomes of the Beyond 1 Million Genomes (B1MG) project, the GDI project is actively realizing the ambitious goals set forth by the 1+Million Genomes (1+MG) initiative.
+
+The GDI User Portal Access Request Service serves as an interface between User Portal and the data authorities. It is developed using [Quarkus](https://quarkus.io/) version 3.7.2 and [GraalVM](https://www.graalvm.org/) for Java 21. This application plays a crucial role in enabling access request integration between the Data User and different Data Authorities.
+
+- **Status**: 0.0.0
+- **Related Project**: [1+ Million Genomes Project](https://gdi.onemilliongenomes.eu/)
+
+## Installation
+
+Ensure you have [Maven](https://maven.apache.org/) and [GraalVM](https://www.graalvm.org/) installed in your machine. We recommend to use [SDKMAN!](https://sdkman.io/).
+
+```shell script
+sdk install java 21.0.2-graal
+sdk install maven 3.9.6
+echo -e "\nexport GRAALVM_HOME="$HOME/.sdkman/candidates/java/21.0.2-graal/" >> $HOME/.zprofile
+```
 
 ## Running the application in dev mode
 
@@ -51,19 +69,16 @@ You can create a native executable using:
 mvn package -Dnative
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-mvn package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
+You can then execute your native executable with: `./target/*-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
 
-## Provided Code
+## Running tests
 
-### RESTEasy Reactive
+All tests are automatically executed when you build a new package.
 
-Easily start your Reactive RESTful Web Services
+## License
 
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+- All original source code is licensed under [Apache-2.0](./LICENSES/Apache-2.0.txt).
+- All documentation is licensed under [CC-BY-4.0](./LICENSES/CC-BY-4.0.txt).
+- For more accurate information, check the individual files.

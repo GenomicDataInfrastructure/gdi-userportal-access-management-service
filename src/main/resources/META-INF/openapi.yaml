@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2024 PNED G.I.E.
 #
 # SPDX-License-Identifier: Apache-2.0
+
 openapi: 3.0.3
 info:
   title: Access Request Management Service - OpenAPI 3.0
@@ -61,7 +62,7 @@ paths:
                   $ref: "#/components/schemas/ListedApplication"
       security:
         - auth:
-          - read:applications
+            - read:applications
   /api/v1/applications/{id}:
     get:
       summary: Retrieve application
@@ -84,7 +85,7 @@ paths:
                 $ref: "#/components/schemas/RetrievedApplication"
       security:
         - auth:
-          - read:applications
+            - read:applications
   /api/v1/applications/{id}/save-forms-and-duos:
     post:
       summary: save application forms and duos
@@ -108,7 +109,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/{id}/submit:
     post:
       summary: Submit application
@@ -135,7 +136,7 @@ paths:
                   $ref: "#/components/schemas/ValidationWarnings"
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/create-application:
     post:
       summary: Create application
@@ -160,7 +161,7 @@ paths:
                   $ref: "#/components/schemas/ValidationWarnings"
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/{id}/cancel:
     post:
       summary: Cancel application
@@ -179,7 +180,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/{id}/copy-as-new:
     post:
       summary: Copy application as new
@@ -198,7 +199,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/{id}/accept-terms:
     post:
       summary: Accept terms of use
@@ -217,7 +218,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/{id}/attachments:
     post:
       summary: Add attachment to application
@@ -248,7 +249,7 @@ paths:
                   $ref: "#/components/schemas/AddedAttachments"
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/{id}/attachments/{attachmentId}:
     get:
       summary: Retrieve attachment from application
@@ -294,7 +295,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/{id}/remove-member:
     post:
       summary: Remove
@@ -318,7 +319,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/{id}/update-datasets:
     post:
       summary: update datasets of application
@@ -344,7 +345,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/applications/{id}/events:
     post:
       summary: add event to application
@@ -368,7 +369,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:applications
+            - write:applications
   /api/v1/baskets:
     get:
       summary: List baskets
@@ -387,7 +388,7 @@ paths:
                 title: collection of baskets
       security:
         - auth:
-          - read:baskets
+            - read:baskets
   /api/v1/baskets/add-dataset:
     post:
       summary: Add dataset to baskets
@@ -404,7 +405,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:baskets
+            - write:baskets
   /api/v1/baskets/{id}/create-application:
     post:
       summary: Create application from basket
@@ -423,7 +424,7 @@ paths:
           description: Successful Response (no content)
       security:
         - auth:
-          - write:applications
+            - write:applications
 components:
   securitySchemes:
     auth:

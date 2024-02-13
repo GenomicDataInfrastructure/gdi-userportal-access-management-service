@@ -11,66 +11,59 @@ SPDX-License-Identifier: CC-BY-4.0
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=GenomicDataInfrastructure_gdi-userportal-access-management-service&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=GenomicDataInfrastructure_gdi-userportal-access-management-service)
 [![GitHub contributors](https://img.shields.io/github/contributors/GenomicDataInfrastructure/gdi-userportal-access-management-service)](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service/graphs/contributors)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
-
 # gdi-userportal-access-management-service
 
-This is a OSS project template. It suggests an initial setup for a successful open-source project.
+This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-## Software Development Guidelines
+If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
-- We encourage the use of docker image to ship the code - GitHub offers free storage for open source projects.
-- Testing is fundamental for stable and secure code.
-- Follow free and Open Source Software principles:
-    - Keep `CHANGELOG.md`, `README.md`, and `CONTRIBUTING.md` up to date.
-    - Add license and copyrights to headers for each file - we suggest following [REUSE](https://reuse.software/).
-    - Keep an issue tracker open for everyone.
-    - Review regularly dependencies licenses and comply with all license requirements.
-    - For more suggestions, please check [OpenSSF Best Practices](https://www.bestpractices.dev/en).
-- Automated and recurrent CI/CD - GitHub offers a few thousand minutes per month.
-- Quality checks are mandatory - SonarCloud is free for open-source projects.
-- Vulnerability checks are mandatory - SonarCloud for code, ORT for dependencies, Trivy for packages and libraries inside docker images.
+## Running the application in dev mode
 
-## CI/CD
+You can run your application in dev mode that enables live coding using:
+```shell script
+mvn compile quarkus:dev
+```
 
-There are three workflows available, `test.yml`, `main.yml`, and `release.yml`. 
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
-In `test.yml` should go all kinds of tests, like: unit/integration tests, linters, prettiers, sonar, etc. This workflow should be fast and happen on every push.
+## Packaging and running the application
 
-In `main.yml` should go all kinds of checks that are still needed to enforce code quality, or license and security compliance checks. This workflow can be heavy, so it is advisable to happen only when the PR is open or when changes are merged to main. 
+The application can be packaged using:
+```shell script
+mvn package
+```
+It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
+Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
-Similarly to the previous workflow, `release.yml` also should enforce code quality, license compliance, or security checks, that can be potentially heavy.
+The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
 
-In this template, you will find jobs for [ORT](https://oss-review-toolkit.org/ort/), [REUSE](https://reuse.software/), [Trivy](https://trivy.dev/), and [GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-docker-registry).
+If you want to build an _über-jar_, execute the following command:
+```shell script
+mvn package -Dquarkus.package.type=uber-jar
+```
 
-## Installation
+The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
 
-![template](./select_repo_template.png)
+## Creating a native executable
 
-## Usage
+You can create a native executable using: 
+```shell script
+mvn package -Dnative
+```
 
-You will need to review the existing files, after you innitialised you project with this template.
+Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
+```shell script
+mvn package -Dnative -Dquarkus.native.container-build=true
+```
 
-- Search for TODO and replace dummy content by the correct value (e.g. links and repository names).
-- Replace all references of `GenomicDataInfrastructure/gdi-userportal-access-management-service` by your project repository.
-- Keep `CHANGELOG.md` up to date, to reflect your deliveries.
-- Update `CONTRIBUTING.md` to your project's needs, there are sessions to be fulfilled or simply removed.
-- Update `README.md` to reflect your projects needs.
-- Replace and add missing licenses accordingly.
-- Review projects `README.md` badges.
-- Register your open project in, if you want to get a `REUSE compliant` badge.
+You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
 
-## Licenses
+If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
 
-This work is licensed under multiple licences:
-- All original source code is licensed under [Apache-2.0](./LICENSES/Apache-2.0.txt).
-- All documentation and images are licensed under [CC-BY-4.0](./LICENSES/CC-BY-4.0.txt).
-- For more accurate information, check the individual files.
+## Provided Code
 
-## References
-- https://fossid.com/blog/19-guidelines-for-free-and-open-source-software-usage/
-- https://reuse.software/
-- https://oss-review-toolkit.org/ort/
-- https://www.sonarsource.com/products/sonarcloud/
-- https://www.bestpractices.dev/en
-- https://trivy.dev/
-- https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-docker-registry
+### RESTEasy Reactive
+
+Easily start your Reactive RESTful Web Services
+
+[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)

@@ -9,9 +9,9 @@ SPDX-License-Identifier: Apache-2.0
   xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.acme</groupId>
-  <artifactId>code-with-quarkus</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <groupId>lu.lnds.daam</groupId>
+  <artifactId>gdi-userportal-access-management-service</artifactId>
+  <version>0.0.0</version>
   <name>gdi-userportal-access-management-service</name>
   <properties>
     <compiler-plugin.version>3.12.1</compiler-plugin.version>

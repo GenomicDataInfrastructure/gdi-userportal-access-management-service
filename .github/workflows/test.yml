@@ -6,13 +6,23 @@ name: Run Tests
 
 on: push
 
-# TODO add here any kind of test you may need
 jobs:
   test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up GraalVM JDK 21
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+      - name: Run the Maven
+        run: mvn --batch-mode --update-snapshots verify checkstyle:check
+  reuse:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: fsfe/reuse-action@v2

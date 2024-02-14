@@ -12,65 +12,73 @@ SPDX-License-Identifier: CC-BY-4.0
 [![GitHub contributors](https://img.shields.io/github/contributors/GenomicDataInfrastructure/gdi-userportal-access-management-service)](https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service/graphs/contributors)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 
-# gdi-userportal-access-management-service
+<div style="display: flex; justify-content: center; padding: 20px;">
+  <img src="gdi_logo.svg" alt="Genomic Data Infrastructure Logo" width="300">
+</div>
 
-This is a OSS project template. It suggests an initial setup for a successful open-source project.
+# GDI User Portal - Access Management Service
 
-## Software Development Guidelines
+The GDI User Portal Access Request Service is a crucial component of the Genomic Data Infrastructure (GDI) project, which aims to facilitate access to genomic, phenotypic, and clinical data across Europe. The GDI project is committed to establishing a federated, sustainable, and secure infrastructure to enable seamless data access. Leveraging the outcomes of the Beyond 1 Million Genomes (B1MG) project, the GDI project is actively realizing the ambitious goals set forth by the 1+Million Genomes (1+MG) initiative.
 
-- We encourage the use of docker image to ship the code - GitHub offers free storage for open source projects.
-- Testing is fundamental for stable and secure code.
-- Follow free and Open Source Software principles:
-    - Keep `CHANGELOG.md`, `README.md`, and `CONTRIBUTING.md` up to date.
-    - Add license and copyrights to headers for each file - we suggest following [REUSE](https://reuse.software/).
-    - Keep an issue tracker open for everyone.
-    - Review regularly dependencies licenses and comply with all license requirements.
-    - For more suggestions, please check [OpenSSF Best Practices](https://www.bestpractices.dev/en).
-- Automated and recurrent CI/CD - GitHub offers a few thousand minutes per month.
-- Quality checks are mandatory - SonarCloud is free for open-source projects.
-- Vulnerability checks are mandatory - SonarCloud for code, ORT for dependencies, Trivy for packages and libraries inside docker images.
+The GDI User Portal Access Request Service serves as an interface between User Portal and the data authorities. It is developed using [Quarkus](https://quarkus.io/) version 3.7.2 and [GraalVM](https://www.graalvm.org/) for Java 21. This application plays a crucial role in enabling access request integration between the Data User and different Data Authorities.
 
-## CI/CD
-
-There are three workflows available, `test.yml`, `main.yml`, and `release.yml`. 
-
-In `test.yml` should go all kinds of tests, like: unit/integration tests, linters, prettiers, sonar, etc. This workflow should be fast and happen on every push.
-
-In `main.yml` should go all kinds of checks that are still needed to enforce code quality, or license and security compliance checks. This workflow can be heavy, so it is advisable to happen only when the PR is open or when changes are merged to main. 
-
-Similarly to the previous workflow, `release.yml` also should enforce code quality, license compliance, or security checks, that can be potentially heavy.
-
-In this template, you will find jobs for [ORT](https://oss-review-toolkit.org/ort/), [REUSE](https://reuse.software/), [Trivy](https://trivy.dev/), and [GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-docker-registry).
+- **Status**: 0.0.0
+- **Related Project**: [1+ Million Genomes Project](https://gdi.onemilliongenomes.eu/)
 
 ## Installation
 
-![template](./select_repo_template.png)
+Ensure you have [Maven](https://maven.apache.org/) and [GraalVM](https://www.graalvm.org/) installed in your machine. We recommend to use [SDKMAN!](https://sdkman.io/).
 
-## Usage
+```shell script
+sdk install java 21.0.2-graal
+sdk install maven 3.9.6
+echo -e "\nexport GRAALVM_HOME="$HOME/.sdkman/candidates/java/21.0.2-graal/" >> $HOME/.zprofile
+```
 
-You will need to review the existing files, after you innitialised you project with this template.
+## Running the application in dev mode
 
-- Search for TODO and replace dummy content by the correct value (e.g. links and repository names).
-- Replace all references of `GenomicDataInfrastructure/gdi-userportal-access-management-service` by your project repository.
-- Keep `CHANGELOG.md` up to date, to reflect your deliveries.
-- Update `CONTRIBUTING.md` to your project's needs, there are sessions to be fulfilled or simply removed.
-- Update `README.md` to reflect your projects needs.
-- Replace and add missing licenses accordingly.
-- Review projects `README.md` badges.
-- Register your open project in, if you want to get a `REUSE compliant` badge.
+You can run your application in dev mode that enables live coding using:
+```shell script
+mvn compile quarkus:dev
+```
 
-## Licenses
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
-This work is licensed under multiple licences:
+## Packaging and running the application
+
+The application can be packaged using:
+```shell script
+mvn package
+```
+It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
+Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+
+The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+
+If you want to build an _über-jar_, execute the following command:
+```shell script
+mvn package -Dquarkus.package.type=uber-jar
+```
+
+The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+
+## Creating a native executable
+
+You can create a native executable using: 
+```shell script
+mvn package -Dnative
+```
+
+You can then execute your native executable with: `./target/*-runner`
+
+If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+
+## Running tests
+
+All tests are automatically executed when you build a new package.
+
+## License
+
 - All original source code is licensed under [Apache-2.0](./LICENSES/Apache-2.0.txt).
-- All documentation and images are licensed under [CC-BY-4.0](./LICENSES/CC-BY-4.0.txt).
+- All documentation is licensed under [CC-BY-4.0](./LICENSES/CC-BY-4.0.txt).
 - For more accurate information, check the individual files.
-
-## References
-- https://fossid.com/blog/19-guidelines-for-free-and-open-source-software-usage/
-- https://reuse.software/
-- https://oss-review-toolkit.org/ort/
-- https://www.sonarsource.com/products/sonarcloud/
-- https://www.bestpractices.dev/en
-- https://trivy.dev/
-- https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-docker-registry

@@ -3,6 +3,7 @@
 ### SPDX-License-Identifier: Apache-2.0
 
 GET https://rems-demo.rahtiapp.fi/api/my-applications
+Accept: application/json
 ## Session cookie and X-Csrf-Token are required
-Cookie: rems-user-preferred-language=en; ring-session=316628e3-dc2b-4146-822f-fda5158dd028; 7d6e23813298f396b0a54adedf7c65de=fce16a865cc44ae244aa8c68aa5e00e6; rems-user-preferred-language=en
-X-Csrf-Token: DYxBqQOMhnD7vFI2Qun/mTeUfrkJ+S/QcoRgZ8EKFI0tY9ygryBF4B7xbYozbp43JnTtytEf5OcYh34I
+Cookie: rems-user-preferred-language=en; ring-session=ea05dbce-1677-4c68-a5b2-28972b17d590; 7d6e23813298f396b0a54adedf7c65de=8ec0480539fb27eaabc4950183fb49f6; rems-user-preferred-language=en
+X-Csrf-Token: oPp7nmvM3CTR1dsfCF31FtiVJp2MqbgO9qyCRtYnQ8EiXT8xdjb8C2nUknmvdOuLohmfMyYWQyktcz5q

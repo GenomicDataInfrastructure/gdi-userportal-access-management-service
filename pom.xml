@@ -1,9 +1,4 @@
 <?xml version="1.0"?>
-<!--
-SPDX-FileCopyrightText: 2024 Google LLC
-
-SPDX-License-Identifier: Apache-2.0
--->
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
   xmlns="http://maven.apache.org/POM/4.0.0"
@@ -14,7 +9,10 @@ SPDX-License-Identifier: Apache-2.0
   <version>0.0.0</version>
   <name>gdi-userportal-access-management-service</name>
   <properties>
+    <assertj.version>3.25.3</assertj.version>
+    <checkstyle-maven-plugin.version>3.3.1</checkstyle-maven-plugin.version>
     <compiler-plugin.version>3.12.1</compiler-plugin.version>
+    <lombok.version>1.18.30</lombok.version>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -23,9 +21,6 @@ SPDX-License-Identifier: Apache-2.0
     <quarkus.platform.version>3.7.2</quarkus.platform.version>
     <skipITs>true</skipITs>
     <surefire-plugin.version>3.2.5</surefire-plugin.version>
-    <assertj.version>3.25.3</assertj.version>
-    <lombok.version>1.18.30</lombok.version>
-    <checkstyle-maven-plugin.version>3.3.1</checkstyle-maven-plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -64,6 +59,10 @@ SPDX-License-Identifier: Apache-2.0
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -150,9 +149,8 @@ SPDX-License-Identifier: Apache-2.0
               <inputSpec>${project.basedir}/src/main/resources/META-INF/openapi.yaml</inputSpec>
               <generatorName>jaxrs-spec</generatorName>
               <configOptions>
-                <additionalModelTypeAnnotations>
-                  @lombok.Data @lombok.NoArgsConstructor @lombok.AllArgsConstructor @lombok.Builder
-                </additionalModelTypeAnnotations>
+                <additionalModelTypeAnnotations>@lombok.Data @lombok.NoArgsConstructor
+                  @lombok.AllArgsConstructor @lombok.Builder</additionalModelTypeAnnotations>
                 <useTags>true</useTags>
                 <useJakartaEe>true</useJakartaEe>
                 <dateLibrary>java8</dateLibrary>
@@ -183,12 +181,8 @@ SPDX-License-Identifier: Apache-2.0
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${checkstyle-maven-plugin.version}</version>
-        <configuration>
-          <configLocation>google_checks.xml</configLocation>
-        </configuration>
         <executions>
           <execution>
             <goals>
@@ -196,6 +190,9 @@ SPDX-License-Identifier: Apache-2.0
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <configLocation>google_checks.xml</configLocation>
+        </configuration>
       </plugin>
     </plugins>
   </build>

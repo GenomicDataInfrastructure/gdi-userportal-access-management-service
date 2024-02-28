@@ -20,7 +20,7 @@
 # docker run -i --rm -p 8080:8080 quarkus/code-with-quarkus
 #
 ###
-FROM quay.io/quarkus/quarkus-micro-image:2.0
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.9
 WORKDIR /work/
 RUN chown 1001 /work \
     && chmod "g+rwX" /work \

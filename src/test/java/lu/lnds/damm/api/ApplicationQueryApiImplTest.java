@@ -9,12 +9,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.quarkus.test.junit.QuarkusTest;
 import java.util.List;
-import lu.lnds.daam.beans.ListedApplication;
-import lu.lnds.daam.beans.RetrievedApplication;
+import lu.lnds.daam.model.ListedApplication;
+import lu.lnds.daam.model.RetrievedApplication;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
-public class ApplicationsTest {
+public class ApplicationQueryApiImplTest {
 
   @Test
   void retrieves_applications() {

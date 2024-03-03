@@ -25,31 +25,21 @@ servers:
   - url: https://localhost:8080
     description: Development server
 tags:
-  - name: applications
-    description: All endpoints related to access request management
-  - name: baskets
-    description: All endpoints related to baskets
-  - name: attachments
-    description: All endpoints related to attachments
-  - name: members
-    description: All endpoints related to members
-  - name: terms
-    description: All endpoints related to terms
-  - name: datasets
-    description: All endpoints related to datasets
-  - name: forms
-    description: All endpoints related to forms
-  - name: actions
-    description: All endpoints related to user actions
-  - name: events
-    description: All endpoints related to events
+  - name: application-query
+    description: All queries related to applications
+  - name: application-command
+    description: All commands related to applications
+  - name: basket-query
+    description: All queries related to baskets
+  - name: basket-command
+    description: All commands related to baskets
 paths:
   /api/v1/applications:
     get:
       summary: List applications
       operationId: list_applications_v1
       tags:
-        - "applications"
+        - "application-query"
       responses:
         "200":
           description: Successful Response
@@ -68,7 +58,7 @@ paths:
       summary: Retrieve application
       operationId: retrieve_application_v1
       tags:
-        - "applications"
+        - "application-query"
       parameters:
         - name: id
           in: path
@@ -91,7 +81,7 @@ paths:
       summary: save application forms and duos
       operationId: save_application_forms_and_duos_v1
       tags:
-        - "forms"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -115,7 +105,7 @@ paths:
       summary: Submit application
       operationId: submit_application_v1
       tags:
-        - "actions"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -142,7 +132,7 @@ paths:
       summary: Create application
       operationId: create_application_v1
       tags:
-        - "actions"
+        - "application-command"
       requestBody:
         content:
           application/json:
@@ -167,7 +157,7 @@ paths:
       summary: Cancel application
       operationId: cancel_application_v1
       tags:
-        - "actions"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -186,7 +176,7 @@ paths:
       summary: Copy application as new
       operationId: copy_application_as_new_v1
       tags:
-        - "actions"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -205,7 +195,7 @@ paths:
       summary: Accept terms of use
       operationId: accept_application_terms_v1
       tags:
-        - "terms"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -224,7 +214,7 @@ paths:
       summary: Add attachment to application
       operationId: add_attachment_to_application_v1
       tags:
-        - "attachments"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -255,7 +245,7 @@ paths:
       summary: Retrieve attachment from application
       operationId: retrieve_attachment_from_application_v1
       tags:
-        - "attachments"
+        - "application-query"
       parameters:
         - name: id
           in: path
@@ -282,7 +272,7 @@ paths:
       summary: Invite member to application
       operationId: invite_member_to_application_v1
       tags:
-        - "members"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -301,7 +291,7 @@ paths:
       summary: Remove
       operationId: remove_member_from_application_v1
       tags:
-        - "members"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -325,7 +315,7 @@ paths:
       summary: update datasets of application
       operationId: update_datasets_of_application_v1
       tags:
-        - "datasets"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -351,7 +341,7 @@ paths:
       summary: add event to application
       operationId: add_event_to_application_v1
       tags:
-        - "events"
+        - "application-command"
       parameters:
         - name: id
           in: path
@@ -375,7 +365,7 @@ paths:
       summary: List baskets
       operationId: list_baskets_v1
       tags:
-        - "baskets"
+        - "basket-query"
       responses:
         "200":
           description: Successful Response
@@ -394,7 +384,7 @@ paths:
       summary: Add dataset to baskets
       operationId: add_dataset_to_baskets_v1
       tags:
-        - "baskets"
+        - "basket-command"
       requestBody:
         content:
           application/json:
@@ -411,7 +401,7 @@ paths:
       summary: Create application from basket
       operationId: create_application_from_basket_v1
       tags:
-        - "baskets"
+        - "basket-command"
       parameters:
         - name: id
           in: path

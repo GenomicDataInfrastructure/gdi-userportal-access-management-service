@@ -7,4 +7,4 @@ package lu.lnds.damm.api;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-public class ApplicationsIT extends ApplicationsTest {}
+public class ApplicationQueryApiImplIT extends ApplicationQueryApiImplTest {}

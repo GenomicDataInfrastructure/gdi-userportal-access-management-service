@@ -15,9 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Dynamic API source-code generation, with openapi-generator-maven-plugin (v7.2.0).
-- Default Quarkus (v3.7.2) configuration.
+- Dynamic API source-code generation, with quarkus-openapi-generator (v2.3.0).
+- Default Quarkus (v3.8.1) configuration.
 - Static API docs following OpenAPI specification, v3.0.3.
+- Static REMS API docs following OpenAPI specification, v3.0.3.
 
 ### Changed
 

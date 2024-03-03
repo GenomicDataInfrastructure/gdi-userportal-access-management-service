@@ -20,7 +20,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 The GDI User Portal Access Request Service is a crucial component of the Genomic Data Infrastructure (GDI) project, which aims to facilitate access to genomic, phenotypic, and clinical data across Europe. The GDI project is committed to establishing a federated, sustainable, and secure infrastructure to enable seamless data access. Leveraging the outcomes of the Beyond 1 Million Genomes (B1MG) project, the GDI project is actively realizing the ambitious goals set forth by the 1+Million Genomes (1+MG) initiative.
 
-The GDI User Portal Access Request Service serves as an interface between User Portal and the data authorities. It is developed using [Quarkus](https://quarkus.io/) version 3.7.2 and [GraalVM](https://www.graalvm.org/) for Java 21. This application plays a crucial role in enabling access request integration between the Data User and different Data Authorities.
+The GDI User Portal Access Request Service serves as an interface between User Portal and the data authorities. It is developed using [Quarkus](https://quarkus.io/) version 3.8.1 and [GraalVM](https://www.graalvm.org/) for Java 21. This application plays a crucial role in enabling access request integration between the Data User and different Data Authorities.
 
 - **Status**: 0.0.0
 - **Related Project**: [1+ Million Genomes Project](https://gdi.onemilliongenomes.eu/)

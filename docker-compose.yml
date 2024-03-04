@@ -1,0 +1,74 @@
+# SPDX-FileCopyrightText: 2006-2023 Open Knowledge Foundation and contributors
+# SPDX-FileContributor: PNED G.I.E.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+version: "3"
+
+volumes:
+  pg_data:
+
+services:
+  postgres:
+    build:
+      context: postgresql/
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - KC_DB_USERNAME
+      - KC_DB_PASSWORD
+      - KC_DB_NAME
+      - REMS_DB_USER
+      - REMS_DB_PASSWORD
+      - REMS_DB
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+    ports:
+      - "5432:5432"
+
+  keycloak:
+    build:
+      context: keycloak/
+    restart: unless-stopped
+    ports:
+      - "8180:8080"
+    volumes:
+      - ./keycloak/realms:/opt/keycloak/data/import
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - KC_DB_URL
+      - KC_DB_USERNAME
+      - KC_DB_PASSWORD
+      - KEYCLOAK_ADMIN
+      - KEYCLOAK_ADMIN_PASSWORD
+      - KC_HOSTNAME
+    healthcheck:
+      test: ["CMD", "curl", "-o", "/dev/null", http://localhost:8080/health/ready"]
+
+  rems:
+    image: cscfi/rems:latest
+    volumes:
+      - ./rems/config.edn:/rems/config/config.edn
+      - ./rems/styles.css:/rems/theme/styles.css
+      - ./rems/theme.edn:/rems/theme/theme.edn
+      - ./rems/en.edn:/rems/theme/extra-translations/en.edn
+      - ./rems/logo_medium.png:/rems/theme/public/img/logo_medium.png
+      - ./rems/logo_small.png:/rems/theme/public/img/logo_small.png
+      - ./rems/ls_login.png:/rems/theme/public/img/ls_login.png
+      - ./rems/private-key.jwk:/rems/keys/private-key.jwk
+      - ./rems/public-key.jwk:/rems/keys/public-key.jwk
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      - "keycloak:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:3000/api/health"]

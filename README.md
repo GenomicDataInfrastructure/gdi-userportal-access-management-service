@@ -39,6 +39,10 @@ echo -e "\nexport GRAALVM_HOME="$HOME/.sdkman/candidates/java/21.0.2-graal/" >> 
 
 You can run your application in dev mode that enables live coding using:
 ```shell script
+cp .env.example .env
+docker compose build
+docker compose run --rm -e CMD="migrate;test-data" rems
+docker compose up -d
 mvn compile quarkus:dev
 ```
 

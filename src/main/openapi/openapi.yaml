@@ -51,7 +51,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/ListedApplication"
       security:
-        - auth:
+        - daam_auth:
             - read:applications
   /api/v1/applications/{id}:
     get:
@@ -74,7 +74,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/RetrievedApplication"
       security:
-        - auth:
+        - daam_auth:
             - read:applications
   /api/v1/applications/{id}/save-forms-and-duos:
     post:
@@ -98,7 +98,7 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/{id}/submit:
     post:
@@ -125,7 +125,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/ValidationWarnings"
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/create-application:
     post:
@@ -150,7 +150,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/ValidationWarnings"
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/{id}/cancel:
     post:
@@ -169,7 +169,7 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/{id}/copy-as-new:
     post:
@@ -188,7 +188,7 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/{id}/accept-terms:
     post:
@@ -207,7 +207,7 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/{id}/attachments:
     post:
@@ -238,7 +238,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/AddedAttachments"
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/{id}/attachments/{attachmentId}:
     get:
@@ -284,7 +284,7 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/{id}/remove-member:
     post:
@@ -308,7 +308,7 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/{id}/update-datasets:
     post:
@@ -334,7 +334,7 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/applications/{id}/events:
     post:
@@ -358,7 +358,7 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:applications
   /api/v1/baskets:
     get:
@@ -377,7 +377,7 @@ paths:
                 type: array
                 title: collection of baskets
       security:
-        - auth:
+        - daam_auth:
             - read:baskets
   /api/v1/baskets/add-dataset:
     post:
@@ -394,7 +394,7 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:baskets
   /api/v1/baskets/{id}/create-application:
     post:
@@ -413,11 +413,11 @@ paths:
         "204":
           description: Successful Response (no content)
       security:
-        - auth:
+        - daam_auth:
             - write:applications
 components:
   securitySchemes:
-    auth:
+    daam_auth:
       type: oauth2
       description: This API uses OAuth 2 with the implicit grant flow.
       flows:

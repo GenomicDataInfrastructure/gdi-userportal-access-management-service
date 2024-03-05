@@ -18,48 +18,60 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # GDI User Portal - Access Management Service
 
-The GDI User Portal Access Request Service is a crucial component of the Genomic Data Infrastructure (GDI) project, which aims to facilitate access to genomic, phenotypic, and clinical data across Europe. The GDI project is committed to establishing a federated, sustainable, and secure infrastructure to enable seamless data access. Leveraging the outcomes of the Beyond 1 Million Genomes (B1MG) project, the GDI project is actively realizing the ambitious goals set forth by the 1+Million Genomes (1+MG) initiative.
+The GDI User Portal Access Request Service is a crucial component of the Genomic Data
+Infrastructure (GDI) project, which aims to facilitate access to genomic, phenotypic, and clinical
+data across Europe. The GDI project is committed to establishing a federated, sustainable, and
+secure infrastructure to enable seamless data access. Leveraging the outcomes of the Beyond 1
+Million Genomes (B1MG) project, the GDI project is actively realizing the ambitious goals set forth
+by the 1+Million Genomes (1+MG) initiative.
 
-The GDI User Portal Access Request Service serves as an interface between User Portal and the data authorities. It is developed using [Quarkus](https://quarkus.io/) version 3.8.1 and [GraalVM](https://www.graalvm.org/) for Java 21. This application plays a crucial role in enabling access request integration between the Data User and different Data Authorities.
+The GDI User Portal Access Request Service serves as an interface between User Portal and the data
+authorities. It is developed using [Quarkus](https://quarkus.io/) version 3.8.1
+and [GraalVM](https://www.graalvm.org/) for Java 21. This application plays a crucial role in
+enabling access request integration between the Data User and different Data Authorities.
 
 - **Status**: 0.0.0
 - **Related Project**: [1+ Million Genomes Project](https://gdi.onemilliongenomes.eu/)
 
 ## Installation
 
-Ensure you have [Maven](https://maven.apache.org/) and [GraalVM](https://www.graalvm.org/) installed in your machine. We recommend to use [SDKMAN!](https://sdkman.io/).
+Ensure you have [Maven](https://maven.apache.org/) and [GraalVM](https://www.graalvm.org/) installed
+in your machine. We recommend to use [SDKMAN!](https://sdkman.io/).
 
 ```shell script
 sdk install java 21.0.2-graal
 sdk install maven 3.9.6
 echo -e "\nexport GRAALVM_HOME="$HOME/.sdkman/candidates/java/21.0.2-graal/" >> $HOME/.zprofile
+echo -e "\nryuk.container.privileged=true" >> $HOME/.testcontainers.properties
 ```
 
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
+
 ```shell script
-cp .env.example .env
-docker compose build
-docker compose run --rm -e CMD="migrate;test-data" rems
-docker compose up -d
 mvn compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only
+> at http://localhost:8080/q/dev/.
 
 ## Packaging and running the application
 
 The application can be packaged using:
+
 ```shell script
 mvn package
 ```
+
 It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Be aware that it’s not an _über-jar_ as the dependencies are copied into
+the `target/quarkus-app/lib/` directory.
 
 The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
 
 If you want to build an _über-jar_, execute the following command:
+
 ```shell script
 mvn package -Dquarkus.package.type=uber-jar
 ```
@@ -68,14 +80,16 @@ The application, packaged as an _über-jar_, is now runnable using `java -jar ta
 
 ## Creating a native executable
 
-You can create a native executable using: 
+You can create a native executable using:
+
 ```shell script
 mvn package -Dnative
 ```
 
 You can then execute your native executable with: `./target/*-runner`
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+If you want to learn more about building native executables, please
+consult https://quarkus.io/guides/maven-tooling.
 
 ## Running tests
 

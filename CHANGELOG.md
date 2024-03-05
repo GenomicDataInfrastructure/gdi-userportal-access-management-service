@@ -15,10 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Dynamic API source-code generation, with quarkus-openapi-generator (v2.3.0).
+- Dynamic client and server API source-code generation, with quarkus-openapi-generator (v2.3.0).
 - Default Quarkus (v3.8.1) configuration.
 - Static API docs following OpenAPI specification, v3.0.3.
 - Static REMS API docs following OpenAPI specification, v3.0.3.
+- OIDC authentication for all `/api` endpoints.
+- endpoints to list all applications of a given user.
 
 ### Changed
 

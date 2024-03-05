@@ -7,7 +7,7 @@ POST http://rems:3000/api/applications/add-attachment?application-id=28
 Accept: application/json
 Content-Type: multipart/form-data; boundary=MfnBoundry
 x-rems-api-key: 42
-x-rems-user-id: 52cacbab-c440-4385-9d5f-46aa4930b0e4
+x-rems-user-id: eb4123a3-b722-4798-9af5-8957f823657a
 
 --MfnBoundry
 Content-Disposition: form-data; name="file"; filename="06_dummy_attachment.txt"

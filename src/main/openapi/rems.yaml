@@ -144,7 +144,7 @@ components:
           type: string
           format: date-time
         application/accepted-licenses:
-          $ref: '#/components/schemas/Response10953AcceptedLicenses'
+          $ref: '#/components/schemas/ApplicationAcceptedLicenses'
         application/invited-members:
           uniqueItems: true
           type: array
@@ -384,7 +384,9 @@ components:
       properties:
         value:
           type: string
-    Response10953AcceptedLicenses:
+    ApplicationAcceptedLicenses:
+      type: object
+      additionalProperties:
         uniqueItems: true
         type: array
         items:

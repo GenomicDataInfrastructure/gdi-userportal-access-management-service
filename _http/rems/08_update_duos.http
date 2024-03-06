@@ -2,11 +2,12 @@
 ###
 ### SPDX-License-Identifier: Apache-2.0
 
-POST https://rems-demo.rahtiapp.fi/api/applications/save-draft
+POST http://rems:3000/api/applications/save-draft
 Accept: application/json
-Content-Type: application/transit+json
-## Session cookie and X-Csrf-Token are required
-Cookie: rems-user-preferred-language=en; rems-user-preferred-language=en; ring-session=c0510a56-c391-4454-9b43-b308825dbc92; 7d6e23813298f396b0a54adedf7c65de=a45d54472b7be689623dbaea52902ca1; rems-user-preferred-language=en
-X-Csrf-Token: Uv4QL75o4DKVd4sWNd1UezewiEhBc2CEXylxnfX+74i8qzt/BmsSntWV2LD8Kj+pRftb0oBvPTA/Vz1R
+Content-Type: application/json
+x-rems-api-key: 42
+x-rems-user-id: eb4123a3-b722-4798-9af5-8957f823657a
 
-["^ ","~:application-id",28,"~:field-values",["~#list",[["^ ","~:form",2,"~:field","fld1","~:value",""],["^ ","^3",2,"^4","fld2","^5",""],["^ ","^3",2,"^4","fld3","^5",""],["^ ","^3",2,"^4","fld4","^5",""],["^ ","^3",2,"^4","fld5","^5",""],["^ ","^3",2,"^4","fld6","^5",""],["^ ","^3",2,"^4","fld7","^5",""],["^ ","^3",2,"^4","fld8","^5","11"],["^ ","^3",2,"^4","option","^5",""],["^ ","^3",2,"^4","fld11","^5",""],["^ ","^3",2,"^4","fld12","^5",[]],["^ ","^3",2,"^4","fld13","^5",""],["^ ","^3",2,"^4","fld14","^5",""],["^ ","^3",2,"^4","fld15","^5",""],["^ ","^3",2,"^4","fld16","^5",""],["^ ","^3",2,"^4","fld17","^5",""]]],"~:duo-codes",["^2",[["^ ","~:id","DUO:0000007","~:restrictions",["^2",[["^ ","~:type","~:mondo","~:values",["^2",[]]]]]],["^ ","^7","DUO:0000019","^8",["^2",[]]]]]]
+{
+    "application-id": 28
+}

@@ -1,10 +1,11 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-
-package lu.lnds.damm.api;
+package io.github.genomicdatainfrastructure.daam.api;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-public class ApplicationsIT extends ApplicationsTest {}
+public class ApplicationQueryApiImplIT {
+
+}

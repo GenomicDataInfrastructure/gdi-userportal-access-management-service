@@ -3,12 +3,11 @@
 ### SPDX-License-Identifier: Apache-2.0
 
 ### Attach file to application
-POST https://rems-demo.rahtiapp.fi/api/applications/add-attachment?application-id=28
+POST http://rems:3000/api/applications/add-attachment?application-id=28
 Accept: application/json
 Content-Type: multipart/form-data; boundary=MfnBoundry
-## Session cookie and X-Csrf-Token are required
-Cookie: rems-user-preferred-language=en; rems-user-preferred-language=en; ring-session=c0510a56-c391-4454-9b43-b308825dbc92; 7d6e23813298f396b0a54adedf7c65de=a45d54472b7be689623dbaea52902ca1; rems-user-preferred-language=en
-X-Csrf-Token: Uv4QL75o4DKVd4sWNd1UezewiEhBc2CEXylxnfX+74i8qzt/BmsSntWV2LD8Kj+pRftb0oBvPTA/Vz1R
+x-rems-api-key: 42
+x-rems-user-id: eb4123a3-b722-4798-9af5-8957f823657a
 
 --MfnBoundry
 Content-Disposition: form-data; name="file"; filename="06_dummy_attachment.txt"
@@ -20,7 +19,7 @@ Content-Type: text/plain
 ### Assign file to attachment field
 ### You must get the attachment id from the previous response
 ### and set the value of the field fld8
-POST https://rems-demo.rahtiapp.fi/api/applications/save-draft
+POST http://rems:3000/api/applications/save-draft
 Content-Type: application/transit+json
 ## Session cookie and X-Csrf-Token are required
 Cookie: rems-user-preferred-language=en; rems-user-preferred-language=en; ring-session=c0510a56-c391-4454-9b43-b308825dbc92; 7d6e23813298f396b0a54adedf7c65de=a45d54472b7be689623dbaea52902ca1; rems-user-preferred-language=en

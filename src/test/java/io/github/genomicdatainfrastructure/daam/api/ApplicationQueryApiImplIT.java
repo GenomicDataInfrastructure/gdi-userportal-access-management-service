@@ -6,6 +6,6 @@ package io.github.genomicdatainfrastructure.daam.api;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-public class ApplicationQueryApiImplIT {
+public class ApplicationQueryApiImplIT extends ApplicationQueryApiImplTest {
 
 }

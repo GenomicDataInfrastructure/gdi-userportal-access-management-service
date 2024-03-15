@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
 package io.github.genomicdatainfrastructure.daam.api;
 import java.io.File;
 import java.util.List;

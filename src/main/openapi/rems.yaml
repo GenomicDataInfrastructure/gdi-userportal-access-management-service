@@ -73,7 +73,7 @@ paths:
   /api/applications/create:
     post:
       tags:
-        - applications
+        - rems-application-command
       summary: 'Create a new application (roles: logged-in)'
       parameters:
         - in: header

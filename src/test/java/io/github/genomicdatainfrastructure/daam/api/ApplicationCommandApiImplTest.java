@@ -10,11 +10,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-
+import io.quarkus.test.junit.QuarkusTest;
 import static io.restassured.RestAssured.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
+@QuarkusTest
 public class ApplicationCommandApiImplTest {
 
     private CreateApplicationsService mockService;

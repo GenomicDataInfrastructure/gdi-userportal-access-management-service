@@ -6,7 +6,7 @@ package io.github.genomicdatainfrastructure.daam.services;
 
 import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
 import io.github.genomicdatainfrastructure.daam.model.CreateApplication;
-import io.github.genomicdatainfrastructure.daam.remote.rems.api.ApplicationsApi;
+import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.CreateApplicationCommand;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -19,21 +19,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
+@RestClient
 public class CreateApplicationsService {
 
     private final SecurityIdentity identity;
     private final String remsApiKey;
-    private final ApplicationsApi applicationsApi;
+    private final RemsApplicationCommandApi remsApplicationCommandApi;
 
     @Inject
     public CreateApplicationsService(
         @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
         SecurityIdentity identity,
-        @RestClient ApplicationsApi applicationsApi
+        @RestClient RemsApplicationCommandApi applicationsApi
     ) {
         this.remsApiKey = remsApiKey;
         this.identity = identity;
-        this.applicationsApi = applicationsApi;
+        this.remsApplicationCommandApi = applicationsApi;
     }
 
     public void createRemsApplication(CreateApplication createApplication) {
@@ -48,6 +49,6 @@ public class CreateApplicationsService {
                 .catalogueItemIds(catalogueItemIds)
                 .build();
     
-        applicationsApi.apiApplicationsCreatePost(command, remsApiKey, userId);
+        remsApplicationCommandApi.apiApplicationsCreatePost(command, remsApiKey, userId);
     }
 }

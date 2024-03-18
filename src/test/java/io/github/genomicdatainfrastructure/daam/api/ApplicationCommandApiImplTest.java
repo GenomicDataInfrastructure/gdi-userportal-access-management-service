@@ -4,44 +4,46 @@
 package io.github.genomicdatainfrastructure.daam.api;
 
 import io.github.genomicdatainfrastructure.daam.model.CreateApplication;
-import io.github.genomicdatainfrastructure.daam.services.CreateApplicationsService;
-import io.quarkus.test.junit.QuarkusMock;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
+import static org.hamcrest.Matchers.equalTo;
 import io.quarkus.test.junit.QuarkusTest;
 import static io.restassured.RestAssured.given;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import io.quarkus.test.keycloak.client.KeycloakTestClient;
+import java.util.Arrays;
+
 
 @QuarkusTest
 public class ApplicationCommandApiImplTest {
 
-    private CreateApplicationsService mockService;
+  private final KeycloakTestClient keycloakClient = new KeycloakTestClient();
 
-    @BeforeEach
-    public void setup() {
-        mockService = Mockito.mock(CreateApplicationsService.class);
-        QuarkusMock.installMockForType(mockService, CreateApplicationsService.class);
-    }
+  @Test
+  void unauthorized_when_no_user() {
+    given().when().get("/api/v1/applications/create").then().statusCode(401);
+  }
 
-        @Test
-    void createApplication_when_validRequest() {
-        String requestBody = """
-            {
-                "datasetIds": ["123", "456"]
-            }
-            """;
 
-        given()
-            .contentType("application/json")
-            .body(requestBody)
-            .when()
-            .post("/api/v1/applications/create-application")
-            .then()
-            .statusCode(204);
+  @Test
+  void createApplication_when_authenticated() {
+    CreateApplication createApplication = CreateApplication.builder()
+    .datasetIds(Arrays.asList("dataset1", "dataset2", "dataset3"))
+    .build();
+    
+    given()
+        .auth()
+        .oauth2(getAccessToken("alice"))
+        .contentType("application/json")
+        .body(createApplication)
+        .when()
+        .post("/api/applications/create")
+        .then()
+        .statusCode(200)
+        .body("success", equalTo(true))
+        .body("application-id", equalTo(12345));
+  }
 
-        verify(mockService, Mockito.times(1)).createRemsApplication(any(CreateApplication.class));
-    }
+  private String getAccessToken(String userName) {
+    return keycloakClient.getAccessToken(userName);
+  }
 }

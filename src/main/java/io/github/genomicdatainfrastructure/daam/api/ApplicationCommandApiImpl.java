@@ -5,7 +5,7 @@ package io.github.genomicdatainfrastructure.daam.api;
 import java.io.File;
 import java.util.List;
 
-import io.github.genomicdatainfrastructure.daam.services.CreateApplicationsService;
+import io.github.genomicdatainfrastructure.daam.services.CreateApplicationService;
 import io.github.genomicdatainfrastructure.daam.model.AddApplicationEvent;
 import io.github.genomicdatainfrastructure.daam.model.AddedAttachments;
 import io.github.genomicdatainfrastructure.daam.model.CreateApplication;
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
-    private final CreateApplicationsService createApplicationsService;
+    private final CreateApplicationService createApplicationService;
 
     @Override
     public Response acceptApplicationTermsV1(String id) {
@@ -57,7 +57,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     @Override
     public Response createApplicationV1(CreateApplication createApplication) {
-        createApplicationsService.createRemsApplication(createApplication);
+        createApplicationService.createRemsApplication(createApplication);
         return Response.noContent().build();
     }
 

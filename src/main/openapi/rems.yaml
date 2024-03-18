@@ -598,8 +598,7 @@ components:
         catalogue-item-ids:
           type: array
           items:
-            type: integer
-            format: int64
+            type: string
       required:
         - catalogue-item-ids
     CreateApplicationResponse:

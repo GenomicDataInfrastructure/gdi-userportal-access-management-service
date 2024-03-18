@@ -36,7 +36,7 @@ public class ApplicationCommandApiImplTest {
         .contentType("application/json")
         .body(createApplication)
         .when()
-        .post("/api/applications/create")
+        .post("/api/v1/applications/create")
         .then()
         .statusCode(200)
         .body("success", equalTo(true))

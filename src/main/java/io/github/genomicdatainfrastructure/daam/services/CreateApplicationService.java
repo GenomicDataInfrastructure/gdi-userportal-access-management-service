@@ -19,15 +19,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-@RestClient
-public class CreateApplicationsService {
+public class CreateApplicationService {
 
     private final SecurityIdentity identity;
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
 
     @Inject
-    public CreateApplicationsService(
+    public CreateApplicationService(
         @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
         SecurityIdentity identity,
         @RestClient RemsApplicationCommandApi applicationsApi
@@ -41,9 +40,7 @@ public class CreateApplicationsService {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
         String userId = principal.getClaim(USER_ID_CLAIM);
 
-        List<Long> catalogueItemIds = createApplication.getDatasetIds().stream()
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
+        List<String> catalogueItemIds = createApplication.getDatasetIds();
         
         CreateApplicationCommand command = CreateApplicationCommand.builder()
                 .catalogueItemIds(catalogueItemIds)

@@ -1,7 +1,7 @@
 {
     "request": {
       "method": "POST",
-      "url": "/api/v1/applications/create"
+      "url": "/api/applications/create"
     },
     "response": {
       "status": 200,

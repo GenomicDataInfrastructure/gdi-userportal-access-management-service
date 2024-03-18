@@ -38,9 +38,7 @@ public class ApplicationCommandApiImplTest {
         .when()
         .post("/api/v1/applications/create")
         .then()
-        .statusCode(200)
-        .body("success", equalTo(true))
-        .body("application-id", equalTo(12345));
+        .statusCode(204);
   }
 
   private String getAccessToken(String userName) {

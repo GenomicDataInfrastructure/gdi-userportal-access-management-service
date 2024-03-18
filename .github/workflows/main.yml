@@ -11,11 +11,10 @@ on:
     types:
       - completed
 
-
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/genomicdatainfrastructure/gdi-userportal-access-management-service
- 
+
 jobs:
   ort:
     strategy:
@@ -46,7 +45,7 @@ jobs:
       - name: Set up GraalVM JDK 21
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '21'
+          java-version: "21"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -56,33 +55,48 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
 
-      - name: Build Docker image for scanning
+      - name: Extract last tag
+        id: tag
+        run: |
+          IFS=',' read -ra TAGS <<< "${{ steps.meta.outputs.tags }}"
+          LAST_INDEX=$((${#TAGS[@]} - 1))
+          echo "last_tag=${TAGS[LAST_INDEX]}" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
-          load: true
-          tags: ${{ steps.meta.outputs.tags }}
+          push: false
+          tags: ${{ steps.tag.outputs.last_tag }}
           labels: ${{ steps.meta.outputs.labels }}
+          load: true
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: "${{ env.IMAGE_NAME }}:main"
+          image-ref: "${{ steps.tag.outputs.last_tag }}"
           format: "table"
           exit-code: "1"
           ignore-unfixed: true
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
 
-      - name: Build and push Docker image
+      - name: Push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  

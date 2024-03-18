@@ -2,7 +2,7 @@
 ###
 ### SPDX-License-Identifier: Apache-2.0
 
-POST http://localhost:3000/api/applications/create
+POST https://rems-demo.rahtiapp.fi/api/applications/create
 Accept: application/json
 Content-Type: application/json
 x-rems-api-key: 42

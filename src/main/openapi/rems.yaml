@@ -70,6 +70,38 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ApplicationOverview'
+  /api/applications/create:
+    post:
+      tags:
+        - rems-application-command
+      summary: 'Create a new application (roles: logged-in)'
+      parameters:
+        - in: header
+          name: x-rems-api-key
+          description: REMS API-Key (optional for UI, required for API)
+          required: false
+          schema:
+            type: string
+        - in: header
+          name: x-rems-user-id
+          description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          required: false
+          schema:
+            type: string
+      requestBody:
+        description: Application creation data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApplicationCommand'
+      responses:
+        '200':
+          description: Application creation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateApplicationResponse'
 components:
   schemas:
     ApplicationOverview:
@@ -560,3 +592,28 @@ components:
           type: array
           items:
             type: object
+    CreateApplicationCommand:
+      type: object
+      properties:
+        catalogue-item-ids:
+          type: array
+          items:
+            type: string
+      required:
+        - catalogue-item-ids
+    CreateApplicationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errors:
+          type: array
+          items: {}
+        warnings:
+          type: array
+          items: {}
+        application-id:
+          type: integer
+          format: int64
+      required:
+        - success

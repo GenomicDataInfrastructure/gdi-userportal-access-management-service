@@ -127,7 +127,7 @@ paths:
       security:
         - daam_auth:
             - write:applications
-  /api/v1/applications/create-application:
+  /api/v1/applications/create:
     post:
       summary: Create application
       operationId: create_application_v1

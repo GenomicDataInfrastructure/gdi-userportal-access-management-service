@@ -88,9 +88,11 @@ paths:
             type: string
         - name: application-id
           in: path
+          required: true
           description: Application id
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
           description: ''
@@ -99,7 +101,7 @@ paths:
               schema:
                 type: object
                 items:
-                  $ref: '#/components/schemas/ApplicationOverview'
+                  $ref: '#/components/schemas/Application'
 components:
   schemas:
     ApplicationOverview:
@@ -765,7 +767,9 @@ components:
             - attachment
             - text
         license/title:
-          $ref: '#/components/schemas/LocalizedString'
+          type: object
+          items:
+            $ref: '#/components/schemas/LocalizedString'
         license/id:
           type: integer
           format: int64
@@ -786,7 +790,9 @@ components:
         form/internal-name:
           type: string
         form/external-title:
-          $ref: '#/components/schemas/LocalizedString'
+          type: object
+          items:
+            $ref: '#/components/schemas/LocalizedString'
         form/fields:
           type: array
           items:
@@ -797,14 +803,16 @@ components:
         - field/title
         - field/visible
         - field/type
-        - field/value
+#        - field/value
         - field/id
         - field/optional
       properties:
         field/private:
           type: boolean
         field/title:
-          $ref: '#/components/schemas/LocalizedString'
+          type: object
+          items:
+            $ref: '#/components/schemas/LocalizedString'
         field/visible:
           type: boolean
         field/type:
@@ -825,11 +833,9 @@ components:
             - text
         field/value:
           type: object
-          required:
-            - description
           properties:
             description:
-              oneOf:
+              x-oneOf:
                 - type: string
                 - type: array
                   items:
@@ -864,4 +870,6 @@ components:
           type: integer
           format: int64
         event/actor-attributes:
-          $ref: '#/components/schemas/UserWithAttributes'
+          type: object
+          items:
+            $ref: '#/components/schemas/UserWithAttributes'

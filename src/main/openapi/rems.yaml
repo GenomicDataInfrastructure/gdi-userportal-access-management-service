@@ -70,6 +70,36 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ApplicationOverview'
+  /api/applications/{application-id}:
+    get:
+      tags:
+        - rems-applications
+      summary: 'Get the application details for a given one (roles: logged-in)'
+      parameters:
+        - name: x-rems-api-key
+          in: header
+          description: REMS API-Key (optional for UI, required for API)
+          schema:
+            type: string
+        - name: x-rems-user-id
+          in: header
+          description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          schema:
+            type: string
+        - name: application-id
+          in: path
+          description: Application id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ApplicationOverview'
 components:
   schemas:
     ApplicationOverview:
@@ -217,6 +247,166 @@ components:
         application/modified:
           type: string
           format: date-time
+    Application:
+      required:
+#        - application/accepted-licenses
+#        - application/applicant
+#        - application/attachments
+#        - application/created
+#        - application/description
+        - application/events
+#        - application/external-id
+        - application/forms
+#        - application/id
+#        - application/invited-members
+#        - application/last-activity
+        - applications/licenses
+#        - application/members
+#        - application/modified
+#        - application/permissions
+#        - application/resources
+#        - application/roles
+#        - application/state
+#        - application/todo
+#        - application/workflow
+      properties:
+        application/workflow:
+          $ref: '#/components/schemas/Response10953Workflow'
+        application/external-id:
+          type: string
+          description: Assigned external id if it exists, otherwise the generated one
+        application/first-submitted:
+          type: string
+          format: date-time
+        application/blacklist:
+          type: array
+          description: Which members of this application are blacklisted for which resources
+          items:
+            $ref: '#/components/schemas/BlacklistEntry'
+        application/id:
+          type: integer
+          format: int64
+        application/duo:
+          $ref: '#/components/schemas/Response10953Duo'
+        application/assigned-external-id:
+          type: string
+        application/applicant:
+          $ref: '#/components/schemas/UserWithAttributes'
+        application/copied-from:
+          $ref: '#/components/schemas/Response10953CopiedFrom'
+        application/todo:
+          type: string
+          nullable: true
+          enum:
+            - no-pending-requests
+            - new-application
+            - resubmitted-application
+            - waiting-for-your-decision
+            - waiting-for-review
+            - waiting-for-your-review
+            - waiting-for-decision
+        application/members:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/UserWithAttributes'
+        entitlement/end:
+          type: string
+          format: date-time
+          nullable: true
+        application/resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Resource'
+        application/deadline:
+          type: string
+          format: date-time
+        application/accepted-licenses:
+          $ref: '#/components/schemas/ApplicationAcceptedLicenses'
+        application/invited-members:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Response10953InvitedMembers'
+        application/description:
+          type: string
+        application/votes:
+          $ref: '#/components/schemas/Response10953Votes'
+        application/generated-external-id:
+          type: string
+        application/permissions:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            enum:
+              - application.command/copy-as-new
+              - application.command/invite-member
+              - application.command/submit
+              - application.command/invite-decider
+              - application.command/request-review
+              - see-everything
+              - application.command/redact-attachments
+              - application.command/invite-reviewer
+              - application.command/change-applicant
+              - application.command/review
+              - application.command/reject
+              - application.command/add-licenses
+              - application.command/remove-member
+              - application.command/revoke
+              - application.command/vote
+              - application.command/request-decision
+              - application.command/accept-licenses
+              - application.command/accept-invitation
+              - application.command/decide
+              - application.command/uninvite-member
+              - application.command/remark
+              - application.command/send-expiration-notifications
+              - application.command/add-member
+              - application.command/delete
+              - application.command/save-draft
+              - application.command/approve
+              - application.command/return
+              - application.command/assign-external-id
+              - application.command/close
+              - application.command/change-resources
+              - application.command/create
+        application/last-activity:
+          type: string
+          format: date-time
+        application/roles:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        application/attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationAttachment'
+        application/created:
+          type: string
+          format: date-time
+        application/state:
+          type: string
+        application/copied-to:
+          type: array
+          items:
+            $ref: '#/components/schemas/Response10953CopiedTo'
+        application/modified:
+          type: string
+          format: date-time
+        application/events:
+            type: array
+            items:
+                $ref: '#/components/schemas/Event'
+        application/forms:
+            type: array
+            items:
+                $ref: '#/components/schemas/Form'
+        application/licenses:
+            type: array
+            items:
+                $ref: '#/components/schemas/V2License'
     BlacklistEntry:
       required:
         - blacklist/resource
@@ -560,3 +750,118 @@ components:
           type: array
           items:
             type: object
+    V2License:
+      required:
+        - license/type
+        - license/title
+        - license/id
+        - license/enabled
+        - license/archived
+      properties:
+        license/type:
+          type: string
+          enum:
+            - link
+            - attachment
+            - text
+        license/title:
+          $ref: '#/components/schemas/LocalizedString'
+        license/id:
+          type: integer
+          format: int64
+        license/enabled:
+          type: boolean
+        license/archived:
+          type: boolean
+    Form:
+      required:
+        - form/id
+        - form/internal-name
+        - form/external-title
+        - form/fields
+      properties:
+        form/id:
+          type: integer
+          format: int64
+        form/internal-name:
+          type: string
+        form/external-title:
+          $ref: '#/components/schemas/LocalizedString'
+        form/fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+    Field:
+      required:
+        - field/private
+        - field/title
+        - field/visible
+        - field/type
+        - field/value
+        - field/id
+        - field/optional
+      properties:
+        field/private:
+          type: boolean
+        field/title:
+          $ref: '#/components/schemas/LocalizedString'
+        field/visible:
+          type: boolean
+        field/type:
+          type: string
+          enum:
+            - description
+            - email
+            - date
+            - phone-number
+            - table
+            - header
+            - texta
+            - option
+            - label
+            - multiselect
+            - ip-address
+            - attachment
+            - text
+        field/value:
+          type: object
+          required:
+            - description
+          properties:
+            description:
+              oneOf:
+                - type: string
+                - type: array
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        column:
+                          type: string
+                        value:
+                          type: string
+        field/id:
+          type: string
+        field/optional:
+          type: boolean
+    Event:
+      required:
+        - event/type
+        - event/time
+        - event/actor
+        - application/id
+        - event/actor-attributes
+      properties:
+        event/type:
+          type: string
+        event-time:
+          type: string
+          format: date-time
+        event/actor:
+          type: string
+        application/id:
+          type: integer
+          format: int64
+        event/actor-attributes:
+          $ref: '#/components/schemas/UserWithAttributes'

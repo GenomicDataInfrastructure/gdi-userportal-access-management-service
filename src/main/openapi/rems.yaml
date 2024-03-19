@@ -249,26 +249,26 @@ components:
           format: date-time
     Application:
       required:
-#        - application/accepted-licenses
-#        - application/applicant
-#        - application/attachments
-#        - application/created
-#        - application/description
+        - application/accepted-licenses
+        - application/applicant
+        - application/attachments
+        - application/created
+        - application/description
         - application/events
-#        - application/external-id
+        - application/external-id
         - application/forms
-#        - application/id
-#        - application/invited-members
-#        - application/last-activity
+        - application/id
+        - application/invited-members
+        - application/last-activity
         - applications/licenses
-#        - application/members
-#        - application/modified
-#        - application/permissions
-#        - application/resources
-#        - application/roles
-#        - application/state
-#        - application/todo
-#        - application/workflow
+        - application/members
+        - application/modified
+        - application/permissions
+        - application/resources
+        - application/roles
+        - application/state
+        - application/todo
+        - application/workflow
       properties:
         application/workflow:
           $ref: '#/components/schemas/Response10953Workflow'

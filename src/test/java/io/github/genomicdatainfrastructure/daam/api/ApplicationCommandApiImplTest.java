@@ -41,6 +41,17 @@ public class ApplicationCommandApiImplTest {
         .statusCode(204);
   }
 
+  @Test
+  void submitApplication_when_authenticated() {
+    given()
+        .auth()
+        .oauth2(getAccessToken("alice"))
+        .when()
+        .post("/api/v1/applications/1/submit")
+        .then()
+        .statusCode(204);
+  }
+
   private String getAccessToken(String userName) {
     return keycloakClient.getAccessToken(userName);
   }

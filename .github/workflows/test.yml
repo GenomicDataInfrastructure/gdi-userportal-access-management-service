@@ -18,7 +18,7 @@ jobs:
         with:
           java-version: '21'
       - name: run tests
-        run: mvn --batch-mode --update-snapshots verify checkstyle:check
+        run: mvn --batch-mode --update-snapshots verify formatter:validate
       - name: run sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

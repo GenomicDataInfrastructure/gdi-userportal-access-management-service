@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 package io.github.genomicdatainfrastructure.daam.services;
-import io.github.genomicdatainfrastructure.daam.domain.ApplicationMapper;
+import io.github.genomicdatainfrastructure.daam.model.RemsApplicationMapper;
 import io.github.genomicdatainfrastructure.daam.model.RetrievedApplication;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationsApi;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,6 +27,6 @@ public class RetrieveApplicationService {
     }
 
     public RetrievedApplication retrieveApplication(Long applicationId, String userId) {
-        return ApplicationMapper.toRetrievedApplication(applicationsApi.apiApplicationsApplicationIdGet(applicationId, remsApiKey, userId));
+        return RemsApplicationMapper.toRetrievedApplication(applicationsApi.apiApplicationsApplicationIdGet(applicationId, remsApiKey, userId));
     }
 }

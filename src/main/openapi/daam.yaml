@@ -631,10 +631,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Label"
+          title: Dataset title
         url:
           type: array
           items:
             $ref: "#/components/schemas/Label"
+          title: Dataset URL
     RetrievedAcceptedLicense:
       properties:
         userId:
@@ -682,9 +684,6 @@ components:
         type:
           type: string
           title: Field type
-        value:
-          type: string
-          title: Field value
     Label:
       properties:
         language:
@@ -695,9 +694,6 @@ components:
           title: Label name
     RetrievedApplicationEvent:
       properties:
-        id:
-          type: string
-          title: Event id
         actorId:
           type: string
           title: actor id
@@ -724,11 +720,6 @@ components:
         type:
           type: string
           title: License type
-        link:
-          type: array
-          title: License link
-          items:
-            $ref: "#/components/schemas/Label"
         title:
           type: array
           title: License title

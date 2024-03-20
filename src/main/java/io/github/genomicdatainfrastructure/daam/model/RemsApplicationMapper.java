@@ -2,16 +2,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.genomicdatainfrastructure.daam.domain;
+package io.github.genomicdatainfrastructure.daam.model;
 
-import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ApplicationMapper {
+public class RemsApplicationMapper {
 
     public static RetrievedApplication toRetrievedApplication(Application remsApplication) {
         return RetrievedApplication
@@ -85,7 +84,7 @@ public class ApplicationMapper {
                                                          toLabelObject(form.getFormExternalTitle()),
                                                          form.getFormFields()
                                                                  .stream()
-                                                                 .map(ApplicationMapper::toRetrievedApplicationFormField)
+                                                                 .map(RemsApplicationMapper::toRetrievedApplicationFormField)
                                                                  .toList()))
                 .toList();
     }
@@ -96,8 +95,7 @@ public class ApplicationMapper {
                                                  remsFormField.getFieldPrivate(),
                                                  remsFormField.getFieldVisible(),
                                                  toLabelObject(remsFormField.getFieldTitle()),
-                                                 remsFormField.getFieldType().value(),
-                                                 remsFormField.getFieldValue().toString());
+                                                 remsFormField.getFieldType().value());
     }
 
 
@@ -119,7 +117,7 @@ public class ApplicationMapper {
     private static List<RetrievedApplicationEvent> toRetrievedApplicationEvents(List<Event> remsApplicationEvents) {
         return remsApplicationEvents
                 .stream()
-                .map(event -> new RetrievedApplicationEvent(event.getEventId().toString(),
+                .map(event -> new RetrievedApplicationEvent(
                                                             event.getEventActor(),
                                                             event.getEventTime(),
                                                             event.getEventType()))
@@ -139,7 +137,6 @@ public class ApplicationMapper {
         return remsApplicationLicenses
                 .stream()
                 .map(license -> new RetrievedApplicationLicense(license.getLicenseType().value(),
-                                                                toLabelObject(license.getLicenseLink()),
                                                                 toLabelObject(license.getLicenseTitle()),
                                                                 license.getLicenseEnabled(),
                                                                 license.getLicenseArchived()))
@@ -153,5 +150,4 @@ public class ApplicationMapper {
                 .map(entry -> new Label(entry.getKey(), entry.getValue()))
                 .toList();
     }
-
 }

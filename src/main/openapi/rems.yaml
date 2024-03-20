@@ -754,7 +754,6 @@ components:
       required:
         - license/type
         - license/title
-        - license/link
         - license/id
         - license/enabled
         - license/archived
@@ -766,8 +765,6 @@ components:
             - attachment
             - text
         license/title:
-          $ref: '#/components/schemas/LocalizedString'
-        license/link:
           $ref: '#/components/schemas/LocalizedString'
         license/id:
           type: integer
@@ -848,16 +845,12 @@ components:
           type: boolean
     Event:
       required:
-        - event/id
         - event/type
         - event/time
         - event/actor
         - application/id
         - event/actor-attributes
       properties:
-        event/id:
-          type: integer
-          format: int64
         event/type:
           type: string
         event-time:

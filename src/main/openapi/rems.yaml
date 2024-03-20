@@ -99,9 +99,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Application'
+                $ref: '#/components/schemas/Application'
 components:
   schemas:
     ApplicationOverview:
@@ -756,6 +754,7 @@ components:
       required:
         - license/type
         - license/title
+        - license/link
         - license/id
         - license/enabled
         - license/archived
@@ -767,9 +766,9 @@ components:
             - attachment
             - text
         license/title:
-          type: object
-          items:
-            $ref: '#/components/schemas/LocalizedString'
+          $ref: '#/components/schemas/LocalizedString'
+        license/link:
+          $ref: '#/components/schemas/LocalizedString'
         license/id:
           type: integer
           format: int64
@@ -790,9 +789,7 @@ components:
         form/internal-name:
           type: string
         form/external-title:
-          type: object
-          items:
-            $ref: '#/components/schemas/LocalizedString'
+          $ref: '#/components/schemas/LocalizedString'
         form/fields:
           type: array
           items:
@@ -803,16 +800,14 @@ components:
         - field/title
         - field/visible
         - field/type
-#        - field/value
+        - field/value
         - field/id
         - field/optional
       properties:
         field/private:
           type: boolean
         field/title:
-          type: object
-          items:
-            $ref: '#/components/schemas/LocalizedString'
+          $ref: '#/components/schemas/LocalizedString'
         field/visible:
           type: boolean
         field/type:
@@ -853,12 +848,16 @@ components:
           type: boolean
     Event:
       required:
+        - event/id
         - event/type
         - event/time
         - event/actor
         - application/id
         - event/actor-attributes
       properties:
+        event/id:
+          type: integer
+          format: int64
         event/type:
           type: string
         event-time:

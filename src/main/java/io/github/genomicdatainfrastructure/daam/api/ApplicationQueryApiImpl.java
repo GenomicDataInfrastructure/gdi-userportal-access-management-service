@@ -8,6 +8,7 @@ import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticati
 import io.github.genomicdatainfrastructure.daam.model.ListedApplication;
 import io.github.genomicdatainfrastructure.daam.model.RetrievedApplication;
 import io.github.genomicdatainfrastructure.daam.services.ListApplicationsService;
+import io.github.genomicdatainfrastructure.daam.services.RetrieveApplicationService;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
 import java.io.File;
@@ -19,6 +20,7 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
 
   private final SecurityIdentity identity;
   private final ListApplicationsService listApplicationsService;
+  private final RetrieveApplicationService retrieveApplicationService;
 
   @Override
   public List<ListedApplication> listApplicationsV1() {
@@ -29,7 +31,9 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
 
   @Override
   public RetrievedApplication retrieveApplicationV1(String id) {
-    throw new UnsupportedOperationException("Unimplemented method 'retrieveApplicationV1'");
+    var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
+    String userId = principal.getClaim(USER_ID_CLAIM);
+    return retrieveApplicationService.retrieveApplication(Long.parseLong(id), userId);
   }
 
   @Override

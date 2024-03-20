@@ -537,7 +537,7 @@ components:
           type: array
           title: Invited members
           items:
-            $ref: "#/components/schemas/RetrievedApplicationMember"
+            $ref: "#/components/schemas/RetrievedApplicationInvitedMember"
         description:
           type: string
           title: Application description
@@ -614,17 +614,27 @@ components:
         email:
           type: string
           title: Member email
+    RetrievedApplicationInvitedMember:
+      properties:
+        name:
+          type: string
+          title: Member name
+        email:
+          type: string
+          title: Member email
     RetrievedApplicationDataset:
       properties:
         id:
           type: string
           title: Dataset id
         title:
-          type: string
-          title: Dataset title
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
         url:
-          type: string
-          title: Dataset URL
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
     RetrievedAcceptedLicense:
       properties:
         userId:
@@ -638,15 +648,13 @@ components:
         id:
           type: string
           title: Form id
-        title:
-          type: string
-          title: Form title
         internalName:
           type: string
           title: Form internal name
         externalTitle:
-          type: string
-          title: Form external title
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
         fields:
           type: array
           title: Fields

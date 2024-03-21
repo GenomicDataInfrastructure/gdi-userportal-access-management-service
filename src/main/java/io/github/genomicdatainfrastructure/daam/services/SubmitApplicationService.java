@@ -66,7 +66,7 @@ public class SubmitApplicationService {
         }
 
         SubmitApplicationCommand command = SubmitApplicationCommand.builder()
-                .applicationId(Long.valueOf(id))
+                .applicationId(id)
                 .build();
 
         remsApplicationCommandApi.apiApplicationsSubmitPost(command, remsApiKey, userId);

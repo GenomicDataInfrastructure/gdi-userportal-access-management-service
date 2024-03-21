@@ -4,7 +4,9 @@
 package io.github.genomicdatainfrastructure.daam.exceptions;
 
 public class ApplicationNotFoundException extends RuntimeException {
+
+    private static final String MESSAGE = "Application %s not found";
     public ApplicationNotFoundException(Long applicationId) {
-        super("Application " + applicationId + " not found");
+        super(MESSAGE.formatted(applicationId));
     }
 }

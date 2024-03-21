@@ -53,22 +53,37 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=schedule,priority=400
+            type=ref,event=branch,priority=600
+            type=ref,event=pr,priority=500
+            type=semver,pattern={{version}},priority=700
+            type=semver,pattern={{major}}.{{minor}},priority=900
+            type=semver,pattern={{major}},priority=800
+            type=sha,priority=1000
+
+      - name: Extract last tag
+        id: tag
+        run: |
+          IFS=',' read -ra TAGS <<< "${{ steps.meta.outputs.tags }}"
+          LAST_INDEX=$((${#TAGS[@]} - 1))
+          echo "last_tag=${TAGS[LAST_INDEX]}" >> $GITHUB_OUTPUT
 
       - name: Build Docker image for scanning
         uses: docker/build-push-action@v5
         with:
           context: .
           load: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.tag.outputs.last_tag }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: "${{ env.IMAGE_NAME }}:latest"
+          image-ref: "${{ steps.tag.outputs.last_tag }}"
           format: "table"
           exit-code: "1"
           ignore-unfixed: true

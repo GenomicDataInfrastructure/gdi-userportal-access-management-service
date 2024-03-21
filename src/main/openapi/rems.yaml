@@ -70,6 +70,70 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ApplicationOverview'
+  /api/applications/create:
+    post:
+      tags:
+        - rems-application-command
+      summary: 'Create a new application (roles: logged-in)'
+      parameters:
+        - in: header
+          name: x-rems-api-key
+          description: REMS API-Key (optional for UI, required for API)
+          required: false
+          schema:
+            type: string
+        - in: header
+          name: x-rems-user-id
+          description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          required: false
+          schema:
+            type: string
+      requestBody:
+        description: Application creation data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApplicationCommand'
+      responses:
+        '200':
+          description: Application creation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateApplicationResponse'
+  /api/applications/submit:
+    post:
+      tags:
+        - rems-application-command
+      summary: 'Submits a submit command for an application (roles: logged-in)'
+      parameters:
+        - in: header
+          name: x-rems-api-key
+          description: REMS API-Key (optional for UI, required for API)
+          required: false
+          schema:
+            type: string
+        - in: header
+          name: x-rems-user-id
+          description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          required: false
+          schema:
+            type: string
+      requestBody:
+        description: Application submission data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitApplicationCommand'
+      responses:
+        '200':
+          description: Application submission successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitApplicationResponse'
   /api/applications/{application-id}:
     get:
       tags:
@@ -865,3 +929,53 @@ components:
       required:
         - column
         - value
+
+    CreateApplicationCommand:
+      type: object
+      properties:
+        catalogue-item-ids:
+          type: array
+          items:
+            type: string
+      required:
+        - catalogue-item-ids
+    CreateApplicationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errors:
+          type: array
+          items: {}
+        warnings:
+          type: array
+          items: {}
+        application-id:
+          type: integer
+          format: int64
+      required:
+        - success
+    SubmitApplicationCommand:
+      type: object
+      properties:
+        application-id:
+          type: integer
+          format: int64
+      required:
+        - application-id
+    SubmitApplicationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errors:
+          type: array
+          items: {}
+        warnings:
+          type: array
+          items: {}
+        application-id:
+          type: integer
+          format: int64
+      required:
+        - success

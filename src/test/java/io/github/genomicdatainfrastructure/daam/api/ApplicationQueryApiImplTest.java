@@ -122,7 +122,6 @@ public class ApplicationQueryApiImplTest {
   @Test
     public void unauthorized_to_retrieve_an_application_when_no_user() {
         given().when().get("/api/v1/applications/28").then().statusCode(401);
-
   }
 
   @Test

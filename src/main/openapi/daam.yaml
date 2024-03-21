@@ -112,7 +112,8 @@ paths:
           description: ID of application to submit
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "204":
           description: Successful Response (no content)

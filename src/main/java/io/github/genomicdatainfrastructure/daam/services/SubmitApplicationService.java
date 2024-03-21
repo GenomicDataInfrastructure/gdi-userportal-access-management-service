@@ -42,12 +42,12 @@ public class SubmitApplicationService {
         this.remsApplicationsApi = applicationsApi;
     }
 
-    public void submitApplication(String id) {
+    public void submitApplication(Long id) {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
         String userId = principal.getClaim(USER_ID_CLAIM);
 
         try {
-            var application = remsApplicationsApi.apiApplicationsApplicationIdGet(Long.valueOf(id), remsApiKey, userId);
+            var application = remsApplicationsApi.apiApplicationsApplicationIdGet(id, remsApiKey, userId);
 
             if (!application.getApplicationApplicant().getUserid().equals(userId)) {
                 throw new UserNotApplicantException("User is not the applicant of the application");

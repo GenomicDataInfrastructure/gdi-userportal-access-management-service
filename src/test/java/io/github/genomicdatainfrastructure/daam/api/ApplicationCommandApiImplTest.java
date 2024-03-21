@@ -3,11 +3,9 @@
 // SPDX-License-Identifier: Apache-2.0
 package io.github.genomicdatainfrastructure.daam.api;
 
-import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorrectStateException;
 import io.github.genomicdatainfrastructure.daam.model.CreateApplication;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
 import io.quarkus.test.junit.QuarkusTest;
 import static io.restassured.RestAssured.given;
 import io.quarkus.test.keycloak.client.KeycloakTestClient;
@@ -61,7 +59,7 @@ public class ApplicationCommandApiImplTest {
         .when()
         .post("/api/v1/applications/12345/submit")
         .then()
-        .statusCode(403);
+        .statusCode(404);
   }
 
   @Test
@@ -72,7 +70,7 @@ public class ApplicationCommandApiImplTest {
         .when()
         .post("/api/v1/applications/1/submit")
         .then()
-        .statusCode(401);
+        .statusCode(403);
   }
 
   @Test

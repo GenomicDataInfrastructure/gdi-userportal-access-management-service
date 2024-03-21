@@ -37,7 +37,7 @@ public class ListApplicationsService {
     return ListedApplication.builder()
         .id(applicationOverview.getApplicationId().toString())
         .title(applicationOverview.getApplicationExternalId())
-        .currentState(applicationOverview.getApplicationState())
+        .currentState(applicationOverview.getApplicationState().value())
         .stateChangedAt(applicationOverview.getApplicationLastActivity())
         .build();
   }

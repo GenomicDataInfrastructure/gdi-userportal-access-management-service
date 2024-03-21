@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
 package io.github.genomicdatainfrastructure.daam.mappers;
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
 import jakarta.ws.rs.ext.Provider;

@@ -4,7 +4,7 @@
 package io.github.genomicdatainfrastructure.daam.exceptions;
 
 public class ApplicationNotInCorrectStateException extends RuntimeException {
-    public ApplicationNotInCorrectStateException(Long id) {
-        super("Application " + id + " is not in a correct state to be submitted");
+    public ApplicationNotInCorrectStateException(Long id, String state) {
+        super("Application " + id + " is not in correct state: " + state);
     }
 }

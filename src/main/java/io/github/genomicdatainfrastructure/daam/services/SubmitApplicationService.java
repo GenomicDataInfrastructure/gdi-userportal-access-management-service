@@ -64,7 +64,7 @@ public class SubmitApplicationService {
             }
 
             if (!application.getApplicationState().equals(ApplicationStateEnum.DRAFT) && !application.getApplicationState().equals(ApplicationStateEnum.RETURNED)) {
-                throw new ApplicationNotInCorrectStateException(id);
+                throw new ApplicationNotInCorrectStateException(id, application.getApplicationState().value());
             }
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == 404) {

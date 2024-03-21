@@ -17,11 +17,10 @@ public class RemsApplicationMapper {
                 .builder()
                 .workflow(toRetrievedApplicationWorkflow(remsApplication.getApplicationWorkflow()))
                 .externalId(remsApplication.getApplicationExternalId())
-                .id(remsApplication.getApplicationId().toString())
+                .id(remsApplication.getApplicationId())
                 .applicant(toRetrievedApplicationApplicant(remsApplication.getApplicationApplicant()))
                 .members(toRetrievedApplicationMembers(remsApplication.getApplicationMembers()))
                 .datasets(toRetrievedApplicationDatasets(remsApplication.getApplicationResources()))
-                .acceptedLicenses(toRetrievedApplicationAcceptedLicences(remsApplication.getApplicationAcceptedLicenses()))
                 .forms(toRetrievedApplicationForms(remsApplication.getApplicationForms()))
                 .invitedMembers(toRetrievedApplicationInvitedMembers(remsApplication.getApplicationInvitedMembers()))
                 .description(remsApplication.getApplicationDescription())
@@ -39,7 +38,7 @@ public class RemsApplicationMapper {
     }
 
     private static RetrievedApplicationWorkflow toRetrievedApplicationWorkflow(Response10953Workflow remsWorkflow) {
-        return new RetrievedApplicationWorkflow(remsWorkflow.getWorkflowId().toString(),
+        return new RetrievedApplicationWorkflow(remsWorkflow.getWorkflowId(),
                 remsWorkflow.getWorkflowType());
     }
 
@@ -62,24 +61,16 @@ public class RemsApplicationMapper {
     private static List<RetrievedApplicationDataset> toRetrievedApplicationDatasets(List<V2Resource> remsResources) {
         return remsResources
                 .stream()
-                .map(resource -> new RetrievedApplicationDataset(resource.getCatalogueItemId().toString(),
+                .map(resource -> new RetrievedApplicationDataset(resource.getCatalogueItemId(),
                                                                  toLabelObject(resource.getCatalogueItemTitle()),
                                                                  toLabelObject(resource.getCatalogueItemInfourl())))
-                .toList();
-    }
-
-    private static List<RetrievedAcceptedLicense> toRetrievedApplicationAcceptedLicences(Map<String, Set<Long>> remsAcceptedLicenses) {
-        return remsAcceptedLicenses
-                .entrySet()
-                .stream()
-                .flatMap(entry -> entry.getValue().stream().map(licenseId -> new RetrievedAcceptedLicense(entry.getKey(), licenseId.toString())))
                 .toList();
     }
 
     private static List<RetrievedApplicationForm> toRetrievedApplicationForms(List<Form> remsApplicationForms) {
         return remsApplicationForms
                 .stream()
-                .map(form -> new RetrievedApplicationForm(form.getFormId().toString(),
+                .map(form -> new RetrievedApplicationForm(form.getFormId(),
                                                          form.getFormInternalName(),
                                                          toLabelObject(form.getFormExternalTitle()),
                                                          form.getFormFields()
@@ -118,7 +109,7 @@ public class RemsApplicationMapper {
         return remsApplicationEvents
                 .stream()
                 .map(event -> new RetrievedApplicationEvent(
-                                                            event.getEventActor(),
+                                                            event.getEventActorAttributes().getUserid(),
                                                             event.getEventTime(),
                                                             event.getEventType()))
                 .toList();
@@ -127,7 +118,7 @@ public class RemsApplicationMapper {
     private static List<RetrievedApplicationAttachment> toRetrievedApplicationAttachments(List<ApplicationAttachment> remsApplicationAttachments) {
         return remsApplicationAttachments
                 .stream()
-                .map(attachment -> new RetrievedApplicationAttachment(attachment.getAttachmentId().toString(),
+                .map(attachment -> new RetrievedApplicationAttachment(attachment.getAttachmentId(),
                                                                      attachment.getAttachmentFilename().toString(),
                                                                      attachment.getAttachmentType()))
                 .toList();

@@ -74,7 +74,7 @@ paths:
     get:
       tags:
         - rems-applications
-      summary: 'Get the application details for a given one (roles: logged-in)'
+      summary: 'Retrieve a given application (roles: logged-in)'
       parameters:
         - name: x-rems-api-key
           in: header
@@ -100,6 +100,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Application'
+        '404':
+          description: No application found
 components:
   schemas:
     ApplicationOverview:
@@ -604,12 +606,7 @@ components:
           type: integer
           format: int64
         attachment/filename:
-          type: object
-          x-oneOf:
-            - type: string
-            - type: string
-              enum:
-                - filename/redacted
+          type: string
         attachment/type:
           type: string
         attachment/event:
@@ -824,21 +821,15 @@ components:
             - attachment
             - text
         field/value:
-          type: object
-          properties:
-            description:
-              x-oneOf:
-                - type: string
-                - type: array
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        column:
-                          type: string
-                        value:
-                          type: string
+          example: value
+          description: 'A string for most fields, or [[{"column": string, "value": string}]] for table fields'
+          x-oneOf:
+            - type: string
+            - type: array
+              items:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApplicationFormsFieldsValue'
         field/id:
           type: string
         field/optional:
@@ -853,7 +844,7 @@ components:
       properties:
         event/type:
           type: string
-        event-time:
+        event/time:
           type: string
           format: date-time
         event/actor:
@@ -862,6 +853,15 @@ components:
           type: integer
           format: int64
         event/actor-attributes:
-          type: object
-          items:
-            $ref: '#/components/schemas/UserWithAttributes'
+          $ref: '#/components/schemas/UserWithAttributes'
+    ApplicationFormsFieldsValue:
+      type: object
+      properties:
+        column:
+          type: string
+        value:
+          type: string
+      additionalProperties: false
+      required:
+        - column
+        - value

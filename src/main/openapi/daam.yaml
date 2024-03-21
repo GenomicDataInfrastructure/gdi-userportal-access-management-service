@@ -65,7 +65,8 @@ paths:
           description: ID of application to retrieve
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "200":
           description: Successful Response
@@ -73,6 +74,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RetrievedApplication"
+        "404":
+          description: No application found
       security:
         - daam_auth:
             - read:applications
@@ -112,7 +115,8 @@ paths:
           description: ID of application to submit
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "204":
           description: Successful Response (no content)
@@ -164,7 +168,8 @@ paths:
           description: ID of application to submit
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "204":
           description: Successful Response (no content)
@@ -183,7 +188,8 @@ paths:
           description: ID of application to resubmit
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "204":
           description: Successful Response (no content)
@@ -202,7 +208,8 @@ paths:
           description: ID of application to accept terms of use for
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "204":
           description: Successful Response (no content)
@@ -221,7 +228,8 @@ paths:
           description: ID of application to attach file to
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       requestBody:
         content:
           application/pdf:
@@ -252,13 +260,15 @@ paths:
           description: ID of application to retrieve attachment from
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
         - name: attachmentId
           in: path
           description: ID of attachment to retrieve
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "200":
           description: Successful Response
@@ -279,7 +289,8 @@ paths:
           description: ID of application to add member to
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "204":
           description: Successful Response (no content)
@@ -298,7 +309,8 @@ paths:
           description: ID of application to remove member from
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -322,7 +334,8 @@ paths:
           description: ID of application to update datasets of
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -348,7 +361,8 @@ paths:
           description: ID of application to post event to
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -408,7 +422,8 @@ paths:
           description: ID of basket to create application from
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "204":
           description: Successful Response (no content)
@@ -433,8 +448,9 @@ components:
     ListedApplication:
       properties:
         id:
-          type: string
           title: Application id
+          type: integer
+          format: int64
         title:
           type: string
           title: Application title
@@ -460,8 +476,9 @@ components:
     SaveForm:
       properties:
         formId:
-          type: string
           title: Form id
+          type: integer
+          format: int64
         fields:
           type: array
           title: Fields
@@ -470,16 +487,17 @@ components:
     SaveFormField:
       properties:
         fieldId:
-          type: string
           title: Field id
+          type: string
         value:
           type: string
           title: Field value
     SaveDUOCode:
       properties:
         duoId:
-          type: string
           title: DUO id
+          type: integer
+          format: int64
         restrictions:
           type: array
           title: Restrictions
@@ -500,16 +518,17 @@ components:
         workflow:
           $ref: "#/components/schemas/RetrievedApplicationWorkflow"
         externalId:
-          type: string
           title: Application external id
+          type: string
         #blacklist: # TODO
         #  type: array
         #  title: Blacklist
         #  items:
         #    type: string
         id:
-          type: string
           title: application id
+          type: integer
+          format: int64
         applicant:
           title: Applicant
           $ref: "#/components/schemas/RetrievedApplicationApplicant"
@@ -523,11 +542,6 @@ components:
           title: Datasets
           items:
             $ref: "#/components/schemas/RetrievedApplicationDataset"
-        acceptedLicenses:
-          type: array
-          title: Accepted licenses
-          items:
-            $ref: "#/components/schemas/RetrievedAcceptedLicense"
         forms:
           type: array
           title: Forms
@@ -542,8 +556,8 @@ components:
           type: string
           title: Application description
         generatedExternalId:
-          type: string
           title: Application generated external id
+          type: string
         permissions:
           type: array
           title: Permissions
@@ -587,8 +601,9 @@ components:
     RetrievedApplicationWorkflow:
       properties:
         id:
-          type: string
           title: Workflow id
+          type: integer
+          format: int64
         type:
           type: string
           title: Workflow type
@@ -625,8 +640,9 @@ components:
     RetrievedApplicationDataset:
       properties:
         id:
-          type: string
           title: Dataset id
+          type: integer
+          format: int64
         title:
           type: array
           items:
@@ -637,19 +653,12 @@ components:
           items:
             $ref: "#/components/schemas/Label"
           title: Dataset URL
-    RetrievedAcceptedLicense:
-      properties:
-        userId:
-          type: string
-          title: user id
-        licenseId:
-          type: string
-          title: license id
     RetrievedApplicationForm:
       properties:
         id:
-          type: string
           title: Form id
+          type: integer
+          format: int64
         internalName:
           type: string
           title: Form internal name
@@ -665,8 +674,8 @@ components:
     RetrievedApplicationFormField:
       properties:
         id:
-          type: string
           title: Field id
+          type: string
         optional:
           type: boolean
           title: Field optional
@@ -695,8 +704,8 @@ components:
     RetrievedApplicationEvent:
       properties:
         actorId:
-          type: string
           title: actor id
+          type: string
         eventTime:
           type: string
           format: date-time
@@ -707,8 +716,9 @@ components:
     RetrievedApplicationAttachment:
       properties:
         id:
-          type: string
           title: Attachment id
+          type: integer
+          format: int64
         filename:
           type: string
           title: Attachment filename
@@ -734,8 +744,9 @@ components:
     ListedBasket:
       properties:
         id:
-          type: string
           title: basket id
+          type: integer
+          format: int64
         daamUri:
           type: string
           title: DAAM URI
@@ -768,8 +779,8 @@ components:
           type: string
           title: form id
         fieldId:
-          type: string
           title: field id
+          type: string
         fieldValidationKey:
           type: string
           title: field validation key
@@ -783,8 +794,9 @@ components:
     AddedAttachment:
       properties:
         id:
-          type: string
           title: attachment id
+          type: integer
+          format: int64
     AddApplicationEvent:
       properties:
         key:
@@ -822,3 +834,14 @@ components:
           title: dataset ids
           items:
             type: string
+    ErrorResponse:
+      properties:
+        title:
+          type: string
+          title: Error title
+        status:
+          type: integer
+          title: Error status
+        detail:
+          type: string
+          title: Error detail

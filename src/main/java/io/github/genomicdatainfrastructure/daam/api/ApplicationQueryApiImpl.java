@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 package io.github.genomicdatainfrastructure.daam.api;
 
 import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
@@ -30,14 +31,12 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
   }
 
   @Override
-  public RetrievedApplication retrieveApplicationV1(String id) {
-    var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
-    String userId = principal.getClaim(USER_ID_CLAIM);
-    return retrieveApplicationService.retrieveApplication(Long.parseLong(id), userId);
+  public RetrievedApplication retrieveApplicationV1(Long id) {
+    return retrieveApplicationService.retrieveApplication(id);
   }
 
   @Override
-  public File retrieveAttachmentFromApplicationV1(String id, String attachmentId) {
+  public File retrieveAttachmentFromApplicationV1(Long id, Long attachmentId) {
     throw new UnsupportedOperationException(
         "Unimplemented method 'retrieveAttachmentFromApplicationV1'"
     );

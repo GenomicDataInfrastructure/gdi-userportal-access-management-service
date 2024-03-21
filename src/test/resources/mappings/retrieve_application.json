@@ -1,0 +1,289 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/applications/28"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "application/workflow": {
+        "workflow/id": 12,
+        "workflow/type": "research",
+        "workflow.dynamic/handlers": [
+          {
+            "userid": "handler123",
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "organizations": [
+              {
+                "organization/id": "org789"
+              }
+            ],
+            "notification-email": "jane.doe@example.com",
+            "researcher-status-by": "admin",
+            "handler/active?": true,
+            "additionalProp1": "value1",
+            "additionalProp2": "value2",
+            "additionalProp3": "value3"
+          }
+        ],
+        "workflow/voting": {
+          "type": "handlers-vote"
+        },
+        "workflow/anonymize-handling": true
+      },
+      "application/external-id": "APP20240328",
+      "application/first-submitted": "2024-03-20T15:18:24.968Z",
+      "application/blacklist": [],
+      "application/id": 28,
+      "application/duo": {
+        "duo/codes": [],
+        "duo/matches": []
+      },
+      "application/assigned-external-id": "APP20240328",
+      "application/applicant": {
+        "userid": "applicant456",
+        "name": "Robert Johnson",
+        "email": "robert.johnson@example.com",
+        "organizations": [
+          {
+            "organization/id": "org789"
+          }
+        ],
+        "notification-email": "robert.johnson@example.com",
+        "researcher-status-by": "admin",
+        "additionalProp1": "value1",
+        "additionalProp2": "value2",
+        "additionalProp3": "value3"
+      },
+      "application/copied-from": {
+        "application/id": 15,
+        "application/external-id": "APP20240315"
+      },
+      "application/todo": "no-pending-requests",
+      "application/members": [
+        {
+        "userid": "33",
+        "name": "Mike Johnson",
+        "email": "mike.johnson@gmail.com",
+        "organizations": [
+          {
+            "organization/id": "org789"
+          }
+        ],
+        "notification-email": "notif@gmail.com",
+        "researcher-status-by": "name",
+        "additionalProp1": "prop1",
+        "additionalProp2": "prop2",
+        "additionalProp3": "prop3"
+       }
+      ],
+      "entitlement/end": "2024-03-20T15:18:24.968Z",
+      "application/resources": [
+        {
+          "catalogue-item/end": "2024-03-20T15:18:24.968Z",
+          "catalogue-item/expired": true,
+          "catalogue-item/enabled": true,
+          "resource/id": 1,
+          "catalogue-item/title": {
+            "fi": "Ilmastonmuutoksen vaikutusten tutkiminen biodiversiteettiin",
+            "en": "Studying the Impacts of Climate Change on Biodiversity"
+          },
+          "resource/duo": {
+            "duo/codes": []
+          },
+          "catalogue-item/infourl": {
+            "fi": "lisätietoja-suomeksi",
+            "en": "more-info-in-english"
+          },
+          "resource/ext-id": "resource123",
+          "catalogue-item/start": "2024-03-20T15:18:24.969Z",
+          "catalogue-item/archived": true,
+          "catalogue-item/id": 1
+        }
+      ],
+      "application/deadline": "2024-03-20T15:18:24.969Z",
+      "application/accepted-licenses": {
+        "additionalProp1": [
+          1
+        ],
+        "additionalProp2": [
+          2
+        ],
+        "additionalProp3": [
+          3
+        ]
+      },
+      "application/forms": [
+        {
+          "form/id": 1,
+          "form/title": "Application Form",
+          "form/internal-name": "app-form",
+          "form/external-title": {
+            "fi": "Hakemuslomake",
+            "en": "Application Form"
+          },
+          "form/fields": [
+            {
+              "field/private": true,
+              "field/info-text": {
+                "fi": "Täytä hakemuslomake huolellisesti.",
+                "en": "Please fill out the application form carefully."
+              },
+              "field/title": {
+                "fi": "Kuvaus",
+                "en": "Description"
+              },
+              "field/columns": [
+                {
+                  "key": "description",
+                  "label": {
+                    "fi": "Kuvaus",
+                    "en": "Description"
+                  }
+                }
+              ],
+              "field/max-length": 500,
+              "field/options": [],
+              "field/privacy": "private",
+              "field/visible": false,
+              "field/visibility": {
+                "visibility/type": "only-if",
+                "visibility/field": {
+                  "field/id": "description"
+                },
+                "visibility/values": [
+                  "string"
+                ]
+              },
+              "field/type": "description",
+              "field/value": "This is a research proposal.",
+              "field/previous-value": "",
+              "field/id": "1112",
+              "field/optional": true,
+              "field/placeholder": {
+                "fi": "Kirjoita kuvaus tähän",
+                "en": "Write description here"
+              }
+            }
+          ]
+        }
+      ],
+      "application/invited-members": [
+        {
+          "name": "special guest",
+          "email": "special.guest@invited.com"
+        }
+      ],
+      "application/description": "Research proposal for studying the effects of climate change on biodiversity.",
+      "application/votes": {
+        "additionalProp1": "string",
+        "additionalProp2": "string",
+        "additionalProp3": "string"
+      },
+      "application/generated-external-id": "APP20240328",
+      "application/permissions": [
+        "application.command/copy-as-new"
+      ],
+      "application/last-activity": "2024-03-20T15:18:24.97Z",
+      "application/events": [
+        {
+        "event/id": 0,
+        "event/type": "application-created",
+        "event/time": "2024-03-20T15:18:29.97Z",
+        "event/actor": "string",
+        "application/id": 0,
+        "event/actor-attributes": {
+          "userid": "6",
+          "name": "Terry Johnson",
+          "email": "terry.johnson@gmail.con",
+          "organizations": [
+            {
+              "organization/id": "string"
+            }
+          ],
+          "notification-email": "string",
+          "researcher-status-by": "string",
+          "additionalProp1": "string",
+          "additionalProp2": "string",
+          "additionalProp3": "string"
+        },
+        "additionalProp1": "string",
+        "additionalProp2": "string",
+        "additionalProp3": "string"
+       }
+      ],
+      "application/roles": [
+        "researcher"
+      ],
+      "application/attachments": [
+        {
+          "attachment/id": 0,
+          "attachment/filename": "research-proposal.pdf",
+          "attachment/type": "pdf",
+          "attachment/event": {
+            "event/id": 0
+          },
+          "attachment/user": {
+            "userid": "string",
+            "name": "string",
+            "email": "string",
+            "organizations": [
+              {
+                "organization/id": "string"
+              }
+            ],
+            "notification-email": "string",
+            "researcher-status-by": "string",
+            "additionalProp1": "string",
+            "additionalProp2": "string",
+            "additionalProp3": "string"
+          },
+          "attachment/redacted": true,
+          "attachment/can-redact": true
+        }
+      ],
+      "application/licenses": [
+        {
+          "license/attachment-filename": {
+            "fi": "license-fi.pdf",
+            "en": "license-en.pdf"
+          },
+          "license/text": {
+            "fi": "Lisenssin teksti suomeksi.",
+            "en": "License text in English."
+          },
+          "license/type": "text",
+          "license/title": {
+            "fi": "Lisenssi",
+            "en": "License"
+          },
+          "license/link": {
+            "fi": "lisenssilinkki-suomeksi",
+            "en": "license-link-in-english"
+          },
+          "license/id": 1,
+          "license/attachment-id": {
+            "fi": 1,
+            "en": 2
+          },
+          "license/enabled": true,
+          "license/archived": true
+        }
+      ],
+      "application/created": "2024-03-20T15:18:24.97Z",
+      "application/state": "pending-review",
+      "application/copied-to": [
+        {
+          "application/id": 0,
+          "application/external-id": "string"
+        }
+      ],
+      "application/modified": "2024-03-20T15:18:24.97Z"
+    }
+  }
+}
+

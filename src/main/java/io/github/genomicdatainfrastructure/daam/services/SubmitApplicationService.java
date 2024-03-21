@@ -46,6 +46,16 @@ public class SubmitApplicationService {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
         String userId = principal.getClaim(USER_ID_CLAIM);
 
+        checkApplication(id, userId);
+
+        SubmitApplicationCommand command = SubmitApplicationCommand.builder()
+                .applicationId(id)
+                .build();
+
+        remsApplicationCommandApi.apiApplicationsSubmitPost(command, remsApiKey, userId);
+    }
+
+    private void checkApplication(Long id, String userId) {
         try {
             var application = remsApplicationsApi.apiApplicationsApplicationIdGet(id, remsApiKey, userId);
 
@@ -56,19 +66,14 @@ public class SubmitApplicationService {
             if (!application.getApplicationState().equals(ApplicationStateEnum.DRAFT) && !application.getApplicationState().equals(ApplicationStateEnum.RETURNED)) {
                 throw new ApplicationNotInCorrectStateException("Application is not in a submittable status");
             }
-
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == 404) {
                 throw new ApplicationNotFoundException("Application not found");
-            } else {
-                throw e;
             }
+
+            throw e;
         }
 
-        SubmitApplicationCommand command = SubmitApplicationCommand.builder()
-                .applicationId(id)
-                .build();
-
-        remsApplicationCommandApi.apiApplicationsSubmitPost(command, remsApiKey, userId);
     }
+
 }

@@ -60,15 +60,15 @@ public class SubmitApplicationService {
             var application = remsApplicationsApi.apiApplicationsApplicationIdGet(id, remsApiKey, userId);
 
             if (!application.getApplicationApplicant().getUserid().equals(userId)) {
-                throw new UserNotApplicantException("User is not the applicant of the application");
+                throw new UserNotApplicantException(id, userId);
             }
 
             if (!application.getApplicationState().equals(ApplicationStateEnum.DRAFT) && !application.getApplicationState().equals(ApplicationStateEnum.RETURNED)) {
-                throw new ApplicationNotInCorrectStateException("Application is not in a submittable status");
+                throw new ApplicationNotInCorrectStateException(id);
             }
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == 404) {
-                throw new ApplicationNotFoundException("Application not found");
+                throw new ApplicationNotFoundException(id);
             }
 
             throw e;

@@ -304,6 +304,14 @@ components:
           format: date-time
         application/state:
           type: string
+          enum:
+            - application.state/draft
+            - application.state/closed
+            - application.state/approved
+            - application.state/returned
+            - application.state/rejected
+            - application.state/revoked
+            - application.state/submitted
         application/copied-to:
           type: array
           items:

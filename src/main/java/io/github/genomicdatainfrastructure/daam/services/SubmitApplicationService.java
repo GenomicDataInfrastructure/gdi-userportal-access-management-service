@@ -12,6 +12,7 @@ import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantExcep
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationsApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.SubmitApplicationCommand;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.ApplicationOverview.ApplicationStateEnum;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -52,7 +53,7 @@ public class SubmitApplicationService {
                 throw new UserNotApplicantException("User is not the applicant of the application");
             }
 
-            if (!application.getApplicationState().equals("application.state/draft") && !application.getApplicationState().equals("application.state/returned")) {
+            if (!application.getApplicationState().equals(ApplicationStateEnum.DRAFT) && !application.getApplicationState().equals(ApplicationStateEnum.RETURNED)) {
                 throw new ApplicationNotInCorrectStateException("Application is not in a submittable status");
             }
 

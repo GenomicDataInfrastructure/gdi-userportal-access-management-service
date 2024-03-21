@@ -70,6 +70,36 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ApplicationOverview'
+  /api/applications/{application-id}:
+    get:
+      tags:
+        - rems-applications
+      summary: 'Get application details (roles: logged-in)'
+      parameters:
+        - name: x-rems-api-key
+          in: header
+          description: REMS API-Key (optional for UI, required for API)
+          schema:
+            type: string
+        - name: x-rems-user-id
+          in: header
+          description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          schema:
+            type: string
+        - name: application-id
+          in: path
+          description: Application id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationOverview'
   /api/applications/create:
     post:
       tags:

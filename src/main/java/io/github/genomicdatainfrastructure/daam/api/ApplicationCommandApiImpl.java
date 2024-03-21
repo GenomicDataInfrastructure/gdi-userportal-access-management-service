@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.List;
 
 import io.github.genomicdatainfrastructure.daam.services.CreateApplicationService;
+import io.github.genomicdatainfrastructure.daam.services.SubmitApplicationService;
 import io.github.genomicdatainfrastructure.daam.model.AddApplicationEvent;
 import io.github.genomicdatainfrastructure.daam.model.AddedAttachments;
 import io.github.genomicdatainfrastructure.daam.model.CreateApplication;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     private final CreateApplicationService createApplicationService;
+    private final SubmitApplicationService submitApplicationService;
 
     @Override
     public Response acceptApplicationTermsV1(String id) {
@@ -84,9 +86,8 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     @Override
     public Response submitApplicationV1(String id) {
-        throw new UnsupportedOperationException(
-            "Unimplemented method 'submitApplicationV1'"
-        );
+        submitApplicationService.submitApplication(id);
+        return Response.noContent().build();
     }
 
     @Override

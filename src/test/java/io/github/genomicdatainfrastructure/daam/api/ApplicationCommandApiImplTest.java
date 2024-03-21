@@ -81,7 +81,7 @@ public class ApplicationCommandApiImplTest {
         .when()
         .post("/api/v1/applications/2/submit")
         .then()
-        .statusCode(400);
+        .statusCode(428);
   }
 
 

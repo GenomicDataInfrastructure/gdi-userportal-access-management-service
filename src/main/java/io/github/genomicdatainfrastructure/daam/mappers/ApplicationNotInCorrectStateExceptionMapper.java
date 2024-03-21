@@ -12,6 +12,6 @@ import jakarta.ws.rs.ext.Provider;
 public class ApplicationNotInCorrectStateExceptionMapper implements ExceptionMapper<ApplicationNotInCorrectStateException> {
     @Override
     public Response toResponse(ApplicationNotInCorrectStateException exception) {
-        return Response.status(Response.Status.BAD_REQUEST).entity(exception.getMessage()).build();
+        return Response.status(Response.Status.PRECONDITION_REQUIRED).entity(exception.getMessage()).build();
     }
 }

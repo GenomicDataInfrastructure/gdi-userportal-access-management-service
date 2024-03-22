@@ -17,8 +17,12 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         with:
           java-version: '21'
-      - name: Run the Maven
+      - name: run tests
         run: mvn --batch-mode --update-snapshots verify checkstyle:check
+      - name: run sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.coverage.jacoco.xmlReportPaths=./target/jacoco-report/jacoco.xml -Dsonar.organization=genomicdatainfrastructure -Dsonar.projectKey=GenomicDataInfrastructure_gdi-userportal-access-management-service
   reuse:
     runs-on: ubuntu-latest
     permissions:

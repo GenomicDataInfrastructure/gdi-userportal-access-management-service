@@ -7,5 +7,5 @@ import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
 public class ApplicationCommandApiImplIT extends ApplicationCommandApiImplTest {
-    
+
 }

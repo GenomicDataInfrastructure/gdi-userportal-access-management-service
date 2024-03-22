@@ -22,8 +22,8 @@ public class CreateApplicationService {
 
     @Inject
     public CreateApplicationService(
-        @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
-        @RestClient RemsApplicationCommandApi applicationsApi
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
+            @RestClient RemsApplicationCommandApi applicationsApi
     ) {
         this.remsApiKey = remsApiKey;
         this.remsApplicationCommandApi = applicationsApi;
@@ -31,11 +31,11 @@ public class CreateApplicationService {
 
     public void createRemsApplication(CreateApplication createApplication, String userId) {
         List<String> catalogueItemIds = createApplication.getDatasetIds();
-        
+
         CreateApplicationCommand command = CreateApplicationCommand.builder()
                 .catalogueItemIds(catalogueItemIds)
                 .build();
-    
+
         remsApplicationCommandApi.apiApplicationsCreatePost(command, remsApiKey, userId);
     }
 }

@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.genomicdatainfrastructure.daam.model;
+package io.github.genomicdatainfrastructure.daam.mappers;
 
+import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
 
 import java.util.List;
@@ -53,8 +54,8 @@ public class RemsApplicationMapper {
         return remsMembers
                 .stream()
                 .map(member -> new RetrievedApplicationMember(member.getUserid(),
-                                                              member.getName(),
-                                                              member.getEmail()))
+                        member.getName(),
+                        member.getEmail()))
                 .toList();
     }
 
@@ -62,8 +63,8 @@ public class RemsApplicationMapper {
         return remsResources
                 .stream()
                 .map(resource -> new RetrievedApplicationDataset(resource.getCatalogueItemId(),
-                                                                 toLabelObject(resource.getCatalogueItemTitle()),
-                                                                 toLabelObject(resource.getCatalogueItemInfourl())))
+                        toLabelObject(resource.getCatalogueItemTitle()),
+                        toLabelObject(resource.getCatalogueItemInfourl())))
                 .toList();
     }
 
@@ -71,22 +72,22 @@ public class RemsApplicationMapper {
         return remsApplicationForms
                 .stream()
                 .map(form -> new RetrievedApplicationForm(form.getFormId(),
-                                                         form.getFormInternalName(),
-                                                         toLabelObject(form.getFormExternalTitle()),
-                                                         form.getFormFields()
-                                                                 .stream()
-                                                                 .map(RemsApplicationMapper::toRetrievedApplicationFormField)
-                                                                 .toList()))
+                        form.getFormInternalName(),
+                        toLabelObject(form.getFormExternalTitle()),
+                        form.getFormFields()
+                                .stream()
+                                .map(RemsApplicationMapper::toRetrievedApplicationFormField)
+                                .toList()))
                 .toList();
     }
 
     private static RetrievedApplicationFormField toRetrievedApplicationFormField(Field remsFormField) {
         return new RetrievedApplicationFormField(remsFormField.getFieldId(),
-                                                 remsFormField.getFieldOptional(),
-                                                 remsFormField.getFieldPrivate(),
-                                                 remsFormField.getFieldVisible(),
-                                                 toLabelObject(remsFormField.getFieldTitle()),
-                                                 remsFormField.getFieldType().value());
+                remsFormField.getFieldOptional(),
+                remsFormField.getFieldPrivate(),
+                remsFormField.getFieldVisible(),
+                toLabelObject(remsFormField.getFieldTitle()),
+                remsFormField.getFieldType().value());
     }
 
 
@@ -94,8 +95,8 @@ public class RemsApplicationMapper {
         return remsInvitedMembers
                 .stream()
                 .map(invitedMember -> new RetrievedApplicationInvitedMember(
-                                                invitedMember.getName(),
-                                                invitedMember.getEmail()))
+                        invitedMember.getName(),
+                        invitedMember.getEmail()))
                 .toList();
     }
 
@@ -105,13 +106,14 @@ public class RemsApplicationMapper {
                 .map(Application.ApplicationPermissionsEnum::value)
                 .toList();
     }
+
     private static List<RetrievedApplicationEvent> toRetrievedApplicationEvents(List<Event> remsApplicationEvents) {
         return remsApplicationEvents
                 .stream()
                 .map(event -> new RetrievedApplicationEvent(
-                                                            event.getEventActorAttributes().getUserid(),
-                                                            event.getEventTime(),
-                                                            event.getEventType()))
+                        event.getEventActorAttributes().getUserid(),
+                        event.getEventTime(),
+                        event.getEventType()))
                 .toList();
     }
 
@@ -119,8 +121,8 @@ public class RemsApplicationMapper {
         return remsApplicationAttachments
                 .stream()
                 .map(attachment -> new RetrievedApplicationAttachment(attachment.getAttachmentId(),
-                                                                     attachment.getAttachmentFilename().toString(),
-                                                                     attachment.getAttachmentType()))
+                        attachment.getAttachmentFilename(),
+                        attachment.getAttachmentType()))
                 .toList();
     }
 
@@ -128,9 +130,9 @@ public class RemsApplicationMapper {
         return remsApplicationLicenses
                 .stream()
                 .map(license -> new RetrievedApplicationLicense(license.getLicenseType().value(),
-                                                                toLabelObject(license.getLicenseTitle()),
-                                                                license.getLicenseEnabled(),
-                                                                license.getLicenseArchived()))
+                        toLabelObject(license.getLicenseTitle()),
+                        license.getLicenseEnabled(),
+                        license.getLicenseArchived()))
                 .toList();
     }
 

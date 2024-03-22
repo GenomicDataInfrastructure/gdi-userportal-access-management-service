@@ -1,9 +1,8 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-package io.github.genomicdatainfrastructure.daam.mappers;
+package io.github.genomicdatainfrastructure.daam.api;
 
-import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorrectStateException;
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;

@@ -32,7 +32,7 @@ public class RemsApplicationMapper {
                 .attachments(toRetrievedApplicationAttachments(remsApplication.getApplicationAttachments()))
                 .licenses(toRetrievedApplicationLicences(remsApplication.getApplicationLicenses()))
                 .createdAt(remsApplication.getApplicationCreated())
-                .state(remsApplication.getApplicationState())
+                .state(RetrievedApplication.StateEnum.fromString(remsApplication.getApplicationState().value()))
                 .modifiedAt(remsApplication.getApplicationModified())
                 .build();
     }

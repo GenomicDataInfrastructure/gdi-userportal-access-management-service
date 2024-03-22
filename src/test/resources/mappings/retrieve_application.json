@@ -275,7 +275,7 @@
         }
       ],
       "application/created": "2024-03-20T15:18:24.97Z",
-      "application/state": "pending-review",
+      "application/state": "application.state/submitted",
       "application/copied-to": [
         {
           "application/id": 0,

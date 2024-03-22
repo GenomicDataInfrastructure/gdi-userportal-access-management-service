@@ -76,6 +76,10 @@ paths:
                 $ref: "#/components/schemas/RetrievedApplication"
         "404":
           description: No application found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - daam_auth:
             - read:applications
@@ -611,8 +615,16 @@ components:
           format: date-time
           title: Created at
         state:
-          type: string
           title: Application state
+          type: string
+          enum:
+            - application.state/draft
+            - application.state/closed
+            - application.state/approved
+            - application.state/returned
+            - application.state/rejected
+            - application.state/revoked
+            - application.state/submitted
         modifiedAt:
           type: string
           format: date-time

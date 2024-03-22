@@ -23,35 +23,35 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     private final SubmitApplicationService submitApplicationService;
 
     @Override
-    public Response acceptApplicationTermsV1(String id) {
+    public Response acceptApplicationTermsV1(Long id) {
         throw new UnsupportedOperationException(
             "Unimplemented method 'acceptApplicationTermsV1'"
         );
     }
 
     @Override
-    public List<AddedAttachments> addAttachmentToApplicationV1(String id, File body) {
+    public List<AddedAttachments> addAttachmentToApplicationV1(Long id, File body) {
         throw new UnsupportedOperationException(
             "Unimplemented method 'addAttachmentToApplicationV1'"
         );
     }
 
     @Override
-    public Response addEventToApplicationV1(String id, AddApplicationEvent addApplicationEvent) {
+    public Response addEventToApplicationV1(Long id, AddApplicationEvent addApplicationEvent) {
         throw new UnsupportedOperationException(
             "Unimplemented method 'addEventToApplicationV1'"
         );
     }
 
     @Override
-    public Response cancelApplicationV1(String id) {
+    public Response cancelApplicationV1(Long id) {
         throw new UnsupportedOperationException(
             "Unimplemented method 'cancelApplicationV1'"
         );
     }
 
     @Override
-    public Response copyApplicationAsNewV1(String id) {
+    public Response copyApplicationAsNewV1(Long id) {
         throw new UnsupportedOperationException(
             "Unimplemented method 'copyApplicationAsNewV1'"
         );
@@ -64,14 +64,14 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     }
 
     @Override
-    public Response inviteMemberToApplicationV1(String id) {
+    public Response inviteMemberToApplicationV1(Long id) {
         throw new UnsupportedOperationException(
             "Unimplemented method 'inviteMemberToApplicationV1'"
         );
     }
 
     @Override
-    public Response removeMemberFromApplicationV1(String id, RemoveMember removeMember) {
+    public Response removeMemberFromApplicationV1(Long id, RemoveMember removeMember) {
         throw new UnsupportedOperationException(
             "Unimplemented method 'removeMemberFromApplicationV1'"
         );
@@ -91,7 +91,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     }
 
     @Override
-    public Response updateDatasetsOfApplicationV1(String id, List<UpdateDatasets> updateDatasets) {
+    public Response updateDatasetsOfApplicationV1(Long id, List<UpdateDatasets> updateDatasets) {
         throw new UnsupportedOperationException(
             "Unimplemented method 'updateDatasetsOfApplicationV1'"
         );

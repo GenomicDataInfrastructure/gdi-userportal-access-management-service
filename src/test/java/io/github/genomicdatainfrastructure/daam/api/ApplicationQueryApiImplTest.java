@@ -58,7 +58,7 @@ public class ApplicationQueryApiImplTest {
         .body("roles", hasItem("researcher"))
         .body("createdAt", equalTo("2024-03-20T15:18:24.97Z"))
         .body("modifiedAt", equalTo("2024-03-20T15:18:24.97Z"))
-        .body("state", equalTo("pending-review"))
+        .body("state", equalTo("application.state/submitted"))
 
         .body("workflow.id", equalTo(12))
         .body("workflow.type", equalTo("research"))

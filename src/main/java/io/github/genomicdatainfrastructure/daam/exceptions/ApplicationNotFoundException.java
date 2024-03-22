@@ -10,5 +10,4 @@ public class ApplicationNotFoundException extends RuntimeException {
     public ApplicationNotFoundException(Long applicationId) {
         super(MESSAGE.formatted(applicationId));
     }
-<<<<<<< HEAD
 }

@@ -6,7 +6,6 @@ package io.github.genomicdatainfrastructure.daam.api;
 import io.github.genomicdatainfrastructure.daam.model.CreateApplication;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
 import io.quarkus.test.junit.QuarkusTest;
 import static io.restassured.RestAssured.given;
 import io.quarkus.test.keycloak.client.KeycloakTestClient;
@@ -51,6 +50,40 @@ public class ApplicationCommandApiImplTest {
         .then()
         .statusCode(204);
   }
+
+  @Test
+  void submitApplication_when_application_not_found() {
+    given()
+        .auth()
+        .oauth2(getAccessToken("alice"))
+        .when()
+        .post("/api/v1/applications/12345/submit")
+        .then()
+        .statusCode(404);
+  }
+
+  @Test
+  void submitApplication_when_not_applicant() {
+    given()
+        .auth()
+        .oauth2(getAccessToken("jdoe"))
+        .when()
+        .post("/api/v1/applications/1/submit")
+        .then()
+        .statusCode(403);
+  }
+
+  @Test
+  void submitApplication_when_application_not_in_submittable_state() {
+    given()
+        .auth()
+        .oauth2(getAccessToken("alice"))
+        .when()
+        .post("/api/v1/applications/2/submit")
+        .then()
+        .statusCode(428);
+  }
+
 
   private String getAccessToken(String userName) {
     return keycloakClient.getAccessToken(userName);

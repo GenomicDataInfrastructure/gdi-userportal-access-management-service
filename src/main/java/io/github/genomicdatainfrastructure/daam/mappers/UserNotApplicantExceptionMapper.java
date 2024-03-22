@@ -2,26 +2,27 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 package io.github.genomicdatainfrastructure.daam.mappers;
-import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
+
+import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.ext.Provider;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class ApplicationNotFoundExceptionMapper implements ExceptionMapper<ApplicationNotFoundException> {
-
+public class UserNotApplicantExceptionMapper implements ExceptionMapper<UserNotApplicantException> {
     @Override
-    public Response toResponse(ApplicationNotFoundException exception) {
+    public Response toResponse(UserNotApplicantException exception) {
+
         ErrorResponse errorResponse = new ErrorResponse(
-                "Application Not Found",
-                Response.Status.NOT_FOUND.getStatusCode(),
+                "User Not Applicant",
+                Response.Status.FORBIDDEN.getStatusCode(),
                 exception.getMessage()
         );
 
         return Response
-                .status(Response.Status.NOT_FOUND)
+                .status(Response.Status.FORBIDDEN)
                 .entity(errorResponse)
                 .type(MediaType.APPLICATION_JSON)
                 .build();

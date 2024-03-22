@@ -112,7 +112,8 @@ paths:
           description: ID of application to submit
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "204":
           description: Successful Response (no content)
@@ -124,6 +125,25 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ValidationWarnings"
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "428":
+          description: Application not in submittable state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
       security:
         - daam_auth:
             - write:applications
@@ -823,3 +843,14 @@ components:
           title: dataset ids
           items:
             type: string
+    ErrorResponse:
+      properties:
+        title:
+          type: string
+          title: Error title
+        status:
+          type: integer
+          title: Error status
+        detail:
+          type: string
+          title: Error detail

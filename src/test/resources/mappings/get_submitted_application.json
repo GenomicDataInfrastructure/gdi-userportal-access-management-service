@@ -1,0 +1,69 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/applications/2"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+        "application/workflow": {
+          "workflow/id": 4,
+          "workflow/type": "workflow/master"
+        },
+        "application/external-id": "2024/14",
+        "application/blacklist": [],
+        "application/id": 2,
+        "application/applicant": {
+          "userid": "eb4123a3-b722-4798-9af5-8957f823657a",
+          "name": "alice",
+          "email": null
+        },
+        "application/todo": null,
+        "application/members": [],
+        "application/resources": [
+          {
+            "catalogue-item/end": null,
+            "catalogue-item/expired": false,
+            "catalogue-item/enabled": true,
+            "resource/id": 1,
+            "catalogue-item/title": {
+              "en": "Auto-approve workflow"
+            },
+            "catalogue-item/infourl": {
+              "en": "http://www.google.com"
+            },
+            "resource/ext-id": "urn:nbn:fi:lb-201403262",
+            "catalogue-item/start": "2024-03-05T15:16:17.176Z",
+            "catalogue-item/archived": false,
+            "catalogue-item/id": 9
+          }
+        ],
+        "application/accepted-licenses": {},
+        "application/invited-members": [],
+        "application/description": "",
+        "application/generated-external-id": "2024/14",
+        "application/permissions": [
+          "application.command/copy-as-new",
+          "application.command/invite-member",
+          "application.command/submit",
+          "application.command/remove-member",
+          "application.command/accept-licenses",
+          "application.command/uninvite-member",
+          "application.command/delete",
+          "application.command/save-draft",
+          "application.command/change-resources"
+        ],
+        "application/last-activity": "2024-03-05T19:44:46.208Z",
+        "application/roles": [
+          "applicant"
+        ],
+        "application/attachments": [],
+        "application/created": "2024-03-05T19:44:46.208Z",
+        "application/state": "application.state/submitted",
+        "application/modified": "2024-03-05T19:44:46.208Z"
+    }
+  }
+}

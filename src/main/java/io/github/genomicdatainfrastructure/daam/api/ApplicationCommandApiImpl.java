@@ -85,7 +85,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     }
 
     @Override
-    public Response submitApplicationV1(String id) {
+    public Response submitApplicationV1(Long id) {
         submitApplicationService.submitApplication(id);
         return Response.noContent().build();
     }

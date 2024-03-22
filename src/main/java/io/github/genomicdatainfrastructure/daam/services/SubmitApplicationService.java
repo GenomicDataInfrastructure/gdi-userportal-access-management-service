@@ -21,6 +21,8 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import jakarta.ws.rs.WebApplicationException;
 
+import java.util.Set;
+
 @ApplicationScoped
 public class SubmitApplicationService {
 
@@ -28,6 +30,8 @@ public class SubmitApplicationService {
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
     private final RemsApplicationsApi remsApplicationsApi;
+
+    private static final Set<ApplicationStateEnum> STATES_FORBIDDEN_FOR_SUBMISSION = Set.of(ApplicationStateEnum.DRAFT, ApplicationStateEnum.RETURNED);
 
     @Inject
     public SubmitApplicationService(
@@ -63,9 +67,10 @@ public class SubmitApplicationService {
                 throw new UserNotApplicantException(id, userId);
             }
 
-            if (!application.getApplicationState().equals(ApplicationStateEnum.DRAFT) && !application.getApplicationState().equals(ApplicationStateEnum.RETURNED)) {
+            if (!STATES_FORBIDDEN_FOR_SUBMISSION.contains(application.getApplicationState())) {
                 throw new ApplicationNotInCorrectStateException(id, application.getApplicationState().value());
             }
+            
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == 404) {
                 throw new ApplicationNotFoundException(id);

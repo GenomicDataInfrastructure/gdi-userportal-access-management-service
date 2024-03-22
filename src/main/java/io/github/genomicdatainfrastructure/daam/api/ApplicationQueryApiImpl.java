@@ -36,7 +36,8 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
 
     @Override
     public File retrieveAttachmentFromApplicationV1(Long id, Long attachmentId) {
-        throw new UnsupportedOperationException("Unimplemented method 'retrieveAttachmentFromApplicationV1'");
+        throw new UnsupportedOperationException(
+                "Unimplemented method 'retrieveAttachmentFromApplicationV1'");
     }
 
     private String userId() {

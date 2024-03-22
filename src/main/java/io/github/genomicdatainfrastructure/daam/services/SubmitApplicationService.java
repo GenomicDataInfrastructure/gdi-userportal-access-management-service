@@ -21,6 +21,7 @@ import java.util.Set;
 
 @ApplicationScoped
 public class SubmitApplicationService {
+
     private static final Set<ApplicationStateEnum> VALID_STATES_FOR_SUBMISSION = Set.of(
             ApplicationStateEnum.DRAFT,
             ApplicationStateEnum.RETURNED
@@ -44,21 +45,25 @@ public class SubmitApplicationService {
     public void submitApplication(Long id, String userId) {
         checkApplication(id, userId);
 
-        SubmitApplicationCommand command = SubmitApplicationCommand.builder().applicationId(id).build();
+        SubmitApplicationCommand command = SubmitApplicationCommand.builder().applicationId(id)
+                .build();
 
         remsApplicationCommandApi.apiApplicationsSubmitPost(command, remsApiKey, userId);
     }
 
     private void checkApplication(Long id, String userId) {
         try {
-            var application = remsApplicationsApi.apiApplicationsApplicationIdGet(id, remsApiKey, userId);
+            var application = remsApplicationsApi.apiApplicationsApplicationIdGet(id, remsApiKey,
+                    userId);
 
             if (!application.getApplicationApplicant().getUserid().equals(userId)) {
                 throw new UserNotApplicantException(id, userId);
             }
 
             if (!VALID_STATES_FOR_SUBMISSION.contains(application.getApplicationState())) {
-                throw new ApplicationNotInCorrectStateException(id, application.getApplicationState().value());
+                throw new ApplicationNotInCorrectStateException(id, application
+                        .getApplicationState()
+                        .value());
             }
 
         } catch (WebApplicationException e) {

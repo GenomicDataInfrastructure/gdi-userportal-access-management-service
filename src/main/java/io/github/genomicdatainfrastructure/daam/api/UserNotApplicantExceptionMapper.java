@@ -12,6 +12,7 @@ import jakarta.ws.rs.ext.Provider;
 
 @Provider
 public class UserNotApplicantExceptionMapper implements ExceptionMapper<UserNotApplicantException> {
+
     @Override
     public Response toResponse(UserNotApplicantException exception) {
 

@@ -14,9 +14,9 @@ import jakarta.ws.rs.WebApplicationException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-
 @ApplicationScoped
 public class RetrieveApplicationService {
+
     private final String remsApiKey;
     private final RemsApplicationsApi applicationsApi;
 
@@ -32,7 +32,9 @@ public class RetrieveApplicationService {
     public RetrievedApplication retrieveApplication(Long applicationId, String userId) {
         try {
             return RemsApplicationMapper
-                    .toRetrievedApplication(applicationsApi.apiApplicationsApplicationIdGet(applicationId, remsApiKey, userId));
+                    .toRetrievedApplication(applicationsApi.apiApplicationsApplicationIdGet(
+                            applicationId,
+                            remsApiKey, userId));
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == 404) {
                 throw new ApplicationNotFoundException(applicationId);

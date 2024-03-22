@@ -26,7 +26,7 @@ public class PostAuthenticationFilter implements ContainerRequestFilter {
 
     @Inject
     public PostAuthenticationFilter(SecurityIdentity identity,
-                                    CreateRemsUserService createRemsUserService
+            CreateRemsUserService createRemsUserService
     ) {
         this.identity = identity;
         this.createRemsUserService = createRemsUserService;

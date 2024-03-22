@@ -11,7 +11,8 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class ApplicationNotFoundExceptionMapper implements ExceptionMapper<ApplicationNotFoundException> {
+public class ApplicationNotFoundExceptionMapper implements
+        ExceptionMapper<ApplicationNotFoundException> {
 
     @Override
     public Response toResponse(ApplicationNotFoundException exception) {

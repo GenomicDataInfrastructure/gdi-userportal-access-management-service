@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 package io.github.genomicdatainfrastructure.daam.api;
 
 import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
@@ -8,6 +9,7 @@ import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticati
 import io.github.genomicdatainfrastructure.daam.model.ListedApplication;
 import io.github.genomicdatainfrastructure.daam.model.RetrievedApplication;
 import io.github.genomicdatainfrastructure.daam.services.ListApplicationsService;
+import io.github.genomicdatainfrastructure.daam.services.RetrieveApplicationService;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
 import java.io.File;
@@ -19,6 +21,7 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
 
   private final SecurityIdentity identity;
   private final ListApplicationsService listApplicationsService;
+  private final RetrieveApplicationService retrieveApplicationService;
 
   @Override
   public List<ListedApplication> listApplicationsV1() {
@@ -28,12 +31,12 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
   }
 
   @Override
-  public RetrievedApplication retrieveApplicationV1(String id) {
-    throw new UnsupportedOperationException("Unimplemented method 'retrieveApplicationV1'");
+  public RetrievedApplication retrieveApplicationV1(Long id) {
+    return retrieveApplicationService.retrieveApplication(id);
   }
 
   @Override
-  public File retrieveAttachmentFromApplicationV1(String id, String attachmentId) {
+  public File retrieveAttachmentFromApplicationV1(Long id, Long attachmentId) {
     throw new UnsupportedOperationException(
         "Unimplemented method 'retrieveAttachmentFromApplicationV1'"
     );

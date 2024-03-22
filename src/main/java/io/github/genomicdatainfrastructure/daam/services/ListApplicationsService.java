@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 package io.github.genomicdatainfrastructure.daam.services;
 
 import io.github.genomicdatainfrastructure.daam.model.ListedApplication;
@@ -35,7 +36,7 @@ public class ListApplicationsService {
 
   public ListedApplication parse(ApplicationOverview applicationOverview) {
     return ListedApplication.builder()
-        .id(applicationOverview.getApplicationId().toString())
+        .id(applicationOverview.getApplicationId())
         .title(applicationOverview.getApplicationExternalId())
         .currentState(applicationOverview.getApplicationState().value())
         .stateChangedAt(applicationOverview.getApplicationLastActivity())

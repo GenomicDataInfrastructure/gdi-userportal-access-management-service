@@ -25,7 +25,7 @@ public class SubmitApplicationService {
     private final RemsApplicationCommandApi remsApplicationCommandApi;
     private final RemsApplicationsApi remsApplicationsApi;
 
-    private static final Set<ApplicationStateEnum> STATES_FORBIDDEN_FOR_SUBMISSION = Set.of(ApplicationStateEnum.DRAFT, ApplicationStateEnum.RETURNED);
+    private static final Set<String> VALID_STATES_FOR_SUBMISSION = Set.of(ApplicationStateEnum.DRAFT.toString(), ApplicationStateEnum.RETURNED.toString());
 
     @Inject
     public SubmitApplicationService(
@@ -56,7 +56,7 @@ public class SubmitApplicationService {
                 throw new UserNotApplicantException(id, userId);
             }
 
-            if (!STATES_FORBIDDEN_FOR_SUBMISSION.contains(application.getApplicationState())) {
+            if (!VALID_STATES_FOR_SUBMISSION.contains(application.getApplicationState().toString())) {
                 throw new ApplicationNotInCorrectStateException(id, application.getApplicationState().value());
             }
             

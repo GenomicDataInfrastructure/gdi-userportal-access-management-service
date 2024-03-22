@@ -11,13 +11,11 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @QuarkusTest
-public class PostAuthenticationFilterTest {
+class PostAuthenticationFilterTest {
 
     @Inject
     private PostAuthenticationFilter underTest;
@@ -34,13 +32,14 @@ public class PostAuthenticationFilterTest {
     }
 
     @Test
-    public void nothing_happens_if_anonymous_request() {
+    void nothing_happens_if_anonymous_request() {
         when(securityIdentity.isAnonymous()).thenReturn(true);
         underTest.filter(null);
+        verify(createRemsUserService, never()).createRemsUser(any(), any(), any());
     }
 
     @Test
-    public void createRemsUser_is_called_if_authenticated_request() {
+    void createRemsUser_is_called_if_authenticated_request() {
         when(securityIdentity.isAnonymous()).thenReturn(false);
         var principalMock = mock(OidcJwtCallerPrincipal.class);
         when(principalMock.getClaim("sub")).thenReturn("dummy_id");
@@ -49,7 +48,7 @@ public class PostAuthenticationFilterTest {
         when(securityIdentity.getPrincipal()).thenReturn(principalMock);
 
         underTest.filter(null);
-        Mockito.verify(createRemsUserService)
+        verify(createRemsUserService)
                 .createRemsUser("dummy_id", "dummy_username", "dummy_email");
     }
 }

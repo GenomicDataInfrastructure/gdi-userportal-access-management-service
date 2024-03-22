@@ -12,17 +12,17 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 
 @QuarkusTest
-public class ApplicationQueryApiImplTest {
+class ApplicationQueryApiImplTest {
 
     private final KeycloakTestClient keycloakClient = new KeycloakTestClient();
 
     @Test
-    public void unauthorized_to_list_applications_when_no_user() {
+    void unauthorized_to_list_applications_when_no_user() {
         given().when().get("/api/v1/applications").then().statusCode(401);
     }
 
     @Test
-    public void can_list_applications_when_authenticated() {
+    void can_list_applications_when_authenticated() {
         given()
                 .auth()
                 .oauth2(getAccessToken("alice"))
@@ -37,12 +37,12 @@ public class ApplicationQueryApiImplTest {
     }
 
     @Test
-    public void can_reach_public_resource_when_no_user() {
+    void can_reach_public_resource_when_no_user() {
         given().when().get("/").then().statusCode(200);
     }
 
     @Test
-    public void can_retrieve_an_application_when_authenticated() {
+    void can_retrieve_an_application_when_authenticated() {
         given()
                 .auth()
                 .oauth2(getAccessToken("alice"))
@@ -121,12 +121,12 @@ public class ApplicationQueryApiImplTest {
     }
 
     @Test
-    public void unauthorized_to_retrieve_an_application_when_no_user() {
+    void unauthorized_to_retrieve_an_application_when_no_user() {
         given().when().get("/api/v1/applications/28").then().statusCode(401);
     }
 
     @Test
-    public void cannot_retrieve_non_existing_application() {
+    void cannot_retrieve_non_existing_application() {
         given()
                 .auth()
                 .oauth2(getAccessToken("alice"))

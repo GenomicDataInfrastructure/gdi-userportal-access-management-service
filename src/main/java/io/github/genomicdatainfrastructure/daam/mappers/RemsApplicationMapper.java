@@ -13,6 +13,10 @@ import java.util.Set;
 
 public class RemsApplicationMapper {
 
+    private RemsApplicationMapper() {
+        //not used
+    }
+
     public static RetrievedApplication toRetrievedApplication(Application remsApplication) {
         return RetrievedApplication
                 .builder()

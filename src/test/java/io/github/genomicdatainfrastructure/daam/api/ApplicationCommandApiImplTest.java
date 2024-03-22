@@ -14,7 +14,7 @@ import static io.restassured.RestAssured.given;
 
 
 @QuarkusTest
-public class ApplicationCommandApiImplTest {
+class ApplicationCommandApiImplTest {
 
     private final KeycloakTestClient keycloakClient = new KeycloakTestClient();
 

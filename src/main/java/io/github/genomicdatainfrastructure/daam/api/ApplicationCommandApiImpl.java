@@ -13,14 +13,19 @@ import io.github.genomicdatainfrastructure.daam.model.CreateApplication;
 import io.github.genomicdatainfrastructure.daam.model.RemoveMember;
 import io.github.genomicdatainfrastructure.daam.model.SaveFormsAndDuos;
 import io.github.genomicdatainfrastructure.daam.model.UpdateDatasets;
+import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+
+import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
 
 @RequiredArgsConstructor
 public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     private final CreateApplicationService createApplicationService;
     private final SubmitApplicationService submitApplicationService;
+    private final SecurityIdentity identity;
 
     @Override
     public Response acceptApplicationTermsV1(Long id) {
@@ -59,7 +64,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     @Override
     public Response createApplicationV1(CreateApplication createApplication) {
-        createApplicationService.createRemsApplication(createApplication);
+        createApplicationService.createRemsApplication(createApplication, getUserId());
         return Response.noContent().build();
     }
 
@@ -86,7 +91,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     @Override
     public Response submitApplicationV1(Long id) {
-        submitApplicationService.submitApplication(id);
+        submitApplicationService.submitApplication(id, getUserId());
         return Response.noContent().build();
     }
 
@@ -95,5 +100,10 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
         throw new UnsupportedOperationException(
             "Unimplemented method 'updateDatasetsOfApplicationV1'"
         );
+    }
+
+    private String getUserId() {
+        var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
+        return principal.getClaim(USER_ID_CLAIM);
     }
 }

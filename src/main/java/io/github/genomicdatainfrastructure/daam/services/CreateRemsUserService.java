@@ -13,23 +13,28 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 @ApplicationScoped
 public class CreateRemsUserService {
 
-  private final String remsApiKey;
-  private final String remsBotUser;
-  private final RemsUsersApi usersApi;
+    private final String remsApiKey;
+    private final String remsBotUser;
+    private final RemsUsersApi usersApi;
 
-  @Inject
-  public CreateRemsUserService(
-      @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
-      @ConfigProperty(name = "quarkus.rest-client.rems_yaml.bot-user") String remsBotUser,
-      @RestClient RemsUsersApi usersApi
-  ) {
-    this.remsApiKey = remsApiKey;
-    this.remsBotUser = remsBotUser;
-    this.usersApi = usersApi;
-  }
+    @Inject
+    public CreateRemsUserService(
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.bot-user") String remsBotUser,
+            @RestClient RemsUsersApi usersApi
+    ) {
+        this.remsApiKey = remsApiKey;
+        this.remsBotUser = remsBotUser;
+        this.usersApi = usersApi;
+    }
 
-  public void createRemsUser(String userId, String name, String email) {
-    var createUser = CreateUserCommand.builder().userid(userId).name(name).email(email).build();
-    usersApi.apiUsersCreatePost(createUser, remsApiKey, remsBotUser);
-  }
+    public void createRemsUser(String userId, String name, String email) {
+        var createUser = CreateUserCommand.builder()
+                .userid(userId)
+                .name(name)
+                .email(email)
+                .build();
+
+        usersApi.apiUsersCreatePost(createUser, remsApiKey, remsBotUser);
+    }
 }

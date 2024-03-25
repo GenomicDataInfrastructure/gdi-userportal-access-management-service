@@ -9,29 +9,33 @@ import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorre
 import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationsApi;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application.ApplicationStateEnum;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.SubmitApplicationCommand;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.ApplicationOverview.ApplicationStateEnum;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import jakarta.ws.rs.WebApplicationException;
 
 import java.util.Set;
 
 @ApplicationScoped
 public class SubmitApplicationService {
+
+    private static final Set<ApplicationStateEnum> VALID_STATES_FOR_SUBMISSION = Set.of(
+            ApplicationStateEnum.DRAFT,
+            ApplicationStateEnum.RETURNED
+    );
+
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
     private final RemsApplicationsApi remsApplicationsApi;
 
-    private static final Set<String> VALID_STATES_FOR_SUBMISSION = Set.of(ApplicationStateEnum.DRAFT.toString(), ApplicationStateEnum.RETURNED.toString());
-
     @Inject
     public SubmitApplicationService(
-        @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
-        @RestClient RemsApplicationCommandApi applicationCommandApi,
-        @RestClient RemsApplicationsApi applicationsApi
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
+            @RestClient RemsApplicationCommandApi applicationCommandApi,
+            @RestClient RemsApplicationsApi applicationsApi
     ) {
         this.remsApiKey = remsApiKey;
         this.remsApplicationCommandApi = applicationCommandApi;
@@ -41,8 +45,7 @@ public class SubmitApplicationService {
     public void submitApplication(Long id, String userId) {
         checkApplication(id, userId);
 
-        SubmitApplicationCommand command = SubmitApplicationCommand.builder()
-                .applicationId(id)
+        SubmitApplicationCommand command = SubmitApplicationCommand.builder().applicationId(id)
                 .build();
 
         remsApplicationCommandApi.apiApplicationsSubmitPost(command, remsApiKey, userId);
@@ -50,16 +53,21 @@ public class SubmitApplicationService {
 
     private void checkApplication(Long id, String userId) {
         try {
-            var application = remsApplicationsApi.apiApplicationsApplicationIdGet(id, remsApiKey, userId);
+            var application = remsApplicationsApi.apiApplicationsApplicationIdGet(
+                    id, remsApiKey, userId
+            );
 
             if (!application.getApplicationApplicant().getUserid().equals(userId)) {
                 throw new UserNotApplicantException(id, userId);
             }
 
-            if (!VALID_STATES_FOR_SUBMISSION.contains(application.getApplicationState().toString())) {
-                throw new ApplicationNotInCorrectStateException(id, application.getApplicationState().value());
+            if (!VALID_STATES_FOR_SUBMISSION.contains(application.getApplicationState())) {
+                throw new ApplicationNotInCorrectStateException(
+                        id,
+                        application.getApplicationState().value()
+                );
             }
-            
+
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == 404) {
                 throw new ApplicationNotFoundException(id);
@@ -67,7 +75,5 @@ public class SubmitApplicationService {
 
             throw e;
         }
-
     }
-
 }

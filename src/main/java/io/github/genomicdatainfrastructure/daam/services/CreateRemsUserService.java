@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package io.github.genomicdatainfrastructure.daam.services;
 
-import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsUsersApi;
+import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsUserCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.CreateUserCommand;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -15,17 +15,17 @@ public class CreateRemsUserService {
 
     private final String remsApiKey;
     private final String remsBotUser;
-    private final RemsUsersApi usersApi;
+    private final RemsUserCommandApi remsUserCommandApi;
 
     @Inject
     public CreateRemsUserService(
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.bot-user") String remsBotUser,
-            @RestClient RemsUsersApi usersApi
+            @RestClient RemsUserCommandApi remsUserCommandApi
     ) {
         this.remsApiKey = remsApiKey;
         this.remsBotUser = remsBotUser;
-        this.usersApi = usersApi;
+        this.remsUserCommandApi = remsUserCommandApi;
     }
 
     public void createRemsUser(String userId, String name, String email) {
@@ -35,6 +35,6 @@ public class CreateRemsUserService {
                 .email(email)
                 .build();
 
-        usersApi.apiUsersCreatePost(createUser, remsApiKey, remsBotUser);
+        remsUserCommandApi.apiUsersCreatePost(createUser, remsApiKey, remsBotUser);
     }
 }

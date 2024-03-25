@@ -8,7 +8,7 @@ import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundEx
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorrectStateException;
 import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
-import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationsApi;
+import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationQueryApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application.ApplicationStateEnum;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.SubmitApplicationCommand;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,23 +29,23 @@ public class SubmitApplicationService {
 
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
-    private final RemsApplicationsApi remsApplicationsApi;
+    private final RemsApplicationQueryApi remsApplicationsQueryApi;
 
     @Inject
     public SubmitApplicationService(
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
-            @RestClient RemsApplicationCommandApi applicationCommandApi,
-            @RestClient RemsApplicationsApi applicationsApi
+            @RestClient RemsApplicationCommandApi remsApplicationCommandApi,
+            @RestClient RemsApplicationQueryApi remsApplicationsQueryApi
     ) {
         this.remsApiKey = remsApiKey;
-        this.remsApplicationCommandApi = applicationCommandApi;
-        this.remsApplicationsApi = applicationsApi;
+        this.remsApplicationCommandApi = remsApplicationCommandApi;
+        this.remsApplicationsQueryApi = remsApplicationsQueryApi;
     }
 
     public void submitApplication(Long id, String userId) {
         checkApplication(id, userId);
 
-        SubmitApplicationCommand command = SubmitApplicationCommand.builder().applicationId(id)
+        var command = SubmitApplicationCommand.builder().applicationId(id)
                 .build();
 
         remsApplicationCommandApi.apiApplicationsSubmitPost(command, remsApiKey, userId);
@@ -53,7 +53,7 @@ public class SubmitApplicationService {
 
     private void checkApplication(Long id, String userId) {
         try {
-            var application = remsApplicationsApi.apiApplicationsApplicationIdGet(
+            var application = remsApplicationsQueryApi.apiApplicationsApplicationIdGet(
                     id, remsApiKey, userId
             );
 

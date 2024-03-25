@@ -7,7 +7,7 @@ package io.github.genomicdatainfrastructure.daam.services;
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
 import io.github.genomicdatainfrastructure.daam.mappers.RemsApplicationMapper;
 import io.github.genomicdatainfrastructure.daam.model.RetrievedApplication;
-import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationsApi;
+import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationQueryApi;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
@@ -18,20 +18,20 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 public class RetrieveApplicationService {
 
     private final String remsApiKey;
-    private final RemsApplicationsApi applicationsApi;
+    private final RemsApplicationQueryApi remsApplicationQueryApi;
 
     @Inject
     public RetrieveApplicationService(
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
-            @RestClient RemsApplicationsApi applicationsApi
+            @RestClient RemsApplicationQueryApi remsApplicationQueryApi
     ) {
         this.remsApiKey = remsApiKey;
-        this.applicationsApi = applicationsApi;
+        this.remsApplicationQueryApi = remsApplicationQueryApi;
     }
 
     public RetrievedApplication retrieveApplication(Long applicationId, String userId) {
         try {
-            var application = applicationsApi.apiApplicationsApplicationIdGet(
+            var application = remsApplicationQueryApi.apiApplicationsApplicationIdGet(
                     applicationId,
                     remsApiKey, userId
             );

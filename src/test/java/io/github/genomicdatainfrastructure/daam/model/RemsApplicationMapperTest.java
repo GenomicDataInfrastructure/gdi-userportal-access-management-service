@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 PNED G.I.E.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package io.github.genomicdatainfrastructure.daam.model;
 
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;

@@ -269,6 +269,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AddedAttachment"
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "428":
+          description: Application not in submittable state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - daam_auth:
             - write:applications

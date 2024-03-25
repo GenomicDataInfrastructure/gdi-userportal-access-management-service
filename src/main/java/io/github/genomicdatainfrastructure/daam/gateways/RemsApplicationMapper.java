@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.genomicdatainfrastructure.daam.mappers;
+package io.github.genomicdatainfrastructure.daam.gateways;
 
 import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
@@ -281,8 +281,9 @@ public class RemsApplicationMapper {
     }
 
     private List<Label> toLabelObject(Map<String, String> map) {
-        if (map == null)
-            return null;
+        if (map == null) {
+            return List.of();
+        }
 
         return map
                 .entrySet()

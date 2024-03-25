@@ -905,15 +905,9 @@ components:
             - attachment
             - text
         field/value:
+          type: string
           example: value
           description: 'A string for most fields, or [[{"column": string, "value": string}]] for table fields'
-          x-oneOf:
-            - type: string
-            - type: array
-              items:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ApplicationFormsFieldsValue'
         field/id:
           type: string
         field/optional:

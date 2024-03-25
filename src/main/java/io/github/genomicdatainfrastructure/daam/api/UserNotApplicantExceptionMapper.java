@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package io.github.genomicdatainfrastructure.daam.api;
 
+import static jakarta.ws.rs.core.Response.Status.FORBIDDEN;
+
 import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
@@ -15,15 +17,14 @@ public class UserNotApplicantExceptionMapper implements ExceptionMapper<UserNotA
 
     @Override
     public Response toResponse(UserNotApplicantException exception) {
-
-        ErrorResponse errorResponse = new ErrorResponse(
+        var errorResponse = new ErrorResponse(
                 "User Not Applicant",
-                Response.Status.FORBIDDEN.getStatusCode(),
+                FORBIDDEN.getStatusCode(),
                 exception.getMessage()
         );
 
         return Response
-                .status(Response.Status.FORBIDDEN)
+                .status(FORBIDDEN)
                 .entity(errorResponse)
                 .type(MediaType.APPLICATION_JSON)
                 .build();

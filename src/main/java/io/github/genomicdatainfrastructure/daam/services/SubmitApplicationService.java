@@ -53,17 +53,19 @@ public class SubmitApplicationService {
 
     private void checkApplication(Long id, String userId) {
         try {
-            var application = remsApplicationsApi.apiApplicationsApplicationIdGet(id, remsApiKey,
-                    userId);
+            var application = remsApplicationsApi.apiApplicationsApplicationIdGet(
+                    id, remsApiKey, userId
+            );
 
             if (!application.getApplicationApplicant().getUserid().equals(userId)) {
                 throw new UserNotApplicantException(id, userId);
             }
 
             if (!VALID_STATES_FOR_SUBMISSION.contains(application.getApplicationState())) {
-                throw new ApplicationNotInCorrectStateException(id, application
-                        .getApplicationState()
-                        .value());
+                throw new ApplicationNotInCorrectStateException(
+                        id,
+                        application.getApplicationState().value()
+                );
             }
 
         } catch (WebApplicationException e) {

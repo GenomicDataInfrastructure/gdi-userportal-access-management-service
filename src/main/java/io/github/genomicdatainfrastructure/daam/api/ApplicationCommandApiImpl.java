@@ -60,8 +60,10 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     @Override
     public Response createApplicationV1(CreateApplication createApplication) {
-        createApplicationService.createRemsApplication(createApplication, getUserId());
-        return Response.noContent().build();
+        createApplicationService.createRemsApplication(createApplication, userId());
+        return Response
+                .noContent()
+                .build();
     }
 
     @Override
@@ -87,8 +89,10 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     @Override
     public Response submitApplicationV1(Long id) {
-        submitApplicationService.submitApplication(id, getUserId());
-        return Response.noContent().build();
+        submitApplicationService.submitApplication(id, userId());
+        return Response
+                .noContent()
+                .build();
     }
 
     @Override
@@ -98,7 +102,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
         );
     }
 
-    private String getUserId() {
+    private String userId() {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
         return principal.getClaim(USER_ID_CLAIM);
     }

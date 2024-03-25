@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package io.github.genomicdatainfrastructure.daam.api;
 
+import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
+
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
@@ -16,14 +18,14 @@ public class ApplicationNotFoundExceptionMapper implements
 
     @Override
     public Response toResponse(ApplicationNotFoundException exception) {
-        ErrorResponse errorResponse = new ErrorResponse(
+        var errorResponse = new ErrorResponse(
                 "Application Not Found",
-                Response.Status.NOT_FOUND.getStatusCode(),
+                NOT_FOUND.getStatusCode(),
                 exception.getMessage()
         );
 
         return Response
-                .status(Response.Status.NOT_FOUND)
+                .status(NOT_FOUND)
                 .entity(errorResponse)
                 .type(MediaType.APPLICATION_JSON)
                 .build();

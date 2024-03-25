@@ -31,10 +31,11 @@ public class RetrieveApplicationService {
 
     public RetrievedApplication retrieveApplication(Long applicationId, String userId) {
         try {
-            return RemsApplicationMapper
-                    .toRetrievedApplication(applicationsApi.apiApplicationsApplicationIdGet(
-                            applicationId,
-                            remsApiKey, userId));
+            var application = applicationsApi.apiApplicationsApplicationIdGet(
+                    applicationId,
+                    remsApiKey, userId
+            );
+            return RemsApplicationMapper.toRetrievedApplication(application);
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == 404) {
                 throw new ApplicationNotFoundException(applicationId);

@@ -20,7 +20,6 @@ public class RetrieveApplicationService {
 
     private final String remsApiKey;
     private final RemsApplicationsApi applicationsApi;
-    private final SecurityIdentity identity;
     private RemsApplicationMapper applicationMapper;
     private final ApplicationValidator applicationValidator;
 
@@ -28,13 +27,11 @@ public class RetrieveApplicationService {
     public RetrieveApplicationService(
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
             @RestClient RemsApplicationsApi applicationsApi,
-            SecurityIdentity identity,
             RemsApplicationMapper applicationMapper,
             ApplicationValidator applicationValidator
     ) {
         this.remsApiKey = remsApiKey;
         this.applicationsApi = applicationsApi;
-        this.identity = identity;
         this.applicationMapper = applicationMapper;
         this.applicationValidator = applicationValidator;
     }

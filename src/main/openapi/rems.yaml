@@ -182,6 +182,13 @@ paths:
           description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
           schema:
             type: string
+        - in: query
+          name: application-id
+          description: Application id
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           multipart/form-data:

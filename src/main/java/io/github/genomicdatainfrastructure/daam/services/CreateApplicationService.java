@@ -30,10 +30,8 @@ public class CreateApplicationService {
     }
 
     public void createRemsApplication(CreateApplication createApplication, String userId) {
-        List<String> catalogueItemIds = createApplication.getDatasetIds();
-
-        CreateApplicationCommand command = CreateApplicationCommand.builder()
-                .catalogueItemIds(catalogueItemIds)
+        var command = CreateApplicationCommand.builder()
+                .catalogueItemIds(createApplication.getDatasetIds())
                 .build();
 
         remsApplicationCommandApi.apiApplicationsCreatePost(command, remsApiKey, userId);

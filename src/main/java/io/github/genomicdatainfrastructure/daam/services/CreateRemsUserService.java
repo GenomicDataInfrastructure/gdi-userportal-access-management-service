@@ -29,7 +29,12 @@ public class CreateRemsUserService {
     }
 
     public void createRemsUser(String userId, String name, String email) {
-        var createUser = CreateUserCommand.builder().userid(userId).name(name).email(email).build();
+        var createUser = CreateUserCommand.builder()
+                .userid(userId)
+                .name(name)
+                .email(email)
+                .build();
+
         usersApi.apiUsersCreatePost(createUser, remsApiKey, remsBotUser);
     }
 }

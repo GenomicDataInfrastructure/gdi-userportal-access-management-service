@@ -40,7 +40,8 @@ public class PostAuthenticationFilter implements ContainerRequestFilter {
             createRemsUserService.createRemsUser(
                     oidcPrincipal.getClaim(USER_ID_CLAIM),
                     oidcPrincipal.getClaim(USER_NAME_CLAIM),
-                    oidcPrincipal.getClaim(EMAIL_CLAIM));
+                    oidcPrincipal.getClaim(EMAIL_CLAIM)
+            );
         }
     }
 }

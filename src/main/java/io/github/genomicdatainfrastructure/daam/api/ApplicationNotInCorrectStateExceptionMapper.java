@@ -11,7 +11,9 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class ApplicationNotInCorrectStateExceptionMapper implements ExceptionMapper<ApplicationNotInCorrectStateException> {
+public class ApplicationNotInCorrectStateExceptionMapper implements
+        ExceptionMapper<ApplicationNotInCorrectStateException> {
+
     @Override
     public Response toResponse(ApplicationNotInCorrectStateException exception) {
         ErrorResponse errorResponse = new ErrorResponse(

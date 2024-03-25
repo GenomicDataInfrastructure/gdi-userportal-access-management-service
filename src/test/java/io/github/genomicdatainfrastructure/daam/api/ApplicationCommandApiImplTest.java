@@ -12,7 +12,6 @@ import java.util.Arrays;
 
 import static io.restassured.RestAssured.given;
 
-
 @QuarkusTest
 class ApplicationCommandApiImplTest {
 
@@ -22,7 +21,6 @@ class ApplicationCommandApiImplTest {
     void unauthorized_when_no_user() {
         given().when().get("/api/v1/applications/create").then().statusCode(401);
     }
-
 
     @Test
     void createApplication_when_authenticated() {
@@ -84,7 +82,6 @@ class ApplicationCommandApiImplTest {
                 .then()
                 .statusCode(428);
     }
-
 
     private String getAccessToken(String userName) {
         return keycloakClient.getAccessToken(userName);

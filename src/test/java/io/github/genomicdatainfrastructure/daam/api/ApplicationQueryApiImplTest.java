@@ -52,7 +52,8 @@ class ApplicationQueryApiImplTest {
                 .statusCode(200)
 
                 .body("id", equalTo(28))
-                .body("description", equalTo("Research proposal for studying the effects of climate change on biodiversity."))
+                .body("description", equalTo(
+                        "Research proposal for studying the effects of climate change on biodiversity."))
                 .body("generatedExternalId", equalTo("APP20240328"))
                 .body("permissions", hasItem("application.command/copy-as-new"))
                 .body("lastActivity", equalTo("2024-03-20T15:18:24.97Z"))
@@ -78,9 +79,11 @@ class ApplicationQueryApiImplTest {
 
                 .body("datasets[0].id", equalTo(1))
                 .body("datasets[0].title[0].language", equalTo("fi"))
-                .body("datasets[0].title[0].name", equalTo("Ilmastonmuutoksen vaikutusten tutkiminen biodiversiteettiin"))
+                .body("datasets[0].title[0].name", equalTo(
+                        "Ilmastonmuutoksen vaikutusten tutkiminen biodiversiteettiin"))
                 .body("datasets[0].title[1].language", equalTo("en"))
-                .body("datasets[0].title[1].name", equalTo("Studying the Impacts of Climate Change on Biodiversity"))
+                .body("datasets[0].title[1].name", equalTo(
+                        "Studying the Impacts of Climate Change on Biodiversity"))
                 .body("datasets[0].url[0].language", equalTo("fi"))
                 .body("datasets[0].url[0].name", equalTo("lisätietoja-suomeksi"))
                 .body("datasets[0].url[1].language", equalTo("en"))

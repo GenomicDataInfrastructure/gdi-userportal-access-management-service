@@ -13,7 +13,8 @@ import jakarta.ws.rs.WebApplicationException;
 @ApplicationScoped
 public class ApplicationValidator {
 
-    public Application validate(Long applicationId, String remsApiKey, String userId, RemsApplicationsApi applicationsApi) {
+    public Application validate(Long applicationId, String remsApiKey, String userId,
+            RemsApplicationsApi applicationsApi) {
         try {
             return applicationsApi.apiApplicationsApplicationIdGet(
                     applicationId, remsApiKey, userId);

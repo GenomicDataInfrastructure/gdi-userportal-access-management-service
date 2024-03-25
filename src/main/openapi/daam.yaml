@@ -255,19 +255,20 @@ paths:
             format: int64
       requestBody:
         content:
-          application/pdf:
+          multipart/form-data:
             schema:
-              type: string
-              format: binary
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
       responses:
         "200":
           description: Successful Response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/AddedAttachments"
+                $ref: "#/components/schemas/AddedAttachment"
       security:
         - daam_auth:
             - write:applications
@@ -296,10 +297,15 @@ paths:
         "200":
           description: Successful Response
           content:
-            application/pdf:
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+              example: attachment; filename="name.pdf"
   /api/v1/applications/{id}/invite-member:
     post:
       summary: Invite member to application
@@ -815,13 +821,6 @@ components:
         fieldValidationKey:
           type: string
           title: field validation key
-    AddedAttachments:
-      properties:
-        attachments:
-          type: array
-          title: attachments
-          items:
-            $ref: "#/components/schemas/AddedAttachment"
     AddedAttachment:
       properties:
         id:

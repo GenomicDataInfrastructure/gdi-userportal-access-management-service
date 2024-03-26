@@ -22,7 +22,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     private final SecurityIdentity identity;
     private final CreateApplicationService createApplicationService;
     private final SubmitApplicationService submitApplicationService;
-    private final AttachFileToApplicationService attachFilesToApplicationService;
+    private final AttachFileToApplicationService attachFileToApplicationService;
 
     @Override
     public Response acceptApplicationTermsV1(Long id) {
@@ -96,19 +96,16 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
         );
     }
 
-    private String userId() {
-        var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
-        return principal.getClaim(USER_ID_CLAIM);
-    }
-
     @Override
     public AddedAttachment addAttachmentToApplicationV1(
             AddAttachmentToApplicationV1MultipartForm multipartForm,
             Long id
     ) {
-        return attachFilesToApplicationService.attach(
-                id,
-                multipartForm._file
-        );
+        return attachFileToApplicationService.attach(id, multipartForm._file, userId());
+    }
+
+    private String userId() {
+        var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
+        return principal.getClaim(USER_ID_CLAIM);
     }
 }

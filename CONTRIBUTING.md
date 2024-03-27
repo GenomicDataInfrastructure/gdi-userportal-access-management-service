@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 <!-- omit in toc -->
 
-# Contributing to GDI User Portal Front-end
+# Contributing to GDI User Portal Access Management Service
 
 First off, thanks for taking the time to contribute! ❤️
 
@@ -231,7 +231,7 @@ git checkout -b fix-bug-123
 
 ```bash
 git add .
-git commit -m "Fix bug #123: Description of the fix"
+git commit -m "fix: #123 Description of the fix"
 git push origin fix-bug-123
 ```
 

@@ -5,8 +5,7 @@
 package io.github.genomicdatainfrastructure.daam.gateways;
 
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
-import io.github.genomicdatainfrastructure.daam.model.ListedApplication;
-import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationsApi;
+import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationQueryApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.ApplicationOverview;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,11 +19,11 @@ import java.util.List;
 public class RemsApiQueryGateway {
 
     private final String remsApiKey;
-    private final RemsApplicationsApi applicationsApi;
+    private final RemsApplicationQueryApi applicationsApi;
 
     public RemsApiQueryGateway(
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
-            @RestClient RemsApplicationsApi applicationsApi
+            @RestClient RemsApplicationQueryApi applicationsApi
     ) {
         this.remsApiKey = remsApiKey;
         this.applicationsApi = applicationsApi;

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.genomicdatainfrastructure.daam.mappers;
+package io.github.genomicdatainfrastructure.daam.gateways;
 
 import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
@@ -13,12 +13,12 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RemsApplicationMapperTest {
+class RemsApplicationMapperTest {
 
     private static final RemsApplicationMapper sut = new RemsApplicationMapper();
 
     @Test
-    public void should_map_correctly_complete_rems_application_to_retrieved_application() {
+    void should_map_correctly_complete_rems_application_to_retrieved_application() {
         RetrievedApplication retrievedApplication = sut.from(createApplication());
 
         assertThat(retrievedApplication.getId()).isEqualTo(1L);

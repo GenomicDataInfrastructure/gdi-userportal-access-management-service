@@ -11,12 +11,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @ApplicationScoped
-public class RemsApplicationMapper implements ApplicationMapper<Application> {
+public class RemsApplicationMapper {
 
-    @Override
     public RetrievedApplication from(Application application) {
         return RetrievedApplication
                 .builder()
@@ -43,7 +41,7 @@ public class RemsApplicationMapper implements ApplicationMapper<Application> {
     }
 
     private RetrievedApplicationWorkflow toWorkflow(Application application) {
-        Optional<Response10953Workflow> workflow = Optional.ofNullable(application
+        var workflow = Optional.ofNullable(application
                 .getApplicationWorkflow());
 
         return new RetrievedApplicationWorkflow(workflow.map(Response10953Workflow::getWorkflowId)
@@ -52,7 +50,7 @@ public class RemsApplicationMapper implements ApplicationMapper<Application> {
     }
 
     private RetrievedApplicationApplicant toApplicant(Application application) {
-        Optional<UserWithAttributes> applicant = Optional.ofNullable(application
+        var applicant = Optional.ofNullable(application
                 .getApplicationApplicant());
 
         return new RetrievedApplicationApplicant(
@@ -62,90 +60,101 @@ public class RemsApplicationMapper implements ApplicationMapper<Application> {
     }
 
     private List<RetrievedApplicationMember> toMembers(Application application) {
-        Optional<Set<UserWithAttributes>> potentialMembers = Optional.ofNullable(application
+        var potentialMembers = Optional.ofNullable(application
                 .getApplicationMembers());
 
         return potentialMembers.map(members -> members
-                .stream()
-                .map(member -> {
-                    Optional<UserWithAttributes> potentialMember = Optional.ofNullable(member);
-
-                    return new RetrievedApplicationMember(potentialMember.map(
-                            UserWithAttributes::getUserid).orElse(null),
-                            potentialMember.map(UserWithAttributes::getName).orElse(null),
-                            potentialMember.map(UserWithAttributes::getEmail).orElse(null));
-                })
-                .toList())
+                        .stream()
+                        .map(this::toMember)
+                        .toList())
                 .orElse(null);
     }
 
+    private RetrievedApplicationMember toMember(UserWithAttributes member) {
+        var potentialMember = Optional.ofNullable(member);
+
+        return new RetrievedApplicationMember(potentialMember.map(
+                UserWithAttributes::getUserid).orElse(null),
+                potentialMember.map(UserWithAttributes::getName).orElse(null),
+                potentialMember.map(UserWithAttributes::getEmail).orElse(null));
+    }
+
     private List<RetrievedApplicationInvitedMember> toInvitedMembers(Application application) {
-        Optional<Set<Response10953InvitedMembers>> potentialInvitedMembers = Optional.ofNullable(
+        var potentialInvitedMembers = Optional.ofNullable(
                 application.getApplicationInvitedMembers());
 
         return potentialInvitedMembers.map(invitedMembers -> invitedMembers
                 .stream()
-                .map(invitedMember -> {
-                    Optional<Response10953InvitedMembers> potentialInvitedMember = Optional
-                            .ofNullable(invitedMember);
-
-                    return new RetrievedApplicationInvitedMember(
-                            potentialInvitedMember.map(Response10953InvitedMembers::getName).orElse(
-                                    null),
-                            potentialInvitedMember.map(Response10953InvitedMembers::getEmail)
-                                    .orElse(null));
-                })
+                .map(this::toInvitedMember)
                 .toList())
                 .orElse(null);
     }
 
+    private RetrievedApplicationInvitedMember toInvitedMember(Response10953InvitedMembers invitedMember) {
+        var potentialInvitedMember = Optional.ofNullable(invitedMember);
+
+        return new RetrievedApplicationInvitedMember(
+                potentialInvitedMember.map(Response10953InvitedMembers::getName).orElse(
+                        null),
+                potentialInvitedMember.map(Response10953InvitedMembers::getEmail)
+                        .orElse(null));
+    }
+
     private List<RetrievedApplicationDataset> toDatasets(Application application) {
-        Optional<List<V2Resource>> potentialResources = Optional.ofNullable(application
+        var potentialResources = Optional.ofNullable(application
                 .getApplicationResources());
 
         return potentialResources
                 .map(resources -> resources
                         .stream()
-                        .map(resource -> {
-                            Optional<V2Resource> potentialResource = Optional.ofNullable(resource);
-
-                            return new RetrievedApplicationDataset(potentialResource.map(
-                                    V2Resource::getCatalogueItemId).orElse(null),
-                                    potentialResource.map(r -> toLabelObject(r
-                                            .getCatalogueItemTitle())).orElse(null),
-                                    potentialResource.map(r -> toLabelObject((r
-                                            .getCatalogueItemInfourl()))).orElse(null));
-                        })
+                        .map(this::toDataset)
                         .toList())
                 .orElse(null);
     }
 
+    private RetrievedApplicationDataset toDataset(V2Resource resource) {
+        var potentialResource = Optional.ofNullable(resource);
+
+        return new RetrievedApplicationDataset(potentialResource.map(
+                V2Resource::getCatalogueItemId).orElse(null),
+                potentialResource.map(r -> toLabelObject(r
+                        .getCatalogueItemTitle())).orElse(null),
+                potentialResource.map(r -> toLabelObject(r
+                        .getCatalogueItemInfourl())).orElse(null));
+    }
+
     private List<RetrievedApplicationForm> toForms(Application application) {
-        Optional<List<Form>> potentialForms = Optional.ofNullable(application
+        var potentialForms = Optional.ofNullable(application
                 .getApplicationForms());
 
         return potentialForms.map(forms -> forms
                 .stream()
-                .map(form -> {
-                    Optional<Form> potentialForm = Optional.ofNullable(form);
-
-                    return new RetrievedApplicationForm(potentialForm.map(Form::getFormId).orElse(
-                            null),
-                            potentialForm.map(Form::getFormInternalName).orElse(null),
-                            potentialForm.map(f -> toLabelObject(f.getFormExternalTitle())).orElse(
-                                    null),
-                            potentialForm.map(f -> f.getFormFields()
-                                    .stream()
-                                    .map(this::toFormField)
-                                    .toList())
-                                    .orElse(null));
-                })
+                .map(this::toForm)
                 .toList())
                 .orElse(null);
     }
 
+    private RetrievedApplicationForm toForm(Form form) {
+        var potentialForm = Optional.ofNullable(form);
+
+        return new RetrievedApplicationForm(potentialForm.map(Form::getFormId).orElse(null),
+                potentialForm.map(Form::getFormInternalName).orElse(null),
+                potentialForm.map(f -> toLabelObject(f.getFormExternalTitle())).orElse(null),
+                potentialForm.map(this::toFormFields).orElse(null));
+    }
+
+    private List<RetrievedApplicationFormField> toFormFields(Form form) {
+        var potentialFields = Optional.ofNullable(form.getFormFields());
+
+        return potentialFields.map(fields -> fields
+                        .stream()
+                        .map(this::toFormField)
+                        .toList())
+                .orElse(null);
+    }
+
     private RetrievedApplicationFormField toFormField(Field formField) {
-        Optional<Field> potentialFormField = Optional.ofNullable(formField);
+        var potentialFormField = Optional.ofNullable(formField);
 
         return new RetrievedApplicationFormField(potentialFormField.map(Field::getFieldId).orElse(
                 null),
@@ -153,87 +162,117 @@ public class RemsApplicationMapper implements ApplicationMapper<Application> {
                 potentialFormField.map(Field::getFieldPrivate).orElse(null),
                 potentialFormField.map(Field::getFieldVisible).orElse(null),
                 potentialFormField.map(f -> toLabelObject(f.getFieldTitle())).orElse(null),
-                potentialFormField.map(f -> f.getFieldType().value()).orElse(null));
+                potentialFormField.map(this::toFieldType).orElse(null));
+    }
+
+    private String toFieldType(Field field) {
+        var fieldType = Optional.of(field.getFieldType());
+
+        return fieldType.map(Field.FieldTypeEnum::value)
+                .orElse(null);
     }
 
     private List<String> toPermissions(Application application) {
-        Optional<Set<Application.ApplicationPermissionsEnum>> potentialPermissions = Optional
+        var potentialPermissions = Optional
                 .ofNullable(application.getApplicationPermissions());
 
         return potentialPermissions.map(permissions -> permissions
                 .stream()
-                .map(permission -> {
-                    Optional<Application.ApplicationPermissionsEnum> potentialPermission = Optional
-                            .ofNullable(permission);
-
-                    return potentialPermission.map(Application.ApplicationPermissionsEnum::value)
-                            .orElse(null);
-                })
+                .map(this::toPermission)
                 .toList())
+                .orElse(null);
+    }
+
+    private String toPermission(Application.ApplicationPermissionsEnum permission) {
+        var potentialPermission = Optional.ofNullable(permission);
+
+        return potentialPermission.map(Application.ApplicationPermissionsEnum::value)
                 .orElse(null);
     }
 
     private List<RetrievedApplicationEvent> toEvents(Application application) {
-        Optional<List<Event>> potentialEvents = Optional.ofNullable(application
+        var potentialEvents = Optional.ofNullable(application
                 .getApplicationEvents());
 
         return potentialEvents.map(events -> events
                 .stream()
-                .map(event -> {
-                    Optional<Event> potentialEvent = Optional.ofNullable(event);
-                    return new RetrievedApplicationEvent(
-                            potentialEvent.map(e -> e.getEventActorAttributes().getUserid()).orElse(
-                                    null),
-                            potentialEvent.map(Event::getEventTime).orElse(null),
-                            potentialEvent.map(Event::getEventType).orElse(null));
-                })
+                .map(this::toEvent)
                 .toList())
                 .orElse(null);
     }
 
+    private RetrievedApplicationEvent toEvent(Event event) {
+        var potentialEvent = Optional.ofNullable(event);
+
+        return new RetrievedApplicationEvent(
+                potentialEvent.map(this::toUserId).orElse(null),
+                potentialEvent.map(Event::getEventTime).orElse(null),
+                potentialEvent.map(Event::getEventType).orElse(null));
+    }
+
+    private String toUserId(Event event) {
+        var eventActorAttributes = Optional.ofNullable(event
+                .getEventActorAttributes());
+
+        return eventActorAttributes.map(UserWithAttributes::getUserid).orElse(null);
+    }
+
     private List<RetrievedApplicationAttachment> toAttachments(Application application) {
-        Optional<List<ApplicationAttachment>> potentialAttachments = Optional.ofNullable(application
+        var potentialAttachments = Optional.ofNullable(application
                 .getApplicationAttachments());
 
         return potentialAttachments.map(attachments -> attachments
                 .stream()
-                .map(attachment -> {
-                    Optional<ApplicationAttachment> potentialAttachment = Optional.ofNullable(
-                            attachment);
-
-                    return new RetrievedApplicationAttachment(potentialAttachment.map(
-                            ApplicationAttachment::getAttachmentId).orElse(null),
-                            potentialAttachment.map(ApplicationAttachment::getAttachmentFilename)
-                                    .orElse(null),
-                            potentialAttachment.map(ApplicationAttachment::getAttachmentType)
-                                    .orElse(null));
-                })
+                .map(this::toAttachment)
                 .toList())
                 .orElse(null);
     }
 
+    private RetrievedApplicationAttachment toAttachment(ApplicationAttachment attachment) {
+        var potentialAttachment = Optional.ofNullable(attachment);
+
+        return new RetrievedApplicationAttachment(potentialAttachment.map(
+                ApplicationAttachment::getAttachmentId).orElse(null),
+                potentialAttachment.map(ApplicationAttachment::getAttachmentFilename)
+                        .orElse(null),
+                potentialAttachment.map(ApplicationAttachment::getAttachmentType)
+                        .orElse(null));
+    }
+
     private List<RetrievedApplicationLicense> toLicences(Application application) {
-        Optional<List<V2License>> potentialLicenses = Optional.ofNullable(application
+        var potentialLicenses = Optional.ofNullable(application
                 .getApplicationLicenses());
 
         return potentialLicenses.map(licenses -> licenses
                 .stream()
-                .map(license -> {
-                    Optional<V2License> potentialLicense = Optional.ofNullable(license);
-
-                    return new RetrievedApplicationLicense(potentialLicense.map(l -> l
-                            .getLicenseType().value()).orElse(null),
-                            potentialLicense.map(l -> toLabelObject(l.getLicenseTitle())).orElse(
-                                    null),
-                            potentialLicense.map(V2License::getLicenseEnabled).orElse(null),
-                            potentialLicense.map(V2License::getLicenseArchived).orElse(null));
-                })
+                .map(this::toLicense)
                 .toList())
                 .orElse(null);
     }
 
+    private RetrievedApplicationLicense toLicense(V2License license) {
+        var potentialLicense = Optional.ofNullable(license);
+
+        return new RetrievedApplicationLicense(
+                potentialLicense.map(this::toLicenseType)
+                        .orElse(null),
+                potentialLicense.map(l -> toLabelObject(l.getLicenseTitle()))
+                        .orElse(null),
+                potentialLicense.map(V2License::getLicenseEnabled)
+                        .orElse(null),
+                potentialLicense.map(V2License::getLicenseArchived)
+                        .orElse(null));
+    }
+
+    private String toLicenseType(V2License license) {
+        var licenseType = Optional.ofNullable(license.getLicenseType());
+
+        return licenseType.map(V2License.LicenseTypeEnum::value)
+                .orElse(null);
+    }
+
     private RetrievedApplication.StateEnum toState(Application application) {
-        Optional<Application.ApplicationStateEnum> potentialState = Optional.ofNullable(application
+        var potentialState = Optional.ofNullable(application
                 .getApplicationState());
 
         return potentialState.map(state -> RetrievedApplication.StateEnum.fromString(state.value()))
@@ -241,6 +280,8 @@ public class RemsApplicationMapper implements ApplicationMapper<Application> {
     }
 
     private List<Label> toLabelObject(Map<String, String> map) {
+        if (map == null) return null;
+
         return map
                 .entrySet()
                 .stream()

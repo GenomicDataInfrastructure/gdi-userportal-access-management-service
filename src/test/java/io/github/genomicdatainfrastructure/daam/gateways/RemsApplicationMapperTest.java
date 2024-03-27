@@ -6,6 +6,8 @@ package io.github.genomicdatainfrastructure.daam.gateways;
 
 import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -15,11 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class RemsApplicationMapperTest {
 
-    private static final RemsApplicationMapper sut = new RemsApplicationMapper();
+    private RemsApplicationMapper underTest;
+
+    @BeforeEach
+    private void setUp() {
+        underTest = new RemsApplicationMapper();
+    }
 
     @Test
     void should_map_correctly_complete_rems_application_to_retrieved_application() {
-        RetrievedApplication retrievedApplication = sut.from(createApplication());
+        RetrievedApplication retrievedApplication = underTest.from(createApplication());
 
         assertThat(retrievedApplication.getId()).isEqualTo(1L);
         assertThat(retrievedApplication.getExternalId()).isEqualTo("APP20240328");

@@ -17,11 +17,13 @@ paths:
       summary: "Create or update user (roles: owner, user-owner)"
       parameters:
         - name: x-rems-api-key
+          required: true
           in: header
           description: REMS API-Key (optional for UI, required for API)
           schema:
             type: string
         - name: x-rems-user-id
+          required: true
           in: header
           description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
           schema:
@@ -47,11 +49,13 @@ paths:
       summary: "Get the current user's own applications (roles: logged-in)"
       parameters:
         - name: x-rems-api-key
+          required: true
           in: header
           description: REMS API-Key (optional for UI, required for API)
           schema:
             type: string
         - name: x-rems-user-id
+          required: true
           in: header
           description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
           schema:
@@ -78,11 +82,13 @@ paths:
       parameters:
         - in: header
           name: x-rems-api-key
+          required: true
           description: REMS API-Key (optional for UI, required for API)
           schema:
             type: string
         - in: header
           name: x-rems-user-id
+          required: true
           description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
           schema:
             type: string
@@ -108,11 +114,13 @@ paths:
       parameters:
         - in: header
           name: x-rems-api-key
+          required: true
           description: REMS API-Key (optional for UI, required for API)
           schema:
             type: string
         - in: header
           name: x-rems-user-id
+          required: true
           description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
           schema:
             type: string
@@ -137,11 +145,13 @@ paths:
       summary: "Retrieve a given application (roles: logged-in)"
       parameters:
         - name: x-rems-api-key
+          required: true
           in: header
           description: REMS API-Key (optional for UI, required for API)
           schema:
             type: string
         - name: x-rems-user-id
+          required: true
           in: header
           description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
           schema:
@@ -174,11 +184,13 @@ paths:
       parameters:
         - in: header
           name: x-rems-api-key
+          required: true
           description: REMS API-Key (optional for UI, required for API)
           schema:
             type: string
         - in: header
           name: x-rems-user-id
+          required: true
           description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
           schema:
             type: string
@@ -212,11 +224,13 @@ paths:
       summary: "Retrieve an attachment (roles: logged-in)"
       parameters:
         - name: x-rems-api-key
+          required: true
           in: header
           description: REMS API-Key (optional for UI, required for API)
           schema:
             type: string
         - name: x-rems-user-id
+          required: true
           in: header
           description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
           schema:
@@ -247,6 +261,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/applications/save-draft:
+    post:
+      tags:
+        - rems-application-command
+      summary: "Submit a `save-draft` command for an application.  (roles: logged-in)"
+      parameters:
+        - name: x-rems-api-key
+          required: true
+          in: header
+          description: REMS API-Key (optional for UI, required for API)
+          schema:
+            type: string
+        - name: x-rems-user-id
+          required: true
+          in: header
+          description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveDraftCommand"
+        required: true
+      responses:
+        "200":
+          description: Attachment addition successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
 components:
   schemas:
     ApplicationOverview:
@@ -1090,3 +1135,90 @@ components:
           format: int64
       required:
         - success
+    SaveDraftCommand:
+      type: object
+      properties:
+        application-id:
+          type: integer
+          format: int64
+        field-values:
+          type: array
+          items:
+            $ref: "#/components/schemas/SaveDraftCommandFieldValues"
+        duo-codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/DuoCode"
+      required:
+        - application-id
+        - field-values
+    SaveDraftCommandFieldValues:
+      type: object
+      properties:
+        form:
+          type: integer
+          format: int64
+        field:
+          type: string
+        value:
+          example: value
+          description: 'A string for most fields, or [[{"column": string, "value": string}]] for table fields'
+          type: string
+      additionalProperties: false
+      required:
+        - form
+        - field
+        - value
+    DuoCode:
+      type: object
+      properties:
+        id:
+          type: string
+        restrictions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidateRequestDuoCodesRestrictions"
+        more-info:
+          $ref: "#/components/schemas/LocalizedString"
+      additionalProperties: false
+      required:
+        - id
+    ValidateRequestDuoCodesRestrictions:
+      type: object
+      properties:
+        type:
+          type: string
+        values:
+          type: array
+          items:
+            x-oneOf:
+              - $ref: "#/components/schemas/ValidateRequestDuoCodesRestrictionsValues"
+              - $ref: "#/components/schemas/MondoCodeFull"
+              - $ref: "#/components/schemas/MondoCode"
+    ValidateRequestDuoCodesRestrictionsValues:
+      type: object
+      properties:
+        value:
+          type: string
+      additionalProperties: false
+      required:
+        - value
+    MondoCodeFull:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+      additionalProperties: false
+      required:
+        - id
+        - label
+    MondoCode:
+      type: object
+      properties:
+        id:
+          type: string
+      additionalProperties: false
+      required:
+        - id

@@ -41,7 +41,8 @@ public class RemsApiQueryGateway {
     public Application retrieveApplication(Long applicationId, String userId) {
         try {
             return applicationsApi.apiApplicationsApplicationIdGet(
-                    applicationId, remsApiKey, userId);
+                    remsApiKey, userId, applicationId
+            );
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == 404) {
                 throw new ApplicationNotFoundException(applicationId);

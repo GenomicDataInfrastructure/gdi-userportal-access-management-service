@@ -35,6 +35,6 @@ public class CreateRemsUserService {
                 .email(email)
                 .build();
 
-        remsUserCommandApi.apiUsersCreatePost(createUser, remsApiKey, remsBotUser);
+        remsUserCommandApi.apiUsersCreatePost(remsApiKey, remsBotUser, createUser);
     }
 }

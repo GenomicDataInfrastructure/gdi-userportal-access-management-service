@@ -18,6 +18,7 @@ import java.util.List;
 
 @ApplicationScoped
 public class RemsApiQueryGateway {
+
     private final String remsApiKey;
     private final RemsApplicationsApi applicationsApi;
 

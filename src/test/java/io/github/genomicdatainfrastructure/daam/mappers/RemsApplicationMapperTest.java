@@ -23,15 +23,22 @@ public class RemsApplicationMapperTest {
 
         assertThat(retrievedApplication.getId()).isEqualTo(1L);
         assertThat(retrievedApplication.getExternalId()).isEqualTo("APP20240328");
-        assertThat(retrievedApplication.getDescription()).isEqualTo("Research proposal for studying the effects of climate change on biodiversity.");
+        assertThat(retrievedApplication.getDescription()).isEqualTo(
+                "Research proposal for studying the effects of climate change on biodiversity.");
         assertThat(retrievedApplication.getGeneratedExternalId()).isEqualTo("APP20240328");
-        assertThat(retrievedApplication.getLastActivity()).isEqualTo(OffsetDateTime.parse("2024-03-20T15:18:24.97Z"));
+        assertThat(retrievedApplication.getLastActivity()).isEqualTo(OffsetDateTime.parse(
+                "2024-03-20T15:18:24.97Z"));
         assertThat(retrievedApplication.getRoles()).containsExactly("researcher");
-        assertThat(retrievedApplication.getCreatedAt()).isEqualTo(OffsetDateTime.parse("2022-06-20T15:18:24.97Z"));
-        assertThat(retrievedApplication.getModifiedAt()).isEqualTo(OffsetDateTime.parse("2024-03-20T15:18:24.97Z"));
-        assertThat(retrievedApplication.getState()).isEqualTo(RetrievedApplication.StateEnum.APPROVED);
-        assertThat(retrievedApplication.getWorkflow()).isEqualTo(new RetrievedApplicationWorkflow(1L, "workflowType"));
-        assertThat(retrievedApplication.getApplicant()).isEqualTo(new RetrievedApplicationApplicant("3P331", "John", "john.wattson@gmail.com"));
+        assertThat(retrievedApplication.getCreatedAt()).isEqualTo(OffsetDateTime.parse(
+                "2022-06-20T15:18:24.97Z"));
+        assertThat(retrievedApplication.getModifiedAt()).isEqualTo(OffsetDateTime.parse(
+                "2024-03-20T15:18:24.97Z"));
+        assertThat(retrievedApplication.getState()).isEqualTo(
+                RetrievedApplication.StateEnum.APPROVED);
+        assertThat(retrievedApplication.getWorkflow()).isEqualTo(new RetrievedApplicationWorkflow(
+                1L, "workflowType"));
+        assertThat(retrievedApplication.getApplicant()).isEqualTo(new RetrievedApplicationApplicant(
+                "3P331", "John", "john.wattson@gmail.com"));
 
         assertThat(retrievedApplication.getMembers()).containsExactlyInAnyOrder(
                 new RetrievedApplicationMember("5YTR", "Mike", "mike.berry@gmail.com"),
@@ -39,27 +46,34 @@ public class RemsApplicationMapperTest {
 
         assertThat(retrievedApplication.getDatasets()).containsExactlyInAnyOrder(
                 new RetrievedApplicationDataset(3L,
-                        List.of(new Label("fi", "Title in Finnish"), new Label("en", "Title in English")),
-                        List.of(new Label("fi", "Url info in Finnish"), new Label("en", "Url info in English"))),
+                        List.of(new Label("fi", "Title in Finnish"), new Label("en",
+                                "Title in English")),
+                        List.of(new Label("fi", "Url info in Finnish"), new Label("en",
+                                "Url info in English"))),
                 new RetrievedApplicationDataset(111L, List.of(new Label("fr", "Title in French"),
-                        new Label("de", "Title in German")), List.of(new Label("fr", "Url info in French"), new Label("de", "Url info in German"))));
+                        new Label("de", "Title in German")), List.of(new Label("fr",
+                                "Url info in French"), new Label("de", "Url info in German"))));
 
         assertThat(retrievedApplication.getForms()).containsExactlyInAnyOrder(
                 new RetrievedApplicationForm(
                         4L,
                         "form-access-1",
-                        List.of(new Label("en", "External title in English"), new Label("fr", "External title in French")),
+                        List.of(new Label("en", "External title in English"), new Label("fr",
+                                "External title in French")),
                         List.of(new RetrievedApplicationFormField("98", true, false, true,
-                                List.of(new Label("en", "Field in English"), new Label("fr", "Field in French")), "email"))));
+                                List.of(new Label("en", "Field in English"), new Label("fr",
+                                        "Field in French")), "email"))));
 
         assertThat(retrievedApplication.getInvitedMembers()).containsExactlyInAnyOrder(
                 new RetrievedApplicationInvitedMember("Kate", "kate.tominay@gmail.com"),
                 new RetrievedApplicationInvitedMember("Tom", "tom.dylan@gmail.com"));
 
-        assertThat(retrievedApplication.getPermissions()).containsExactlyInAnyOrder("application.command/approve", "application.command/close");
+        assertThat(retrievedApplication.getPermissions()).containsExactlyInAnyOrder(
+                "application.command/approve", "application.command/close");
 
         assertThat(retrievedApplication.getEvents()).containsExactlyInAnyOrder(
-                new RetrievedApplicationEvent("1444", OffsetDateTime.parse("2023-03-20T15:18:24.97Z"), "request"));
+                new RetrievedApplicationEvent("1444", OffsetDateTime.parse(
+                        "2023-03-20T15:18:24.97Z"), "request"));
 
         assertThat(retrievedApplication.getAttachments()).containsExactlyInAnyOrder(
                 new RetrievedApplicationAttachment(14L, "file.pdf", "pdf"));
@@ -72,15 +86,18 @@ public class RemsApplicationMapperTest {
                 .builder()
                 .applicationId(1L)
                 .applicationExternalId("APP20240328")
-                .applicationDescription("Research proposal for studying the effects of climate change on biodiversity.")
+                .applicationDescription(
+                        "Research proposal for studying the effects of climate change on biodiversity.")
                 .applicationGeneratedExternalId("APP20240328")
                 .applicationLastActivity(OffsetDateTime.parse("2024-03-20T15:18:24.97Z"))
                 .applicationRoles(Set.of("researcher"))
                 .applicationCreated(OffsetDateTime.parse("2022-06-20T15:18:24.97Z"))
                 .applicationModified(OffsetDateTime.parse("2024-03-20T15:18:24.97Z"))
                 .applicationState(Application.ApplicationStateEnum.APPROVED)
-                .applicationWorkflow(new Response10953Workflow(1L, "workflowType", null, null, null))
-                .applicationApplicant(new UserWithAttributes("3P331", "John", "john.wattson@gmail.com", null, null, null))
+                .applicationWorkflow(new Response10953Workflow(1L, "workflowType", null, null,
+                        null))
+                .applicationApplicant(new UserWithAttributes("3P331", "John",
+                        "john.wattson@gmail.com", null, null, null))
                 .applicationMembers(createMembers())
                 .applicationResources(createResources())
                 .applicationForms(createForms())
@@ -88,15 +105,16 @@ public class RemsApplicationMapperTest {
                 .applicationPermissions(createPermissions())
                 .applicationEvents(createEvents())
                 .applicationAttachments(List.of(new ApplicationAttachment(14L, "file.pdf",
-                "pdf", null, null, null, null)))
+                        "pdf", null, null, null, null)))
                 .applicationLicenses(null)
                 .build();
     }
 
     private Set<UserWithAttributes> createMembers() {
-       return Set.of(
-               new UserWithAttributes("5YTR", "Mike", "mike.berry@gmail.com", null, null, null),
-               new UserWithAttributes("NZRWRR", "Elly", "elly.white@outlook.com", null, null, null));
+        return Set.of(
+                new UserWithAttributes("5YTR", "Mike", "mike.berry@gmail.com", null, null, null),
+                new UserWithAttributes("NZRWRR", "Elly", "elly.white@outlook.com", null, null,
+                        null));
     }
 
     private List<V2Resource> createResources() {
@@ -134,7 +152,8 @@ public class RemsApplicationMapperTest {
 
         return List.of(
                 new Form(4L, "form-access-1", formTitleResourceId4,
-                        List.of(new Field(false, fieldTitleResourceId4, true, Field.FieldTypeEnum.EMAIL, "ulrich.smith@outlook.de", "98", true)))
+                        List.of(new Field(false, fieldTitleResourceId4, true,
+                                Field.FieldTypeEnum.EMAIL, "ulrich.smith@outlook.de", "98", true)))
         );
     }
 
@@ -153,6 +172,7 @@ public class RemsApplicationMapperTest {
     private List<Event> createEvents() {
         return List.of(
                 new Event("request", OffsetDateTime.parse("2023-03-20T15:18:24.97Z"), null, null,
-                        new UserWithAttributes("1444", "Jean", "jean.du@gmail.com", null, null, null)));
+                        new UserWithAttributes("1444", "Jean", "jean.du@gmail.com", null, null,
+                                null)));
     }
 }

@@ -21,6 +21,7 @@ public class ListApplicationsService {
     ) {
         this.gateway = remsApiQueryGateway;
     }
+
     public List<ListedApplication> listApplications(String userId) {
         return gateway.listApplications(userId)
                 .stream()

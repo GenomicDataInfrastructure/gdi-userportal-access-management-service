@@ -64,9 +64,9 @@ public class RemsApplicationMapper {
                 .getApplicationMembers());
 
         return potentialMembers.map(members -> members
-                        .stream()
-                        .map(this::toMember)
-                        .toList())
+                .stream()
+                .map(this::toMember)
+                .toList())
                 .orElse(null);
     }
 
@@ -90,7 +90,8 @@ public class RemsApplicationMapper {
                 .orElse(null);
     }
 
-    private RetrievedApplicationInvitedMember toInvitedMember(Response10953InvitedMembers invitedMember) {
+    private RetrievedApplicationInvitedMember toInvitedMember(
+            Response10953InvitedMembers invitedMember) {
         var potentialInvitedMember = Optional.ofNullable(invitedMember);
 
         return new RetrievedApplicationInvitedMember(
@@ -147,9 +148,9 @@ public class RemsApplicationMapper {
         var potentialFields = Optional.ofNullable(form.getFormFields());
 
         return potentialFields.map(fields -> fields
-                        .stream()
-                        .map(this::toFormField)
-                        .toList())
+                .stream()
+                .map(this::toFormField)
+                .toList())
                 .orElse(null);
     }
 
@@ -280,7 +281,8 @@ public class RemsApplicationMapper {
     }
 
     private List<Label> toLabelObject(Map<String, String> map) {
-        if (map == null) return null;
+        if (map == null)
+            return null;
 
         return map
                 .entrySet()

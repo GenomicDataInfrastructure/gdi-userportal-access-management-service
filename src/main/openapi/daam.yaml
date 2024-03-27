@@ -602,8 +602,9 @@ components:
           items:
             $ref: "#/components/schemas/RetrievedApplicationEvent"
         roles:
-          type: array
           title: Roles
+          uniqueItems: true
+          type: array
           items:
             type: string
         attachments:

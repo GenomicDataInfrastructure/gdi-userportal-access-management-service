@@ -32,6 +32,6 @@ public class CreateApplicationService {
                 .catalogueItemIds(createApplication.getDatasetIds())
                 .build();
 
-        remsApplicationCommandApi.apiApplicationsCreatePost(command, remsApiKey, userId);
+        remsApplicationCommandApi.apiApplicationsCreatePost(remsApiKey, userId, command);
     }
 }

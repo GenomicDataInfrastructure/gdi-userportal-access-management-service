@@ -37,6 +37,6 @@ public class SubmitApplicationService {
                 .applicationId(id)
                 .build();
 
-        remsApplicationCommandApi.apiApplicationsSubmitPost(command, remsApiKey, userId);
+        remsApplicationCommandApi.apiApplicationsSubmitPost(remsApiKey, userId, command);
     }
 }

@@ -12,8 +12,6 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import java.util.List;
-
 @ApplicationScoped
 public class CreateApplicationService {
 
@@ -23,10 +21,10 @@ public class CreateApplicationService {
     @Inject
     public CreateApplicationService(
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
-            @RestClient RemsApplicationCommandApi applicationsApi
+            @RestClient RemsApplicationCommandApi remsApplicationCommandApi
     ) {
         this.remsApiKey = remsApiKey;
-        this.remsApplicationCommandApi = applicationsApi;
+        this.remsApplicationCommandApi = remsApplicationCommandApi;
     }
 
     public void createRemsApplication(CreateApplication createApplication, String userId) {

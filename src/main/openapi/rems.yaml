@@ -13,8 +13,8 @@ paths:
   /api/users/create:
     post:
       tags:
-        - rems-users
-      summary: 'Create or update user (roles: owner, user-owner)'
+        - rems-user-command
+      summary: "Create or update user (roles: owner, user-owner)"
       parameters:
         - name: x-rems-api-key
           in: header
@@ -30,21 +30,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserCommand'
+              $ref: "#/components/schemas/CreateUserCommand"
         required: true
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: "#/components/schemas/SuccessResponse"
       x-codegen-request-body-name: CreateUserCommand
   /api/my-applications:
     get:
       tags:
-        - rems-applications
-      summary: 'Get the current user''s own applications (roles: logged-in)'
+        - rems-application-query
+      summary: "Get the current user's own applications (roles: logged-in)"
       parameters:
         - name: x-rems-api-key
           in: header
@@ -62,30 +62,28 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ApplicationOverview'
+                  $ref: "#/components/schemas/ApplicationOverview"
   /api/applications/create:
     post:
       tags:
         - rems-application-command
-      summary: 'Create a new application (roles: logged-in)'
+      summary: "Create a new application (roles: logged-in)"
       parameters:
         - in: header
           name: x-rems-api-key
           description: REMS API-Key (optional for UI, required for API)
-          required: false
           schema:
             type: string
         - in: header
           name: x-rems-user-id
           description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
-          required: false
           schema:
             type: string
       requestBody:
@@ -94,30 +92,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateApplicationCommand'
+              $ref: "#/components/schemas/CreateApplicationCommand"
       responses:
-        '200':
+        "200":
           description: Application creation successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateApplicationResponse'
+                $ref: "#/components/schemas/CreateApplicationResponse"
   /api/applications/submit:
     post:
       tags:
         - rems-application-command
-      summary: 'Submits a submit command for an application (roles: logged-in)'
+      summary: "Submits a submit command for an application (roles: logged-in)"
       parameters:
         - in: header
           name: x-rems-api-key
           description: REMS API-Key (optional for UI, required for API)
-          required: false
           schema:
             type: string
         - in: header
           name: x-rems-user-id
           description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
-          required: false
           schema:
             type: string
       requestBody:
@@ -126,19 +122,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubmitApplicationCommand'
+              $ref: "#/components/schemas/SubmitApplicationCommand"
       responses:
-        '200':
+        "200":
           description: Application submission successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubmitApplicationResponse'
+                $ref: "#/components/schemas/SubmitApplicationResponse"
   /api/applications/{application-id}:
     get:
       tags:
-        - rems-applications
-      summary: 'Retrieve a given application (roles: logged-in)'
+        - rems-application-query
+      summary: "Retrieve a given application (roles: logged-in)"
       parameters:
         - name: x-rems-api-key
           in: header
@@ -158,18 +154,99 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Application'
-        '404':
+                $ref: "#/components/schemas/Application"
+        "404":
           description: No application found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/applications/add-attachment:
+    post:
+      tags:
+        - rems-application-command
+      summary: "Add an attachment to an application (roles: logged-in)"
+      parameters:
+        - in: header
+          name: x-rems-api-key
+          description: REMS API-Key (optional for UI, required for API)
+          schema:
+            type: string
+        - in: header
+          name: x-rems-user-id
+          description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          schema:
+            type: string
+        - in: query
+          name: application-id
+          description: Application id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Attachment addition successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttachFileResponse"
+  /api/applications/attachment/{attachment-id}:
+    get:
+      tags:
+        - rems-application-query
+      summary: "Retrieve an attachment (roles: logged-in)"
+      parameters:
+        - name: x-rems-api-key
+          in: header
+          description: REMS API-Key (optional for UI, required for API)
+          schema:
+            type: string
+        - name: x-rems-user-id
+          in: header
+          description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          schema:
+            type: string
+        - name: attachment-id
+          in: path
+          required: true
+          description: Attachment id
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+              example: attachment; filename="name.pdf"
+        "404":
+          description: No attachment found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     ApplicationOverview:
@@ -193,7 +270,7 @@ components:
         - application/workflow
       properties:
         application/workflow:
-          $ref: '#/components/schemas/Response10953Workflow'
+          $ref: "#/components/schemas/Response10953Workflow"
         application/external-id:
           type: string
           description: Assigned external id if it exists, otherwise the generated one
@@ -204,18 +281,18 @@ components:
           type: array
           description: Which members of this application are blacklisted for which resources
           items:
-            $ref: '#/components/schemas/BlacklistEntry'
+            $ref: "#/components/schemas/BlacklistEntry"
         application/id:
           type: integer
           format: int64
         application/duo:
-          $ref: '#/components/schemas/Response10953Duo'
+          $ref: "#/components/schemas/Response10953Duo"
         application/assigned-external-id:
           type: string
         application/applicant:
-          $ref: '#/components/schemas/UserWithAttributes'
+          $ref: "#/components/schemas/UserWithAttributes"
         application/copied-from:
-          $ref: '#/components/schemas/Response10953CopiedFrom'
+          $ref: "#/components/schemas/Response10953CopiedFrom"
         application/todo:
           type: string
           nullable: true
@@ -231,7 +308,7 @@ components:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/UserWithAttributes'
+            $ref: "#/components/schemas/UserWithAttributes"
         entitlement/end:
           type: string
           format: date-time
@@ -239,21 +316,21 @@ components:
         application/resources:
           type: array
           items:
-            $ref: '#/components/schemas/V2Resource'
+            $ref: "#/components/schemas/V2Resource"
         application/deadline:
           type: string
           format: date-time
         application/accepted-licenses:
-          $ref: '#/components/schemas/ApplicationAcceptedLicenses'
+          $ref: "#/components/schemas/ApplicationAcceptedLicenses"
         application/invited-members:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/Response10953InvitedMembers'
+            $ref: "#/components/schemas/Response10953InvitedMembers"
         application/description:
           type: string
         application/votes:
-          $ref: '#/components/schemas/Response10953Votes'
+          $ref: "#/components/schemas/Response10953Votes"
         application/generated-external-id:
           type: string
         application/permissions:
@@ -304,7 +381,7 @@ components:
         application/attachments:
           type: array
           items:
-            $ref: '#/components/schemas/ApplicationAttachment'
+            $ref: "#/components/schemas/ApplicationAttachment"
         application/created:
           type: string
           format: date-time
@@ -321,7 +398,7 @@ components:
         application/copied-to:
           type: array
           items:
-            $ref: '#/components/schemas/Response10953CopiedTo'
+            $ref: "#/components/schemas/Response10953CopiedTo"
         application/modified:
           type: string
           format: date-time
@@ -349,7 +426,7 @@ components:
         - application/workflow
       properties:
         application/workflow:
-          $ref: '#/components/schemas/Response10953Workflow'
+          $ref: "#/components/schemas/Response10953Workflow"
         application/external-id:
           type: string
           description: Assigned external id if it exists, otherwise the generated one
@@ -360,18 +437,18 @@ components:
           type: array
           description: Which members of this application are blacklisted for which resources
           items:
-            $ref: '#/components/schemas/BlacklistEntry'
+            $ref: "#/components/schemas/BlacklistEntry"
         application/id:
           type: integer
           format: int64
         application/duo:
-          $ref: '#/components/schemas/Response10953Duo'
+          $ref: "#/components/schemas/Response10953Duo"
         application/assigned-external-id:
           type: string
         application/applicant:
-          $ref: '#/components/schemas/UserWithAttributes'
+          $ref: "#/components/schemas/UserWithAttributes"
         application/copied-from:
-          $ref: '#/components/schemas/Response10953CopiedFrom'
+          $ref: "#/components/schemas/Response10953CopiedFrom"
         application/todo:
           type: string
           nullable: true
@@ -387,7 +464,7 @@ components:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/UserWithAttributes'
+            $ref: "#/components/schemas/UserWithAttributes"
         entitlement/end:
           type: string
           format: date-time
@@ -395,21 +472,21 @@ components:
         application/resources:
           type: array
           items:
-            $ref: '#/components/schemas/V2Resource'
+            $ref: "#/components/schemas/V2Resource"
         application/deadline:
           type: string
           format: date-time
         application/accepted-licenses:
-          $ref: '#/components/schemas/ApplicationAcceptedLicenses'
+          $ref: "#/components/schemas/ApplicationAcceptedLicenses"
         application/invited-members:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/Response10953InvitedMembers'
+            $ref: "#/components/schemas/Response10953InvitedMembers"
         application/description:
           type: string
         application/votes:
-          $ref: '#/components/schemas/Response10953Votes'
+          $ref: "#/components/schemas/Response10953Votes"
         application/generated-external-id:
           type: string
         application/permissions:
@@ -460,7 +537,7 @@ components:
         application/attachments:
           type: array
           items:
-            $ref: '#/components/schemas/ApplicationAttachment'
+            $ref: "#/components/schemas/ApplicationAttachment"
         application/created:
           type: string
           format: date-time
@@ -477,31 +554,31 @@ components:
         application/copied-to:
           type: array
           items:
-            $ref: '#/components/schemas/Response10953CopiedTo'
+            $ref: "#/components/schemas/Response10953CopiedTo"
         application/modified:
           type: string
           format: date-time
         application/events:
-            type: array
-            items:
-                $ref: '#/components/schemas/Event'
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
         application/forms:
-            type: array
-            items:
-                $ref: '#/components/schemas/Form'
+          type: array
+          items:
+            $ref: "#/components/schemas/Form"
         application/licenses:
-            type: array
-            items:
-                $ref: '#/components/schemas/V2License'
+          type: array
+          items:
+            $ref: "#/components/schemas/V2License"
     BlacklistEntry:
       required:
         - blacklist/resource
         - blacklist/user
       properties:
         blacklist/user:
-          $ref: '#/components/schemas/UserWithAttributes'
+          $ref: "#/components/schemas/UserWithAttributes"
         blacklist/resource:
-          $ref: '#/components/schemas/Response10953BlacklistResource'
+          $ref: "#/components/schemas/Response10953BlacklistResource"
     Response10953BlacklistResource:
       required:
         - resource/ext-id
@@ -513,11 +590,11 @@ components:
         duo/codes:
           type: array
           items:
-            $ref: '#/components/schemas/DuoCodeFull'
+            $ref: "#/components/schemas/DuoCodeFull"
         duo/matches:
           type: array
           items:
-            $ref: '#/components/schemas/DuoCodeMatch'
+            $ref: "#/components/schemas/DuoCodeMatch"
     Response10953CopiedFrom:
       required:
         - application/external-id
@@ -553,11 +630,11 @@ components:
           type: integer
           format: int64
         catalogue-item/title:
-          $ref: '#/components/schemas/LocalizedString'
+          $ref: "#/components/schemas/LocalizedString"
         resource/duo:
-          $ref: '#/components/schemas/Response10953ResourcesDuo'
+          $ref: "#/components/schemas/Response10953ResourcesDuo"
         catalogue-item/infourl:
-          $ref: '#/components/schemas/LocalizedString'
+          $ref: "#/components/schemas/LocalizedString"
         resource/ext-id:
           type: string
         catalogue-item/start:
@@ -582,12 +659,12 @@ components:
         duo/shorthand:
           type: string
         duo/label:
-          $ref: '#/components/schemas/Response10953DuoMatchesLabel'
+          $ref: "#/components/schemas/Response10953DuoMatchesLabel"
         resource/id:
           type: integer
           format: int64
         duo/validation:
-          $ref: '#/components/schemas/Response10953DuoMatchesValidation'
+          $ref: "#/components/schemas/Response10953DuoMatchesValidation"
     Response10953DuoMatchesValidation:
       required:
         - validity
@@ -597,7 +674,7 @@ components:
         errors:
           type: array
           items:
-            $ref: '#/components/schemas/Response10953DuoMatchesValidationErrors'
+            $ref: "#/components/schemas/Response10953DuoMatchesValidationErrors"
     Response10953DuoMatchesValidationErrors:
       required:
         - type
@@ -614,7 +691,7 @@ components:
         duo/codes:
           type: array
           items:
-            $ref: '#/components/schemas/DuoCodeFull'
+            $ref: "#/components/schemas/DuoCodeFull"
     LocalizedString:
       additionalProperties:
         type: string
@@ -633,16 +710,16 @@ components:
         restrictions:
           type: array
           items:
-            $ref: '#/components/schemas/Response10953ResourcesDuoCodesRestrictions'
+            $ref: "#/components/schemas/Response10953ResourcesDuoCodesRestrictions"
         more-info:
-          $ref: '#/components/schemas/LocalizedString'
+          $ref: "#/components/schemas/LocalizedString"
         shorthand:
           type: string
           nullable: true
         label:
-          $ref: '#/components/schemas/LocalizedString'
+          $ref: "#/components/schemas/LocalizedString"
         description:
-          $ref: '#/components/schemas/LocalizedString'
+          $ref: "#/components/schemas/LocalizedString"
     Response10953ResourcesDuoCodesRestrictions:
       required:
         - type
@@ -653,7 +730,7 @@ components:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/Response10953ResourcesDuoCodesRestrictionsValues'
+            $ref: "#/components/schemas/Response10953ResourcesDuoCodesRestrictionsValues"
     Response10953ResourcesDuoCodesRestrictionsValues:
       required:
         - value
@@ -694,9 +771,9 @@ components:
         attachment/type:
           type: string
         attachment/event:
-          $ref: '#/components/schemas/Response10953AttachmentsEvent'
+          $ref: "#/components/schemas/Response10953AttachmentsEvent"
         attachment/user:
-          $ref: '#/components/schemas/UserWithAttributes'
+          $ref: "#/components/schemas/UserWithAttributes"
         attachment/redacted:
           type: boolean
         attachment/can-redact:
@@ -718,7 +795,7 @@ components:
         organizations:
           type: array
           items:
-            $ref: '#/components/schemas/OrganizationId'
+            $ref: "#/components/schemas/OrganizationId"
         notification-email:
           type: string
           nullable: true
@@ -754,9 +831,9 @@ components:
         workflow.dynamic/handlers:
           type: array
           items:
-            $ref: '#/components/schemas/Handler'
+            $ref: "#/components/schemas/Handler"
         workflow/voting:
-          $ref: '#/components/schemas/WorkflowVoting'
+          $ref: "#/components/schemas/WorkflowVoting"
         workflow/anonymize-handling:
           type: boolean
     Handler:
@@ -776,7 +853,7 @@ components:
         organizations:
           type: array
           items:
-            $ref: '#/components/schemas/OrganizationId'
+            $ref: "#/components/schemas/OrganizationId"
         notification-email:
           type: string
           nullable: true
@@ -816,7 +893,7 @@ components:
         organizations:
           type: array
           items:
-            $ref: '#/components/schemas/OrganizationId'
+            $ref: "#/components/schemas/OrganizationId"
     SuccessResponse:
       required:
         - success
@@ -846,7 +923,7 @@ components:
             - attachment
             - text
         license/title:
-          $ref: '#/components/schemas/LocalizedString'
+          $ref: "#/components/schemas/LocalizedString"
         license/id:
           type: integer
           format: int64
@@ -867,11 +944,11 @@ components:
         form/internal-name:
           type: string
         form/external-title:
-          $ref: '#/components/schemas/LocalizedString'
+          $ref: "#/components/schemas/LocalizedString"
         form/fields:
           type: array
           items:
-            $ref: '#/components/schemas/Field'
+            $ref: "#/components/schemas/Field"
     Field:
       required:
         - field/private
@@ -885,7 +962,7 @@ components:
         field/private:
           type: boolean
         field/title:
-          $ref: '#/components/schemas/LocalizedString'
+          $ref: "#/components/schemas/LocalizedString"
         field/visible:
           type: boolean
         field/type:
@@ -931,7 +1008,7 @@ components:
           type: integer
           format: int64
         event/actor-attributes:
-          $ref: '#/components/schemas/UserWithAttributes'
+          $ref: "#/components/schemas/UserWithAttributes"
     ApplicationFormsFieldsValue:
       type: object
       properties:
@@ -943,7 +1020,6 @@ components:
       required:
         - column
         - value
-
     CreateApplicationCommand:
       type: object
       properties:
@@ -998,3 +1074,19 @@ components:
         error:
           type: string
           title: error description
+    AttachFileResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errors:
+          type: array
+          items: {}
+        warnings:
+          type: array
+          items: {}
+        id:
+          type: integer
+          format: int64
+      required:
+        - success

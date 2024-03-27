@@ -4,6 +4,7 @@
 package io.github.genomicdatainfrastructure.daam.api;
 
 import io.github.genomicdatainfrastructure.daam.model.*;
+import io.github.genomicdatainfrastructure.daam.services.AttachFileToApplicationService;
 import io.github.genomicdatainfrastructure.daam.services.CreateApplicationService;
 import io.github.genomicdatainfrastructure.daam.services.SubmitApplicationService;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
@@ -11,7 +12,6 @@ import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
-import java.io.File;
 import java.util.List;
 
 import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
@@ -19,21 +19,15 @@ import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticati
 @RequiredArgsConstructor
 public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
+    private final SecurityIdentity identity;
     private final CreateApplicationService createApplicationService;
     private final SubmitApplicationService submitApplicationService;
-    private final SecurityIdentity identity;
+    private final AttachFileToApplicationService attachFileToApplicationService;
 
     @Override
     public Response acceptApplicationTermsV1(Long id) {
         throw new UnsupportedOperationException(
                 "Unimplemented method 'acceptApplicationTermsV1'"
-        );
-    }
-
-    @Override
-    public List<AddedAttachments> addAttachmentToApplicationV1(Long id, File body) {
-        throw new UnsupportedOperationException(
-                "Unimplemented method 'addAttachmentToApplicationV1'"
         );
     }
 
@@ -100,6 +94,14 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
         throw new UnsupportedOperationException(
                 "Unimplemented method 'updateDatasetsOfApplicationV1'"
         );
+    }
+
+    @Override
+    public AddedAttachment addAttachmentToApplicationV1(
+            AddAttachmentToApplicationV1MultipartForm multipartForm,
+            Long id
+    ) {
+        return attachFileToApplicationService.attach(id, multipartForm._file, userId());
     }
 
     private String userId() {

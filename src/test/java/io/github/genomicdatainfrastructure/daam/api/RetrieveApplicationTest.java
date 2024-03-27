@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 package io.github.genomicdatainfrastructure.daam.api;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.keycloak.client.KeycloakTestClient;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -12,34 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 
 @QuarkusTest
-class ApplicationQueryApiImplTest {
-
-    private final KeycloakTestClient keycloakClient = new KeycloakTestClient();
-
-    @Test
-    void unauthorized_to_list_applications_when_no_user() {
-        given().when().get("/api/v1/applications").then().statusCode(401);
-    }
-
-    @Test
-    void can_list_applications_when_authenticated() {
-        given()
-                .auth()
-                .oauth2(getAccessToken("alice"))
-                .when()
-                .get("/api/v1/applications")
-                .then()
-                .statusCode(200)
-                .body("[0].id", equalTo(25))
-                .body("[0].title", equalTo("2024/14"))
-                .body("[0].currentState", equalTo("application.state/draft"))
-                .body("[0].stateChangedAt", equalTo("2024-03-05T19:44:46.208Z"));
-    }
-
-    @Test
-    void can_reach_public_resource_when_no_user() {
-        given().when().get("/").then().statusCode(200);
-    }
+class RetrieveApplicationTest extends BaseTest {
 
     @Test
     void can_retrieve_an_application_when_authenticated() {
@@ -124,12 +97,7 @@ class ApplicationQueryApiImplTest {
     }
 
     @Test
-    void unauthorized_to_retrieve_an_application_when_no_user() {
-        given().when().get("/api/v1/applications/28").then().statusCode(401);
-    }
-
-    @Test
-    void cannot_retrieve_non_existing_application() {
+    void cannot_retrieve_application_when_non_existing_application() {
         given()
                 .auth()
                 .oauth2(getAccessToken("alice"))
@@ -139,7 +107,12 @@ class ApplicationQueryApiImplTest {
                 .statusCode(404);
     }
 
-    private String getAccessToken(String userName) {
-        return keycloakClient.getAccessToken(userName);
+    @Test
+    void cannot_retrieve_application_when_anonymous_request() {
+        given()
+                .when()
+                .get("/api/v1/applications/28")
+                .then()
+                .statusCode(401);
     }
 }

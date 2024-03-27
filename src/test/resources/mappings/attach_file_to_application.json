@@ -1,0 +1,16 @@
+{
+    "request": {
+        "method": "POST",
+        "urlPattern": "/api/applications/add-attachment\\?application-id=(\\d+)"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "jsonBody": {
+            "success": true,
+            "id": 1
+        }
+    }
+}

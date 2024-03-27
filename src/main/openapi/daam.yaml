@@ -95,7 +95,8 @@ paths:
           description: ID of application to update
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -104,6 +105,24 @@ paths:
       responses:
         "204":
           description: Successful Response (no content)
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "428":
+          description: Application not in submittable state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - daam_auth:
             - write:applications

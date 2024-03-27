@@ -6,6 +6,7 @@ package io.github.genomicdatainfrastructure.daam.api;
 import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.services.AttachFileToApplicationService;
 import io.github.genomicdatainfrastructure.daam.services.CreateApplicationService;
+import io.github.genomicdatainfrastructure.daam.services.SaveApplicationService;
 import io.github.genomicdatainfrastructure.daam.services.SubmitApplicationService;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -20,6 +21,7 @@ import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticati
 public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     private final SecurityIdentity identity;
+    private final SaveApplicationService saveApplicationService;
     private final CreateApplicationService createApplicationService;
     private final SubmitApplicationService submitApplicationService;
     private final AttachFileToApplicationService attachFileToApplicationService;
@@ -75,10 +77,11 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     }
 
     @Override
-    public Response saveApplicationFormsAndDuosV1(String id, SaveFormsAndDuos saveFormsAndDuos) {
-        throw new UnsupportedOperationException(
-                "Unimplemented method 'saveApplicationFormsAndDuosV1'"
-        );
+    public Response saveApplicationFormsAndDuosV1(Long id, SaveFormsAndDuos saveFormsAndDuos) {
+        saveApplicationService.save(userId(), id, saveFormsAndDuos);
+        return Response
+                .noContent()
+                .build();
     }
 
     @Override

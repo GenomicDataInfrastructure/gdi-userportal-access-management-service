@@ -17,6 +17,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -49,31 +50,33 @@ public class CreateApplicationService {
     }
 
     private List<Long> getCatalogueItemIds(List<String> datasetIds, String userId) {
-        List<CompletableFuture<Long>> futureList = datasetIds.stream()
-                .map(datasetId -> CompletableFuture.supplyAsync(() -> {
-                    CatalogueItem item = gateway.retrieveCatalogueItemByResourceId(userId,
-                            datasetId);
-                    if (item == null) {
-                        throw new CatalogueItemNotFoundException(datasetId);
-                    }
-                    return item.getCatalogueItemId();
-                }))
+        List<CompletableFuture<Long>> futures = datasetIds.stream()
+                .map(datasetId -> fetchCatalogueItemIdAsync(userId, datasetId))
                 .toList();
 
-        return futureList.stream()
-                .map(future -> {
-                    try {
-                        return future.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        Thread.currentThread().interrupt();
+        List<Long> result;
+        try {
+            result = futures.stream()
+                    .map(CompletableFuture::join)
+                    .collect(Collectors.toList());
+        } catch (CompletionException e) {
+            if (e.getCause() instanceof CatalogueItemNotFoundException) {
+                throw (CatalogueItemNotFoundException) e.getCause();
+            }
 
-                        if (e.getCause() instanceof CatalogueItemNotFoundException) {
-                            throw (CatalogueItemNotFoundException) e.getCause();
-                        }
+            throw e;
+        }
 
-                        throw new RuntimeException("Failed to retrieve catalogue item IDs", e);
-                    }
-                })
-                .toList();
+        return result;
+    }
+
+    private CompletableFuture<Long> fetchCatalogueItemIdAsync(String userId, String datasetId) {
+        return CompletableFuture.supplyAsync(() -> {
+            CatalogueItem item = gateway.retrieveCatalogueItemByResourceId(userId, datasetId);
+            if (item == null) {
+                throw new CatalogueItemNotFoundException(datasetId);
+            }
+            return item.getCatalogueItemId();
+        });
     }
 }

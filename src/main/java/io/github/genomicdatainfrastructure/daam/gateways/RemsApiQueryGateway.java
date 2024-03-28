@@ -8,10 +8,15 @@ import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundEx
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorrectStateException;
 import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationQueryApi;
+import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsCatalogueItemQueryApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application.ApplicationStateEnum;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.ApplicationOverview;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.CatalogueItem;
+import io.quarkiverse.openapi.generator.annotations.GeneratedParam;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -29,13 +34,16 @@ public class RemsApiQueryGateway {
 
     private final String remsApiKey;
     private final RemsApplicationQueryApi applicationsApi;
+    private final RemsCatalogueItemQueryApi catalogueItemApi;
 
     public RemsApiQueryGateway(
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
-            @RestClient RemsApplicationQueryApi applicationsApi
+            @RestClient RemsApplicationQueryApi applicationsApi,
+            @RestClient RemsCatalogueItemQueryApi catalogueItemApi
     ) {
         this.remsApiKey = remsApiKey;
         this.applicationsApi = applicationsApi;
+        this.catalogueItemApi = catalogueItemApi;
     }
 
     public Application retrieveApplication(Long applicationId, String userId) {
@@ -68,5 +76,9 @@ public class RemsApiQueryGateway {
                     application.getApplicationState().value()
             );
         }
+    }
+
+    public CatalogueItem retrieveCatalogueItemByResourceId(String resourceId, String userId) {
+        return catalogueItemApi.apiCatalogueItemsGet(remsApiKey, userId, resourceId).getFirst();
     }
 }

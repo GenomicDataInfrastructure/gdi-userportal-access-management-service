@@ -42,6 +42,38 @@ paths:
               schema:
                 $ref: "#/components/schemas/SuccessResponse"
       x-codegen-request-body-name: CreateUserCommand
+  /api/catalogue-items:
+    get:
+      tags:
+        - rems-catalogue-item-query
+      summary: "Get catalogue items (roles: logged-in)"
+      parameters:
+        - name: x-rems-api-key
+          required: true
+          in: header
+          description: REMS API-Key (optional for UI, required for API)
+          schema:
+            type: string
+        - name: x-rems-user-id
+          required: true
+          in: header
+          description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          schema:
+            type: string
+        - name: resource
+          in: query
+          description: resource id
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CatalogueItem"
   /api/my-applications:
     get:
       tags:
@@ -294,6 +326,25 @@ paths:
                 $ref: "#/components/schemas/SuccessResponse"
 components:
   schemas:
+    CatalogueItem:
+      required:
+        - catalogue-item/archived
+        - catalogue-item/enabled
+        - catalogue-item/expired
+        - catalogue-item/id
+        - catalogue-item/resource-id
+      properties:
+        catalogue-item/expired:
+          type: boolean
+        catalogue-item/enabled:
+          type: boolean
+        catalogue-item/archived:
+          type: boolean
+        catalogue-item/id:
+          type: integer
+          format: int64
+        catalogue-item/resource-id:
+          type: string
     ApplicationOverview:
       required:
         - application/accepted-licenses

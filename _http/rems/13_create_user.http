@@ -2,19 +2,19 @@
 ###
 ### SPDX-License-Identifier: Apache-2.0
 
-POST https://rems-demo.rahtiapp.fi/api/users/create
+POST http://daam.local.onemilliongenomes.eu/api/users/create
 Content-Type: application/json
 x-rems-api-key: 42
 x-rems-user-id: owner
 
 {
-  "userid": "eb4123a3-b722-4798-9af5-8957f823657a",
-  "name": "CKAN Admin",
+  "userid": "52cacbab-c440-4385-9d5f-46aa4930b0e4",
+  "name": "GDI Admin",
   "email": "your_email@example.com"
 }
 
 ###
-GET https://rems-demo.rahtiapp.fi/api/users/active
+GET http://daam.local.onemilliongenomes.eu/api/users/active
 Accept: application/json
 x-rems-api-key: 42
 x-rems-user-id: owner

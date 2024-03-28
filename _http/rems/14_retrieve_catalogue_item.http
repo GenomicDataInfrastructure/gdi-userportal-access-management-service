@@ -1,0 +1,8 @@
+### SPDX-FileCopyrightText: 2024 PNED G.I.E.
+###
+### SPDX-License-Identifier: Apache-2.0
+
+GET http://daam.local.onemilliongenomes.eu/api/catalogue-items?resource=e1cf894e-305b-4c16-8413-95479c7f5afd
+Accept: application/json
+x-rems-api-key: 42
+x-rems-user-id: 52cacbab-c440-4385-9d5f-46aa4930b0e4

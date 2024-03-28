@@ -2,11 +2,11 @@
 ###
 ### SPDX-License-Identifier: Apache-2.0
 
-POST http://rems:3000/api/applications/invite-member
+POST http://daam.local.onemilliongenomes.eu/api/applications/invite-member
 Accept: application/json
 Content-Type: application/json
 x-rems-api-key: 42
-x-rems-user-id: eb4123a3-b722-4798-9af5-8957f823657a
+x-rems-user-id: 52cacbab-c440-4385-9d5f-46aa4930b0e4
 
 {
     "application-id": 28

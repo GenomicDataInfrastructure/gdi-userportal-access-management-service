@@ -19,7 +19,7 @@ public class CatalogueItemNotFoundExceptionMapper implements
     @Override
     public Response toResponse(CatalogueItemNotFoundException exception) {
         var errorResponse = new ErrorResponse(
-                "Catalogue Item Not Found",
+                "REMS Catalogue Item Not Found",
                 NOT_FOUND.getStatusCode(),
                 exception.getMessage()
         );

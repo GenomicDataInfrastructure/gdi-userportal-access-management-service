@@ -79,6 +79,10 @@ public class RemsApiQueryGateway {
     }
 
     public CatalogueItem retrieveCatalogueItemByResourceId(String userId, String resourceId) {
-        return catalogueItemApi.apiCatalogueItemsGet(remsApiKey, userId, resourceId).getFirst();
+        var items = catalogueItemApi.apiCatalogueItemsGet(remsApiKey, userId, resourceId);
+        if (items.isEmpty()) {
+            return null;
+        }
+        return items.getFirst();
     }
 }

@@ -195,6 +195,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ValidationWarnings"
+        "404":
+          description: Catalogue Item not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - daam_auth:
             - write:applications

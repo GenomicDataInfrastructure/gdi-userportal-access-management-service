@@ -19,7 +19,7 @@ class CreateApplicationTest extends BaseTest {
     @Test
     void can_create_application() {
         var createApplication = CreateApplication.builder()
-                .datasetIds(List.of("dataset1", "dataset2", "dataset3"))
+                .datasetIds(List.of("12345"))
                 .build();
 
         given()
@@ -31,6 +31,23 @@ class CreateApplicationTest extends BaseTest {
                 .post("/api/v1/applications/create")
                 .then()
                 .statusCode(204);
+    }
+
+    @Test
+    void application_creation_fails_for_invalid_dataset_id() {
+        var createApplication = CreateApplication.builder()
+                .datasetIds(List.of("invalid"))
+                .build();
+
+        given()
+                .auth()
+                .oauth2(getAccessToken("alice"))
+                .contentType("application/json")
+                .body(createApplication)
+                .when()
+                .post("/api/v1/applications/create")
+                .then()
+                .statusCode(404);
     }
 
     @Test

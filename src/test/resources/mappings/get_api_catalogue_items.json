@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/catalogue-items?resource=12345"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      {
+        "catalogue-item/archived": false,
+        "catalogue-item/enabled": true,
+        "catalogue-item/expired": false,
+        "catalogue-item/id": 100,
+        "catalogue-item/resource-id": "12345"
+      }
+    ]
+  }
+}

@@ -78,7 +78,7 @@ public class RemsApiQueryGateway {
         }
     }
 
-    public CatalogueItem retrieveCatalogueItemByResourceId(String resourceId, String userId) {
+    public CatalogueItem retrieveCatalogueItemByResourceId(String userId, String resourceId) {
         return catalogueItemApi.apiCatalogueItemsGet(remsApiKey, userId, resourceId).getFirst();
     }
 }

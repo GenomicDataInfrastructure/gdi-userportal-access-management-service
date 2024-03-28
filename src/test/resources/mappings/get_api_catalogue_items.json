@@ -1,21 +1,24 @@
 {
-  "request": {
-    "method": "GET",
-    "url": "/api/catalogue-items?resource=12345"
-  },
-  "response": {
-    "status": 200,
-    "headers": {
-      "Content-Type": "application/json"
+    "request": {
+        "method": "GET",
+        "url": "/api/catalogue-items?resource=12345"
     },
-    "jsonBody": [
-      {
-        "catalogue-item/archived": false,
-        "catalogue-item/enabled": true,
-        "catalogue-item/expired": false,
-        "catalogue-item/id": 100,
-        "catalogue-item/resource-id": "12345"
-      }
-    ]
-  }
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "jsonBody": [
+            {
+                "archived": false,
+                "enabled": true,
+                "expired": false,
+                "id": 100,
+                "resource-id": 3,
+                "resid": "12345",
+                "wfid": 2,
+                "formid": 1
+            }
+        ]
+    }
 }

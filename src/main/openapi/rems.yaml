@@ -328,23 +328,35 @@ components:
   schemas:
     CatalogueItem:
       required:
-        - catalogue-item/archived
-        - catalogue-item/enabled
-        - catalogue-item/expired
-        - catalogue-item/id
-        - catalogue-item/resource-id
+        - archived
+        - enabled
+        - expired
+        - id
+        - resource-id
+        - resid
+        - formid
+        - wfid
       properties:
-        catalogue-item/expired:
+        archived:
           type: boolean
-        catalogue-item/enabled:
+        enabled:
           type: boolean
-        catalogue-item/archived:
+        expired:
           type: boolean
-        catalogue-item/id:
+        id:
           type: integer
           format: int64
-        catalogue-item/resource-id:
+        resource-id:
+          type: integer
+          format: int64
+        resid:
           type: string
+        formid:
+          type: integer
+          format: int64
+        wfid:
+          type: integer
+          format: int64
     ApplicationOverview:
       required:
         - application/accepted-licenses

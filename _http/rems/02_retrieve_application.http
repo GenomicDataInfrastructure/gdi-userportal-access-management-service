@@ -2,7 +2,7 @@
 ###
 ### SPDX-License-Identifier: Apache-2.0
 
-GET http://rems:3000/api/applications/25
+GET http://daam.local.onemilliongenomes.eu/api/applications/25
 Accept: application/json
 x-rems-api-key: 42
-x-rems-user-id: eb4123a3-b722-4798-9af5-8957f823657a
+x-rems-user-id: 52cacbab-c440-4385-9d5f-46aa4930b0e4

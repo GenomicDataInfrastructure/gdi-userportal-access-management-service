@@ -5,6 +5,7 @@
 package io.github.genomicdatainfrastructure.daam.services;
 
 import java.io.File;
+import java.nio.file.Files;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -34,11 +35,11 @@ public class AttachFileToApplicationService {
         this.gateway = apiQueryGateway;
     }
 
-    public AddedAttachment attach(Long applicationId, File file, String userId) {
+    public AddedAttachment attach(Long applicationId, String userId, String filename, File file) {
         gateway.checkIfApplicationIsEditableByUser(applicationId, userId);
 
         var multipartForm = new ApiApplicationsAddAttachmentPostMultipartForm();
-        multipartForm._file = file;
+        multipartForm._file = tempFile(filename, file);
 
         var attachmentResponse = remsApplicationCommandApi.apiApplicationsAddAttachmentPost(
                 multipartForm, applicationId, remsApiKey, userId
@@ -47,5 +48,16 @@ public class AttachFileToApplicationService {
         return AddedAttachment.builder()
                 .id(attachmentResponse.getId())
                 .build();
+    }
+
+    private File tempFile(String filename, File file) {
+        try {
+            var tempFile = Files.createTempFile(null, filename);
+            var content = Files.readAllBytes(file.toPath());
+            Files.write(tempFile, content);
+            return tempFile.toFile();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 }

@@ -26,7 +26,7 @@ Million Genomes (B1MG) project, the GDI project is actively realizing the ambiti
 by the 1+Million Genomes (1+MG) initiative.
 
 The GDI User Portal Access Management Service serves as an interface between User Portal and the data
-authorities. It is developed using [Quarkus](https://quarkus.io/) version 3.8.1
+authorities. It is developed using [Quarkus](https://quarkus.io/) version 3.9.1
 and [GraalVM](https://www.graalvm.org/) for Java 21. This application plays a crucial role in
 enabling access request integration between the Data User and different Data Authorities.
 

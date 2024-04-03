@@ -26,20 +26,25 @@
         "application/members": [],
         "application/resources": [
           {
-            "catalogue-item/end": null,
-            "catalogue-item/expired": false,
+            "catalogue-item/end": "2024-03-20T15:18:24.968Z",
+            "catalogue-item/expired": true,
             "catalogue-item/enabled": true,
             "resource/id": 1,
             "catalogue-item/title": {
-              "en": "Auto-approve workflow"
+              "fi": "Ilmastonmuutoksen vaikutusten tutkiminen biodiversiteettiin",
+              "en": "Studying the Impacts of Climate Change on Biodiversity"
+            },
+            "resource/duo": {
+              "duo/codes": []
             },
             "catalogue-item/infourl": {
-              "en": "http://www.google.com"
+              "fi": "lisätietoja-suomeksi",
+              "en": "more-info-in-english"
             },
-            "resource/ext-id": "12345",
-            "catalogue-item/start": "2024-03-05T15:16:17.176Z",
-            "catalogue-item/archived": false,
-            "catalogue-item/id": 9
+            "resource/ext-id": "resource123",
+            "catalogue-item/start": "2024-03-20T15:18:24.969Z",
+            "catalogue-item/archived": true,
+            "catalogue-item/id": 1
           }
         ],
         "application/accepted-licenses": {},

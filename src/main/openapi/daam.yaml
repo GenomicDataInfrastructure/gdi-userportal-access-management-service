@@ -533,11 +533,11 @@ components:
           type: string
           format: date-time
           title: Status changed at
-        datasetIds:
+        datasets:
           type: array
-          title: Dataset ids
+          title: Datasets
           items:
-            type: string
+            $ref: "#/components/schemas/ApplicationDataset"
     SaveFormsAndDuos:
       properties:
         forms:
@@ -618,7 +618,7 @@ components:
           type: array
           title: Datasets
           items:
-            $ref: "#/components/schemas/RetrievedApplicationDataset"
+            $ref: "#/components/schemas/ApplicationDataset"
         forms:
           type: array
           title: Forms
@@ -723,7 +723,7 @@ components:
         email:
           type: string
           title: Member email
-    RetrievedApplicationDataset:
+    ApplicationDataset:
       properties:
         id:
           title: Dataset id

@@ -526,6 +526,9 @@ components:
         title:
           type: string
           title: Application title
+        description:
+          type: string
+          title: Application description
         currentState:
           type: string
           title: Application state
@@ -533,6 +536,10 @@ components:
           type: string
           format: date-time
           title: Status changed at
+        createdAt:
+          type: string
+          format: date-time
+          title: Created at
         datasets:
           type: array
           title: Datasets

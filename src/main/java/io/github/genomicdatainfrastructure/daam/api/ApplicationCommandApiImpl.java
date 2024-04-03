@@ -104,7 +104,10 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
             AddAttachmentToApplicationV1MultipartForm multipartForm,
             Long id
     ) {
-        return attachFileToApplicationService.attach(id, multipartForm._file, userId());
+        var file = multipartForm._file;
+        return attachFileToApplicationService.attach(
+                id, userId(), file.fileName(), file.filePath().toFile()
+        );
     }
 
     private String userId() {

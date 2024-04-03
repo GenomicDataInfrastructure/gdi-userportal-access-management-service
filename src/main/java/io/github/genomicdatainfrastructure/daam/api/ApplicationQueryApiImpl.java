@@ -12,8 +12,9 @@ import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
 import lombok.RequiredArgsConstructor;
 
-import java.io.File;
 import java.util.List;
+
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
 
@@ -35,7 +36,7 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
     }
 
     @Override
-    public File retrieveAttachmentFromApplicationV1(Long id, Long attachmentId) {
+    public FileUpload retrieveAttachmentFromApplicationV1(Long id, Long attachmentId) {
         throw new UnsupportedOperationException(
                 "Unimplemented method 'retrieveAttachmentFromApplicationV1'"
         );

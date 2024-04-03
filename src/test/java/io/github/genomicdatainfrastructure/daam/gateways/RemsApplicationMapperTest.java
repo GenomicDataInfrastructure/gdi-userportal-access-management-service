@@ -52,12 +52,12 @@ class RemsApplicationMapperTest {
                 new RetrievedApplicationMember("NZRWRR", "Elly", "elly.white@outlook.com"));
 
         assertThat(retrievedApplication.getDatasets()).containsExactlyInAnyOrder(
-                new RetrievedApplicationDataset(3L,
+                new ApplicationDataset(3L,
                         List.of(new Label("fi", "Title in Finnish"), new Label("en",
                                 "Title in English")),
                         List.of(new Label("fi", "Url info in Finnish"), new Label("en",
                                 "Url info in English"))),
-                new RetrievedApplicationDataset(111L, List.of(new Label("fr", "Title in French"),
+                new ApplicationDataset(111L, List.of(new Label("fr", "Title in French"),
                         new Label("de", "Title in German")), List.of(new Label("fr",
                                 "Url info in French"), new Label("de", "Url info in German"))));
 

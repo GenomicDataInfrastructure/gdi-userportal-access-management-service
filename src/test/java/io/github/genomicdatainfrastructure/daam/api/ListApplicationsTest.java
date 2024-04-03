@@ -26,7 +26,18 @@ class ListApplicationsTest extends BaseTest {
                 .body("[0].id", equalTo(25))
                 .body("[0].title", equalTo("2024/14"))
                 .body("[0].currentState", equalTo("application.state/draft"))
-                .body("[0].stateChangedAt", equalTo("2024-03-05T19:44:46.208Z"));
+                .body("[0].stateChangedAt", equalTo("2024-03-05T19:44:46.208Z"))
+                .body("[0].datasets[0].id", equalTo(1))
+                .body("[0].datasets[0].title[0].language", equalTo("fi"))
+                .body("[0].datasets[0].title[0].name", equalTo(
+                        "Ilmastonmuutoksen vaikutusten tutkiminen biodiversiteettiin"))
+                .body("[0].datasets[0].title[1].language", equalTo("en"))
+                .body("[0].datasets[0].title[1].name", equalTo(
+                        "Studying the Impacts of Climate Change on Biodiversity"))
+                .body("[0].datasets[0].url[0].language", equalTo("fi"))
+                .body("[0].datasets[0].url[0].name", equalTo("lisätietoja-suomeksi"))
+                .body("[0].datasets[0].url[1].language", equalTo("en"))
+                .body("[0].datasets[0].url[1].name", equalTo("more-info-in-english"));
     }
 
     @Test

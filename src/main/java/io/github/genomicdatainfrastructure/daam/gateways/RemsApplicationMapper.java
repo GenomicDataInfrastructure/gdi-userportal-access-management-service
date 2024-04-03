@@ -40,6 +40,26 @@ public class RemsApplicationMapper {
                 .build();
     }
 
+    public List<ListedApplication> from(List<ApplicationOverview> applicationOverviews) {
+        return applicationOverviews
+                .stream()
+                .map(this::from)
+                .toList();
+    }
+
+    private ListedApplication from(ApplicationOverview applicationOverview) {
+        return ListedApplication.builder()
+                .id(applicationOverview.getApplicationId())
+                .title(applicationOverview.getApplicationExternalId())
+                .currentState(applicationOverview.getApplicationState().value())
+                .stateChangedAt(applicationOverview.getApplicationLastActivity())
+                .datasets(applicationOverview.getApplicationResources()
+                        .stream()
+                        .map(this::toDataset)
+                        .toList())
+                .build();
+    }
+
     private RetrievedApplicationWorkflow toWorkflow(Application application) {
         var workflow = Optional.ofNullable(application
                 .getApplicationWorkflow());
@@ -101,7 +121,7 @@ public class RemsApplicationMapper {
                         .orElse(null));
     }
 
-    private List<RetrievedApplicationDataset> toDatasets(Application application) {
+    private List<ApplicationDataset> toDatasets(Application application) {
         var potentialResources = Optional.ofNullable(application
                 .getApplicationResources());
 
@@ -113,10 +133,10 @@ public class RemsApplicationMapper {
                 .orElse(null);
     }
 
-    private RetrievedApplicationDataset toDataset(V2Resource resource) {
+    private ApplicationDataset toDataset(V2Resource resource) {
         var potentialResource = Optional.ofNullable(resource);
 
-        return new RetrievedApplicationDataset(potentialResource.map(
+        return new ApplicationDataset(potentialResource.map(
                 V2Resource::getCatalogueItemId).orElse(null),
                 potentialResource.map(r -> toLabelObject(r
                         .getCatalogueItemTitle())).orElse(null),

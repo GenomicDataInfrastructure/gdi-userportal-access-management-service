@@ -36,7 +36,7 @@
             "catalogue-item/infourl": {
               "en": "http://www.google.com"
             },
-            "resource/ext-id": "urn:nbn:fi:lb-201403262",
+            "resource/ext-id": "12345",
             "catalogue-item/start": "2024-03-05T15:16:17.176Z",
             "catalogue-item/archived": false,
             "catalogue-item/id": 9

@@ -533,6 +533,11 @@ components:
           type: string
           format: date-time
           title: Status changed at
+        datasetIds:
+          type: array
+          title: Dataset ids
+          items:
+            type: string
     SaveFormsAndDuos:
       properties:
         forms:

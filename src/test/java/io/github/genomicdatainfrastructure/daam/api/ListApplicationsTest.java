@@ -26,7 +26,8 @@ class ListApplicationsTest extends BaseTest {
                 .body("[0].id", equalTo(25))
                 .body("[0].title", equalTo("2024/14"))
                 .body("[0].currentState", equalTo("application.state/draft"))
-                .body("[0].stateChangedAt", equalTo("2024-03-05T19:44:46.208Z"));
+                .body("[0].stateChangedAt", equalTo("2024-03-05T19:44:46.208Z"))
+                .body("[0].datasetIds[0]", equalTo("12345"));
     }
 
     @Test

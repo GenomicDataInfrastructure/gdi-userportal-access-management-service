@@ -7,6 +7,7 @@ package io.github.genomicdatainfrastructure.daam.services;
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
 import io.github.genomicdatainfrastructure.daam.model.ListedApplication;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.ApplicationOverview;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.V2Resource;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
@@ -35,6 +36,14 @@ public class ListApplicationsService {
                 .title(applicationOverview.getApplicationExternalId())
                 .currentState(applicationOverview.getApplicationState().value())
                 .stateChangedAt(applicationOverview.getApplicationLastActivity())
+                .datasetIds(getDatasetIds(applicationOverview))
                 .build();
+    }
+
+    private List<String> getDatasetIds(ApplicationOverview applicationOverview) {
+        return applicationOverview.getApplicationResources()
+                .stream()
+                .map(V2Resource::getResourceExtId)
+                .toList();
     }
 }

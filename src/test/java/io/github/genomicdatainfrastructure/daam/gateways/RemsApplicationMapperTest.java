@@ -52,12 +52,13 @@ class RemsApplicationMapperTest {
                 new RetrievedApplicationMember("NZRWRR", "Elly", "elly.white@outlook.com"));
 
         assertThat(retrievedApplication.getDatasets()).containsExactlyInAnyOrder(
-                new ApplicationDataset(3L,
+                new ApplicationDataset(3L, "external-id-3L",
                         List.of(new Label("fi", "Title in Finnish"), new Label("en",
                                 "Title in English")),
                         List.of(new Label("fi", "Url info in Finnish"), new Label("en",
                                 "Url info in English"))),
-                new ApplicationDataset(111L, List.of(new Label("fr", "Title in French"),
+                new ApplicationDataset(111L, "external-id-111L", List.of(new Label("fr",
+                        "Title in French"),
                         new Label("de", "Title in German")), List.of(new Label("fr",
                                 "Url info in French"), new Label("de", "Url info in German"))));
 
@@ -143,9 +144,9 @@ class RemsApplicationMapperTest {
 
         return List.of(
                 new V2Resource(null, null, null, null, datasetTitleResourceId3, null,
-                        datasetUrlInfoResourceId3, null, null, null, 3L),
+                        datasetUrlInfoResourceId3, "external-id-3L", null, null, 3L),
                 new V2Resource(null, null, null, null, datasetTitleResourceId111, null,
-                        datasetUrlInfoResourceId111, null, null, null, 111L));
+                        datasetUrlInfoResourceId111, "external-id-111L", null, null, 111L));
     }
 
     private List<Form> createForms() {

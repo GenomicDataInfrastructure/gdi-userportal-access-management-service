@@ -40,7 +40,8 @@ class ListApplicationsTest extends BaseTest {
                 .body("[0].datasets[0].url[0].language", equalTo("fi"))
                 .body("[0].datasets[0].url[0].name", equalTo("lisätietoja-suomeksi"))
                 .body("[0].datasets[0].url[1].language", equalTo("en"))
-                .body("[0].datasets[0].url[1].name", equalTo("more-info-in-english"));
+                .body("[0].datasets[0].url[1].name", equalTo("more-info-in-english"))
+                .body("[0].datasets[0].externalId", equalTo("resource123"));
     }
 
     @Test

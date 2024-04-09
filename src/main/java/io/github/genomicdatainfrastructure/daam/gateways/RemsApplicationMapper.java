@@ -182,6 +182,7 @@ public class RemsApplicationMapper {
 
         return new RetrievedApplicationFormField(potentialFormField.map(Field::getFieldId).orElse(
                 null),
+                potentialFormField.map(Field::getFieldValue).orElse(null),
                 potentialFormField.map(Field::getFieldOptional).orElse(null),
                 potentialFormField.map(Field::getFieldPrivate).orElse(null),
                 potentialFormField.map(Field::getFieldVisible).orElse(null),

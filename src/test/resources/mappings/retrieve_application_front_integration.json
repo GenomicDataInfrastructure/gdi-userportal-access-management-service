@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/api/applications/28"
+    "url": "/api/applications/27"
   },
   "response": {
     "status": 200,
@@ -38,16 +38,16 @@
       "application/external-id": "APP20240328",
       "application/first-submitted": "2024-03-20T15:18:24.968Z",
       "application/blacklist": [],
-      "application/id": 28,
+      "application/id": 27,
       "application/duo": {
         "duo/codes": [],
         "duo/matches": []
       },
       "application/assigned-external-id": "APP20240328",
       "application/applicant": {
-        "userid": "applicant456",
-        "name": "Robert Johnson",
-        "email": "robert.johnson@example.com",
+        "userid": "52cacbab-c440-4385-9d5f-46aa4930b0e4",
+        "name": "ckan_admin",
+        "email": "your_email@example.com",
         "organizations": [
           {
             "organization/id": "org789"
@@ -97,7 +97,7 @@
           },
           "catalogue-item/infourl": {
             "fi": "lisätietoja-suomeksi",
-            "en": "more-info-in-english"
+            "en": "0ddd7a13-ee11-4e5d-bbff-34e04a6a7949"
           },
           "resource/ext-id": "resource123",
           "catalogue-item/start": "2024-03-20T15:18:24.969Z",
@@ -160,7 +160,7 @@
                 ]
               },
               "field/type": "description",
-              "field/value": "",
+              "field/value": "This is a research proposal.",
               "field/previous-value": "",
               "field/id": "1112",
               "field/optional": true,
@@ -275,7 +275,7 @@
         }
       ],
       "application/created": "2024-03-20T15:18:24.97Z",
-      "application/state": "application.state/submitted",
+      "application/state": "application.state/draft",
       "application/copied-to": [
         {
           "application/id": 0,

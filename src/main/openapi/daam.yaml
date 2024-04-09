@@ -772,6 +772,9 @@ components:
         id:
           title: Field id
           type: string
+        value:
+          title: Field value
+          type: string
         optional:
           type: boolean
           title: Field optional

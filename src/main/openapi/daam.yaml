@@ -736,6 +736,9 @@ components:
           title: Dataset id
           type: integer
           format: int64
+        externalId:
+          type: string
+          title: Dataset external id
         title:
           type: array
           items:

@@ -140,6 +140,7 @@ public class RemsApplicationMapper {
 
         return new ApplicationDataset(potentialResource.map(
                 V2Resource::getCatalogueItemId).orElse(null),
+                potentialResource.map(V2Resource::getResourceExtId).orElse(null),
                 potentialResource.map(r -> toLabelObject(r
                         .getCatalogueItemTitle())).orElse(null),
                 potentialResource.map(r -> toLabelObject(r

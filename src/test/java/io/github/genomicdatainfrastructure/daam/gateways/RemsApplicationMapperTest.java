@@ -68,7 +68,7 @@ class RemsApplicationMapperTest {
                         "form-access-1",
                         List.of(new Label("en", "External title in English"), new Label("fr",
                                 "External title in French")),
-                        List.of(new RetrievedApplicationFormField("98", true, false, true,
+                        List.of(new RetrievedApplicationFormField("98","", true, false, true,
                                 List.of(new Label("en", "Field in English"), new Label("fr",
                                         "Field in French")), "email"))));
 

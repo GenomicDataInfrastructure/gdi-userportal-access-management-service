@@ -37,13 +37,16 @@ public class CreateApplicationService {
         this.gateway = apiQueryGateway;
     }
 
-    public void createRemsApplication(CreateApplication createApplication, String userId) {
+    public Long createRemsApplication(CreateApplication createApplication, String userId) {
         var catalogueItemIds = getCatalogueItemIds(createApplication.getDatasetIds(), userId);
         var command = CreateApplicationCommand.builder()
                 .catalogueItemIds(catalogueItemIds)
                 .build();
 
-        remsApplicationCommandApi.apiApplicationsCreatePost(remsApiKey, userId, command);
+        var response = remsApplicationCommandApi.apiApplicationsCreatePost(remsApiKey, userId,
+                command);
+
+        return response.getApplicationId();
     }
 
     private List<Long> getCatalogueItemIds(List<String> datasetIds, String userId) {

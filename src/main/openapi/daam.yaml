@@ -185,8 +185,12 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateApplication"
       responses:
-        "204":
-          description: Successful Response (no content)
+        "201":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateApplicationResponse"
         "422":
           description: Validation warnings
           content:
@@ -919,6 +923,11 @@ components:
           title: dataset ids
           items:
             type: string
+    CreateApplicationResponse:
+      properties:
+        applicationId:
+          type: integer
+          format: int64
     AddDatasetToBasket:
       properties:
         datasetIds:

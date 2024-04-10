@@ -32,7 +32,7 @@ class CreateApplicationTest extends BaseTest {
                 .post("/api/v1/applications/create")
                 .then()
                 .statusCode(201)
-                .body("id", equalTo(12345));
+                .body("applicationId", equalTo(12345));
     }
 
     @Test

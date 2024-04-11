@@ -56,15 +56,11 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     }
 
     @Override
-    public Response createApplicationV1(CreateApplication createApplication) {
+    public CreateApplicationResponse createApplicationV1(CreateApplication createApplication) {
         var applicationId = createApplicationService.createRemsApplication(createApplication,
                 userId());
 
-        return Response
-                .status(201)
-                .entity(new CreateApplicationResponse().applicationId(applicationId))
-                .type(MediaType.APPLICATION_JSON)
-                .build();
+        return new CreateApplicationResponse().applicationId(applicationId);
     }
 
     @Override

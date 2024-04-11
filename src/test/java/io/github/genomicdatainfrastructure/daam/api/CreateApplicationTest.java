@@ -31,7 +31,7 @@ class CreateApplicationTest extends BaseTest {
                 .when()
                 .post("/api/v1/applications/create")
                 .then()
-                .statusCode(201)
+                .statusCode(200)
                 .body("applicationId", equalTo(12345));
     }
 

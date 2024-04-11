@@ -4,6 +4,7 @@
 
 package io.github.genomicdatainfrastructure.daam.api;
 
+import static org.hamcrest.Matchers.equalTo;
 import static io.restassured.RestAssured.given;
 
 import java.util.List;
@@ -30,7 +31,8 @@ class CreateApplicationTest extends BaseTest {
                 .when()
                 .post("/api/v1/applications/create")
                 .then()
-                .statusCode(204);
+                .statusCode(200)
+                .body("applicationId", equalTo(12345));
     }
 
     @Test

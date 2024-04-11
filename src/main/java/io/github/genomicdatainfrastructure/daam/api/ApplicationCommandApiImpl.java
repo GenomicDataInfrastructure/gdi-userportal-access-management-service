@@ -10,6 +10,7 @@ import io.github.genomicdatainfrastructure.daam.services.SaveApplicationService;
 import io.github.genomicdatainfrastructure.daam.services.SubmitApplicationService;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
@@ -55,11 +56,11 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     }
 
     @Override
-    public Response createApplicationV1(CreateApplication createApplication) {
-        createApplicationService.createRemsApplication(createApplication, userId());
-        return Response
-                .noContent()
-                .build();
+    public CreateApplicationResponse createApplicationV1(CreateApplication createApplication) {
+        var applicationId = createApplicationService.createRemsApplication(createApplication,
+                userId());
+
+        return new CreateApplicationResponse().applicationId(applicationId);
     }
 
     @Override

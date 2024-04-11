@@ -4,6 +4,9 @@
 
 package io.github.genomicdatainfrastructure.daam.gateways;
 
+import static java.util.Comparator.comparing;
+import static java.util.Optional.ofNullable;
+
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorrectStateException;
 import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
@@ -57,7 +60,12 @@ public class RemsApiQueryGateway {
     }
 
     public List<ApplicationOverview> listApplications(String userId) {
-        return applicationsApi.apiMyApplicationsGet(remsApiKey, userId, null);
+        var list = applicationsApi.apiMyApplicationsGet(remsApiKey, userId, null);
+        return ofNullable(list)
+                .orElseGet(List::of)
+                .stream()
+                .sorted(comparing(ApplicationOverview::getApplicationLastActivity).reversed())
+                .toList();
     }
 
     public void checkIfApplicationIsEditableByUser(Long id, String userId) {

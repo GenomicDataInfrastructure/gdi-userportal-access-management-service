@@ -10,7 +10,6 @@ import io.github.genomicdatainfrastructure.daam.services.SaveApplicationService;
 import io.github.genomicdatainfrastructure.daam.services.SubmitApplicationService;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 

@@ -1169,10 +1169,12 @@ components:
           type: boolean
         errors:
           type: array
-          items: {}
+          items:
+            type: string
         warnings:
           type: array
-          items: {}
+          items:
+            type: string
         application-id:
           type: integer
           format: int64

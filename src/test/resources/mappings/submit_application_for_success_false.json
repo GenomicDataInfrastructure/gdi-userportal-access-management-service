@@ -1,0 +1,24 @@
+{
+    "request": {
+      "method": "POST",
+      "url": "/api/applications/submit",
+      "bodyPatterns": [
+        {
+          "matchesJsonPath": "$[?(@.application-id == 44)]"
+        }
+      ]
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "jsonBody": {
+        "success": false,
+        "errorMessages": [
+          "The application submission failed. Ensure all required fields are filled out correctly."
+        ]
+      }
+    },
+    "priority": 1
+  }

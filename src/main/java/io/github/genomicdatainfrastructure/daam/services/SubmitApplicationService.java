@@ -1,14 +1,15 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
-
 package io.github.genomicdatainfrastructure.daam.services;
 
+import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationSubmissionException;
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.SubmitApplicationCommand;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -37,6 +38,12 @@ public class SubmitApplicationService {
                 .applicationId(id)
                 .build();
 
-        remsApplicationCommandApi.apiApplicationsSubmitPost(remsApiKey, userId, command);
+        var response = remsApplicationCommandApi.apiApplicationsSubmitPost(
+                remsApiKey, userId,
+                command);
+
+        if (Boolean.FALSE.equals(response.getSuccess())) {
+            throw new ApplicationSubmissionException(id, response.getErrors());
+        }
     }
 }

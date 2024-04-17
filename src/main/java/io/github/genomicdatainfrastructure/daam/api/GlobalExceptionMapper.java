@@ -6,6 +6,8 @@ package io.github.genomicdatainfrastructure.daam.api;
 
 import static jakarta.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
+import java.util.List;
+
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -20,7 +22,8 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
         var errorResponse = new ErrorResponse(
                 "Not expected exception",
                 INTERNAL_SERVER_ERROR.getStatusCode(),
-                exception.getMessage()
+                exception.getMessage(),
+                List.of()
         );
 
         return Response

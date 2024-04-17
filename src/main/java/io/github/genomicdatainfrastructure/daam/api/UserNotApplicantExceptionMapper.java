@@ -5,6 +5,8 @@ package io.github.genomicdatainfrastructure.daam.api;
 
 import static jakarta.ws.rs.core.Response.Status.FORBIDDEN;
 
+import java.util.List;
+
 import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
@@ -20,7 +22,8 @@ public class UserNotApplicantExceptionMapper implements ExceptionMapper<UserNotA
         var errorResponse = new ErrorResponse(
                 "User Not Applicant",
                 FORBIDDEN.getStatusCode(),
-                exception.getMessage()
+                exception.getMessage(),
+                List.of()
         );
 
         return Response

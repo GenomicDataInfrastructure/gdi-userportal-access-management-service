@@ -3,11 +3,11 @@
 // SPDX-License-Identifier: Apache-2.0
 package io.github.genomicdatainfrastructure.daam.api;
 
-import static jakarta.ws.rs.core.Response.Status.PRECONDITION_REQUIRED;
+import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationSubmissionException;
+import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
 import java.util.List;
 
-import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorrectStateException;
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -15,20 +15,20 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class ApplicationNotInCorrectStateExceptionMapper implements
-        ExceptionMapper<ApplicationNotInCorrectStateException> {
+public class ApplicationSubmissionExceptionMapper implements
+        ExceptionMapper<ApplicationSubmissionException> {
 
     @Override
-    public Response toResponse(ApplicationNotInCorrectStateException exception) {
+    public Response toResponse(ApplicationSubmissionException exception) {
         var errorResponse = new ErrorResponse(
-                "Application Not In Correct State",
-                PRECONDITION_REQUIRED.getStatusCode(),
+                "Application could not be submitted",
+                BAD_REQUEST.getStatusCode(),
                 exception.getMessage(),
-                List.of()
+                exception.getErrorMessages()
         );
 
         return Response
-                .status(PRECONDITION_REQUIRED)
+                .status(BAD_REQUEST)
                 .entity(errorResponse)
                 .type(MediaType.APPLICATION_JSON)
                 .build();

@@ -12,5 +12,6 @@
       "success": true,
       "application-id": 12345
     }
-  }
+  },
+  "priority": 2
 }

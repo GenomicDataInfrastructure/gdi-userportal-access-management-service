@@ -24,7 +24,7 @@ public class CatalogueItemNotFoundExceptionMapper implements
                 "REMS Catalogue Item Not Found",
                 NOT_FOUND.getStatusCode(),
                 exception.getMessage(),
-                List.of("The requested catalogue item is not available.")
+                List.of()
         );
 
         return Response

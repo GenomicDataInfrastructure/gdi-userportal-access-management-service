@@ -24,7 +24,7 @@ public class ApplicationSubmissionExceptionMapper implements
                 "Application could not be submitted",
                 BAD_REQUEST.getStatusCode(),
                 exception.getMessage(),
-                List.of("The application submission failed. Ensure all required fields are filled out correctly.")
+                exception.getErrorMessages()
         );
 
         return Response

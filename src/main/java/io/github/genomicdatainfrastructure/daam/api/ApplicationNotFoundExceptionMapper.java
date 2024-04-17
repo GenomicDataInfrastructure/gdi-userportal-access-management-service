@@ -23,8 +23,7 @@ public class ApplicationNotFoundExceptionMapper implements
                 "Application Not Found",
                 NOT_FOUND.getStatusCode(),
                 exception.getMessage(),
-                List.of(
-                        "The requested application ID does not exist or is not accessible with the provided credentials.")
+                List.of()
         );
 
         return Response

@@ -23,8 +23,7 @@ public class UserNotApplicantExceptionMapper implements ExceptionMapper<UserNotA
                 "User Not Applicant",
                 FORBIDDEN.getStatusCode(),
                 exception.getMessage(),
-                List.of(
-                        "The current user is not the applicant of the specified application and therefore does not have the necessary permissions to perform this action.")
+                List.of()
         );
 
         return Response

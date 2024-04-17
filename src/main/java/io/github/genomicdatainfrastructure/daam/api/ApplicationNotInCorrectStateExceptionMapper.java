@@ -24,8 +24,7 @@ public class ApplicationNotInCorrectStateExceptionMapper implements
                 "Application Not In Correct State",
                 PRECONDITION_REQUIRED.getStatusCode(),
                 exception.getMessage(),
-                List.of(
-                        "The application is not in a state that allows the requested operation.")
+                List.of()
         );
 
         return Response

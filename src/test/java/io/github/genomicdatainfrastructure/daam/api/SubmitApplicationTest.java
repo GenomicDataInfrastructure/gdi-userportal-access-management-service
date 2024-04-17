@@ -74,9 +74,7 @@ class SubmitApplicationTest extends BaseTest {
                 .post("api/v1/applications/44/submit")
                 .then()
                 .statusCode(400)
-                .body("title", equalTo("Application could not be submitted"))
-                .body("errorMessages[0]", equalTo(
-                        "The application submission failed. Ensure all required fields are filled out correctly."));
+                .body("title", equalTo("Application could not be submitted"));
 
     }
 }

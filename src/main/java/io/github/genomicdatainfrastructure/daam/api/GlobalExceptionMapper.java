@@ -23,7 +23,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
                 "Not expected exception",
                 INTERNAL_SERVER_ERROR.getStatusCode(),
                 exception.getMessage(),
-                List.of("An unexpected error has occurred.")
+                List.of()
         );
 
         return Response

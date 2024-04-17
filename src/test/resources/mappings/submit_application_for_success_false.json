@@ -1,0 +1,22 @@
+{
+    "request": {
+      "method": "POST",
+      "url": "/api/applications/submit",
+      "bodyPatterns": [
+        {
+          "matchesJsonPath": "$[?(@.application-id == 44)]"
+        }
+      ]
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "jsonBody": {
+        "success": false,
+        "errors": ["Application could not be submitted"]
+      }
+    },
+    "priority": 1
+  }

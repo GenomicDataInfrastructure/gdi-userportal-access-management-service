@@ -143,14 +143,12 @@ paths:
       responses:
         "204":
           description: Successful Response (no content)
-        "422":
-          description: Validation warnings
+        "400":
+          description: Bad Request
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ValidationWarnings"
+                  $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: Application not found
           content:

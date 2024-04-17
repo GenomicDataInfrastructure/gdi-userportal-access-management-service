@@ -6,7 +6,6 @@ package io.github.genomicdatainfrastructure.daam.api;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
@@ -63,5 +62,17 @@ class SubmitApplicationTest extends BaseTest {
                 .post("/api/v1/applications/1/submit")
                 .then()
                 .statusCode(401);
+    }
+
+    @Test
+    void cannot_submit_application_due_to_submission_errors() {
+        given()
+                .auth()
+                .oauth2(getAccessToken("alice"))
+                .when()
+                .post("api/v1/applications/44/submit")
+                .then()
+                .statusCode(400);
+
     }
 }

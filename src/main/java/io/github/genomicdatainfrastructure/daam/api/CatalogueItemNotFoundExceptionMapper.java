@@ -5,7 +5,7 @@ package io.github.genomicdatainfrastructure.daam.api;
 
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
-import java.util.Collections;
+import java.util.List;
 
 import io.github.genomicdatainfrastructure.daam.exceptions.CatalogueItemNotFoundException;
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
@@ -24,7 +24,7 @@ public class CatalogueItemNotFoundExceptionMapper implements
                 "REMS Catalogue Item Not Found",
                 NOT_FOUND.getStatusCode(),
                 exception.getMessage(),
-                Collections.singletonList("The requested catalogue item is not available.")
+                List.of("The requested catalogue item is not available.")
         );
 
         return Response

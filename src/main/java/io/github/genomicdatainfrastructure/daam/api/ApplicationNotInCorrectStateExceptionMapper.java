@@ -5,7 +5,7 @@ package io.github.genomicdatainfrastructure.daam.api;
 
 import static jakarta.ws.rs.core.Response.Status.PRECONDITION_REQUIRED;
 
-import java.util.Collections;
+import java.util.List;
 
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorrectStateException;
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
@@ -24,7 +24,7 @@ public class ApplicationNotInCorrectStateExceptionMapper implements
                 "Application Not In Correct State",
                 PRECONDITION_REQUIRED.getStatusCode(),
                 exception.getMessage(),
-                Collections.singletonList(
+                List.of(
                         "The application is not in a state that allows the requested operation.")
         );
 

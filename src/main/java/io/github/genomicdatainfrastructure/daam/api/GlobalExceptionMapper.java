@@ -6,7 +6,7 @@ package io.github.genomicdatainfrastructure.daam.api;
 
 import static jakarta.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
-import java.util.Collections;
+import java.util.List;
 
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
@@ -23,7 +23,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
                 "Not expected exception",
                 INTERNAL_SERVER_ERROR.getStatusCode(),
                 exception.getMessage(),
-                Collections.singletonList("An unexpected error has occurred.")
+                List.of("An unexpected error has occurred.")
         );
 
         return Response

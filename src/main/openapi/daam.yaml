@@ -944,3 +944,8 @@ components:
         detail:
           type: string
           title: Error detail
+        errorMessages:
+          type: array
+          items:
+            type: string
+          description: Additional error messages related to the response

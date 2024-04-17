@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+import java.util.Collections;
 
 @Provider
 public class ApplicationNotFoundExceptionMapper implements
@@ -21,7 +22,9 @@ public class ApplicationNotFoundExceptionMapper implements
         var errorResponse = new ErrorResponse(
                 "Application Not Found",
                 NOT_FOUND.getStatusCode(),
-                exception.getMessage()
+                exception.getMessage(),
+                Collections.singletonList(
+                        "The requested application ID does not exist or is not accessible with the provided credentials.")
         );
 
         return Response

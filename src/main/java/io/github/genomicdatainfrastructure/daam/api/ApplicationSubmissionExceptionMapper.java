@@ -5,6 +5,9 @@ package io.github.genomicdatainfrastructure.daam.api;
 
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationSubmissionException;
 import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
+
+import java.util.Collections;
+
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -20,7 +23,9 @@ public class ApplicationSubmissionExceptionMapper implements
         var errorResponse = new ErrorResponse(
                 "Application could not be submitted",
                 BAD_REQUEST.getStatusCode(),
-                exception.getMessage()
+                exception.getMessage(),
+                Collections.singletonList(
+                        "The application submission failed. Ensure all required fields are filled out correctly.")
         );
 
         return Response

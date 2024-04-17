@@ -7,6 +7,7 @@ package io.github.genomicdatainfrastructure.daam.api;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
 class SubmitApplicationTest extends BaseTest {
@@ -72,7 +73,10 @@ class SubmitApplicationTest extends BaseTest {
                 .when()
                 .post("api/v1/applications/44/submit")
                 .then()
-                .statusCode(400);
+                .statusCode(400)
+                .body("title", equalTo("Application could not be submitted"))
+                .body("errorMessages[0]", equalTo(
+                        "The application submission failed. Ensure all required fields are filled out correctly."));
 
     }
 }

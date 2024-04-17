@@ -7,7 +7,6 @@ import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationSubmission
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.SubmitApplicationCommand;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.SubmitApplicationResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -39,7 +38,7 @@ public class SubmitApplicationService {
                 .applicationId(id)
                 .build();
 
-        SubmitApplicationResponse response = remsApplicationCommandApi.apiApplicationsSubmitPost(
+        var response = remsApplicationCommandApi.apiApplicationsSubmitPost(
                 remsApiKey, userId,
                 command);
 

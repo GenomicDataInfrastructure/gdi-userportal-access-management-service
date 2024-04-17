@@ -15,7 +15,9 @@
       },
       "jsonBody": {
         "success": false,
-        "errors": ["Application could not be submitted"]
+        "errorMessages": [
+          "The application submission failed. Ensure all required fields are filled out correctly."
+        ]
       }
     },
     "priority": 1

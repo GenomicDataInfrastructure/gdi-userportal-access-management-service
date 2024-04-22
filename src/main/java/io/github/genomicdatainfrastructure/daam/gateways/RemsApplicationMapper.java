@@ -8,9 +8,13 @@ import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import static java.util.Optional.ofNullable;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Comparator;
+import java.util.Objects;
 
 @ApplicationScoped
 public class RemsApplicationMapper {
@@ -63,7 +67,7 @@ public class RemsApplicationMapper {
     }
 
     private RetrievedApplicationWorkflow toWorkflow(Application application) {
-        var workflow = Optional.ofNullable(application
+        var workflow = ofNullable(application
                 .getApplicationWorkflow());
 
         return new RetrievedApplicationWorkflow(workflow.map(Response10953Workflow::getWorkflowId)
@@ -72,7 +76,7 @@ public class RemsApplicationMapper {
     }
 
     private RetrievedApplicationApplicant toApplicant(Application application) {
-        var applicant = Optional.ofNullable(application
+        var applicant = ofNullable(application
                 .getApplicationApplicant());
 
         return new RetrievedApplicationApplicant(
@@ -82,7 +86,7 @@ public class RemsApplicationMapper {
     }
 
     private List<RetrievedApplicationMember> toMembers(Application application) {
-        var potentialMembers = Optional.ofNullable(application
+        var potentialMembers = ofNullable(application
                 .getApplicationMembers());
 
         return potentialMembers.map(members -> members
@@ -93,7 +97,7 @@ public class RemsApplicationMapper {
     }
 
     private RetrievedApplicationMember toMember(UserWithAttributes member) {
-        var potentialMember = Optional.ofNullable(member);
+        var potentialMember = ofNullable(member);
 
         return new RetrievedApplicationMember(potentialMember.map(
                 UserWithAttributes::getUserid).orElse(null),
@@ -102,7 +106,7 @@ public class RemsApplicationMapper {
     }
 
     private List<RetrievedApplicationInvitedMember> toInvitedMembers(Application application) {
-        var potentialInvitedMembers = Optional.ofNullable(
+        var potentialInvitedMembers = ofNullable(
                 application.getApplicationInvitedMembers());
 
         return potentialInvitedMembers.map(invitedMembers -> invitedMembers
@@ -114,7 +118,7 @@ public class RemsApplicationMapper {
 
     private RetrievedApplicationInvitedMember toInvitedMember(
             Response10953InvitedMembers invitedMember) {
-        var potentialInvitedMember = Optional.ofNullable(invitedMember);
+        var potentialInvitedMember = ofNullable(invitedMember);
 
         return new RetrievedApplicationInvitedMember(
                 potentialInvitedMember.map(Response10953InvitedMembers::getName).orElse(
@@ -124,7 +128,7 @@ public class RemsApplicationMapper {
     }
 
     private List<ApplicationDataset> toDatasets(Application application) {
-        var potentialResources = Optional.ofNullable(application
+        var potentialResources = ofNullable(application
                 .getApplicationResources());
 
         return potentialResources
@@ -136,7 +140,7 @@ public class RemsApplicationMapper {
     }
 
     private ApplicationDataset toDataset(V2Resource resource) {
-        var potentialResource = Optional.ofNullable(resource);
+        var potentialResource = ofNullable(resource);
 
         return new ApplicationDataset(potentialResource.map(
                 V2Resource::getCatalogueItemId).orElse(null),
@@ -148,7 +152,7 @@ public class RemsApplicationMapper {
     }
 
     private List<RetrievedApplicationForm> toForms(Application application) {
-        var potentialForms = Optional.ofNullable(application
+        var potentialForms = ofNullable(application
                 .getApplicationForms());
 
         return potentialForms.map(forms -> forms
@@ -159,7 +163,7 @@ public class RemsApplicationMapper {
     }
 
     private RetrievedApplicationForm toForm(Form form) {
-        var potentialForm = Optional.ofNullable(form);
+        var potentialForm = ofNullable(form);
 
         return new RetrievedApplicationForm(potentialForm.map(Form::getFormId).orElse(null),
                 potentialForm.map(Form::getFormInternalName).orElse(null),
@@ -168,7 +172,7 @@ public class RemsApplicationMapper {
     }
 
     private List<RetrievedApplicationFormField> toFormFields(Form form) {
-        var potentialFields = Optional.ofNullable(form.getFormFields());
+        var potentialFields = ofNullable(form.getFormFields());
 
         return potentialFields.map(fields -> fields
                 .stream()
@@ -178,7 +182,7 @@ public class RemsApplicationMapper {
     }
 
     private RetrievedApplicationFormField toFormField(Field formField) {
-        var potentialFormField = Optional.ofNullable(formField);
+        var potentialFormField = ofNullable(formField);
 
         return new RetrievedApplicationFormField(potentialFormField.map(Field::getFieldId).orElse(
                 null),
@@ -198,8 +202,7 @@ public class RemsApplicationMapper {
     }
 
     private List<String> toPermissions(Application application) {
-        var potentialPermissions = Optional
-                .ofNullable(application.getApplicationPermissions());
+        var potentialPermissions = ofNullable(application.getApplicationPermissions());
 
         return potentialPermissions.map(permissions -> permissions
                 .stream()
@@ -209,25 +212,26 @@ public class RemsApplicationMapper {
     }
 
     private String toPermission(Application.ApplicationPermissionsEnum permission) {
-        var potentialPermission = Optional.ofNullable(permission);
+        var potentialPermission = ofNullable(permission);
 
         return potentialPermission.map(Application.ApplicationPermissionsEnum::value)
                 .orElse(null);
     }
 
     private List<RetrievedApplicationEvent> toEvents(Application application) {
-        var potentialEvents = Optional.ofNullable(application
-                .getApplicationEvents());
+        var potentialEvents = ofNullable(application.getApplicationEvents())
+                .orElseGet(List::of);
 
-        return potentialEvents.map(events -> events
+        return potentialEvents
                 .stream()
                 .map(this::toEvent)
-                .toList())
-                .orElse(null);
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparing(RetrievedApplicationEvent::getEventTime).reversed())
+                .toList();
     }
 
     private RetrievedApplicationEvent toEvent(Event event) {
-        var potentialEvent = Optional.ofNullable(event);
+        var potentialEvent = ofNullable(event);
 
         return new RetrievedApplicationEvent(
                 potentialEvent.map(this::toUserId).orElse(null),
@@ -236,14 +240,14 @@ public class RemsApplicationMapper {
     }
 
     private String toUserId(Event event) {
-        var eventActorAttributes = Optional.ofNullable(event
+        var eventActorAttributes = ofNullable(event
                 .getEventActorAttributes());
 
         return eventActorAttributes.map(UserWithAttributes::getUserid).orElse(null);
     }
 
     private List<RetrievedApplicationAttachment> toAttachments(Application application) {
-        var potentialAttachments = Optional.ofNullable(application
+        var potentialAttachments = ofNullable(application
                 .getApplicationAttachments());
 
         return potentialAttachments.map(attachments -> attachments
@@ -254,7 +258,7 @@ public class RemsApplicationMapper {
     }
 
     private RetrievedApplicationAttachment toAttachment(ApplicationAttachment attachment) {
-        var potentialAttachment = Optional.ofNullable(attachment);
+        var potentialAttachment = ofNullable(attachment);
 
         return new RetrievedApplicationAttachment(potentialAttachment.map(
                 ApplicationAttachment::getAttachmentId).orElse(null),
@@ -265,7 +269,7 @@ public class RemsApplicationMapper {
     }
 
     private List<RetrievedApplicationLicense> toLicences(Application application) {
-        var potentialLicenses = Optional.ofNullable(application
+        var potentialLicenses = ofNullable(application
                 .getApplicationLicenses());
 
         return potentialLicenses.map(licenses -> licenses
@@ -276,7 +280,7 @@ public class RemsApplicationMapper {
     }
 
     private RetrievedApplicationLicense toLicense(V2License license) {
-        var potentialLicense = Optional.ofNullable(license);
+        var potentialLicense = ofNullable(license);
 
         return new RetrievedApplicationLicense(
                 potentialLicense.map(this::toLicenseType)
@@ -290,14 +294,14 @@ public class RemsApplicationMapper {
     }
 
     private String toLicenseType(V2License license) {
-        var licenseType = Optional.ofNullable(license.getLicenseType());
+        var licenseType = ofNullable(license.getLicenseType());
 
         return licenseType.map(V2License.LicenseTypeEnum::value)
                 .orElse(null);
     }
 
     private RetrievedApplication.StateEnum toState(Application application) {
-        var potentialState = Optional.ofNullable(application
+        var potentialState = ofNullable(application
                 .getApplicationState());
 
         return potentialState.map(state -> RetrievedApplication.StateEnum.fromString(state.value()))

@@ -6,8 +6,6 @@ package io.github.genomicdatainfrastructure.daam.api;
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationSubmissionException;
 import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
-import java.util.List;
-
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;

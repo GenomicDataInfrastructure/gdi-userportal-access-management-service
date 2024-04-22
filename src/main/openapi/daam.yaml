@@ -148,7 +148,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: Application not found
           content:
@@ -296,14 +296,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AddedAttachment"
-        "404":
-          description: Application not found
+        "400":
+          description: Bad Request
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Application not found
           content:
             application/json:
               schema:

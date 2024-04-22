@@ -7,8 +7,6 @@ package io.github.genomicdatainfrastructure.daam.services;
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApplicationMapper;
 import io.github.genomicdatainfrastructure.daam.model.ListedApplication;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.ApplicationOverview;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.V2Resource;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;

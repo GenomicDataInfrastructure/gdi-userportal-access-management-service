@@ -249,6 +249,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AttachFileResponse"
+        "413":
+          description: Attachment too large
+          content:
+            text/html:
+              schema:
+                type: string
+        "415":
+          description: Unsupported media type
+          content:
+            text/html:
+              schema:
+                type: string
   /api/applications/attachment/{attachment-id}:
     get:
       tags:

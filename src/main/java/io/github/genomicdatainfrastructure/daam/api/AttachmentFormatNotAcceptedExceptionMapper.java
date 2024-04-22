@@ -1,28 +1,30 @@
 // SPDX-FileCopyrightText: 2024 PNED G.I.E.
 //
 // SPDX-License-Identifier: Apache-2.0
+
 package io.github.genomicdatainfrastructure.daam.api;
 
-import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationSubmissionException;
 import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
+import io.github.genomicdatainfrastructure.daam.exceptions.AttachmentFormatNotAcceptedException;
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+import java.util.List;
 
 @Provider
-public class ApplicationSubmissionExceptionMapper implements
-        ExceptionMapper<ApplicationSubmissionException> {
+public class AttachmentFormatNotAcceptedExceptionMapper implements
+        ExceptionMapper<AttachmentFormatNotAcceptedException> {
 
     @Override
-    public Response toResponse(ApplicationSubmissionException exception) {
+    public Response toResponse(AttachmentFormatNotAcceptedException exception) {
         var errorResponse = new ErrorResponse(
-                "Application could not be submitted",
+                "Attachment Format Not Accepted",
                 BAD_REQUEST.getStatusCode(),
                 exception.getMessage(),
-                exception.getErrorMessages()
+                List.of()
         );
 
         return Response

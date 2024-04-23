@@ -742,7 +742,8 @@
                 "role_list",
                 "profile",
                 "roles",
-                "email"
+                "email",
+                "elixir_id"
             ],
             "optionalClientScopes": [
                 "address",
@@ -1079,6 +1080,36 @@
                     "protocolMapper": "oidc-allowed-origins-mapper",
                     "consentRequired": false,
                     "config": {}
+                }
+            ]
+        },
+        {
+            "id": "d604cd08-c72f-491a-bd84-d115a130c587",
+            "name": "elixir_id",
+            "description": "",
+            "protocol": "openid-connect",
+            "attributes": {
+                "include.in.token.scope": "true",
+                "display.on.consent.screen": "true",
+                "gui.order": "",
+                "consent.screen.text": ""
+            },
+            "protocolMappers": [
+                {
+                    "id": "1cc50331-bfc6-4f5b-8280-6a805d73823c",
+                    "name": "elixir_id_mapper",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-property-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "introspection.token.claim": "true",
+                        "userinfo.token.claim": "true",
+                        "user.attribute": "id",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "claim.name": "elixir_id",
+                        "jsonType.label": "String"
+                    }
                 }
             ]
         },
@@ -1440,7 +1471,8 @@
         "email",
         "roles",
         "web-origins",
-        "acr"
+        "acr",
+        "elixir_id"
     ],
     "defaultOptionalClientScopes": [
         "offline_access",

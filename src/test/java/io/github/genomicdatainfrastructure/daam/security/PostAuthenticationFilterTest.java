@@ -41,8 +41,10 @@ class PostAuthenticationFilterTest {
     @Test
     void createRemsUser_is_called_if_authenticated_request() {
         when(securityIdentity.isAnonymous()).thenReturn(false);
+
         var principalMock = mock(OidcJwtCallerPrincipal.class);
-        when(principalMock.getClaim("sub")).thenReturn("dummy_id");
+
+        when(principalMock.getClaim("elixir_id")).thenReturn("dummy_id");
         when(principalMock.getClaim("preferred_username")).thenReturn("dummy_username");
         when(principalMock.getClaim("email")).thenReturn("dummy_email");
         when(securityIdentity.getPrincipal()).thenReturn(principalMock);

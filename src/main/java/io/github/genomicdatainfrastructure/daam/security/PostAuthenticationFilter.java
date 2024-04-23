@@ -17,7 +17,7 @@ import jakarta.ws.rs.ext.Provider;
 @Priority(Priorities.AUTHENTICATION)
 public class PostAuthenticationFilter implements ContainerRequestFilter {
 
-    public static final String USER_ID_CLAIM = "sub";
+    public static final String USER_ID_CLAIM = "elixir_id";
     public static final String USER_NAME_CLAIM = "preferred_username";
     public static final String EMAIL_CLAIM = "email";
 

@@ -6,7 +6,7 @@ package io.github.genomicdatainfrastructure.daam.exceptions;
 
 public class AttachmentIsNullException extends RuntimeException {
 
-    private static final String MESSAGE = "Null file is not accepted";
+    private static final String MESSAGE = "Null file is not accepted.";
 
     public AttachmentIsNullException() {
         super(MESSAGE);

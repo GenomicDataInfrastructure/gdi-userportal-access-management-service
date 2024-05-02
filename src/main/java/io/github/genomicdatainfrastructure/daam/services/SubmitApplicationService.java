@@ -43,7 +43,9 @@ public class SubmitApplicationService {
                 command);
 
         if (Boolean.FALSE.equals(response.getSuccess())) {
-            throw new ApplicationSubmissionException(id, response.getErrors());
+            throw new ApplicationSubmissionException(id, response.getErrors().stream().map(
+                    error -> error.getFieldId() + " " + error.getType() + " " + error.getFormId())
+                    .toList());
         }
     }
 }

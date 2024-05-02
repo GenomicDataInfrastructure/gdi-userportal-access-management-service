@@ -1182,7 +1182,7 @@ components:
         errors:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/ValidationField'
         warnings:
           type: array
           items:
@@ -1192,11 +1192,26 @@ components:
           format: int64
       required:
         - success
+    ValidationField:
+      type: object
+      properties:
+        field-id: 
+          type: string
+        type:
+          type: string
+        form-id:
+          type: integer
+          format: int64
+      required:
+        - field-id
+        - type
+        - form-id
     ErrorResponse:
       properties:
         error:
           type: string
           title: error description
+
     AttachFileResponse:
       type: object
       properties:

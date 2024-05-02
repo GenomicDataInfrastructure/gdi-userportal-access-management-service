@@ -15,9 +15,15 @@
       },
       "jsonBody": {
         "success": false,
-        "errorMessages": [
-          "The application submission failed. Ensure all required fields are filled out correctly."
-        ]
+        "errors": [
+          {
+            "field-id": "requiredField",
+            "type": "Missing",
+            "form-id": 1
+          }
+        ],
+        "warnings": [],
+        "application-id": 44
       }
     },
     "priority": 1

@@ -24,7 +24,6 @@ public class ApplicationSubmissionExceptionMapper implements
                 exception.getMessage(),
                 exception.getErrorMessages()
         );
-
         return Response
                 .status(BAD_REQUEST)
                 .entity(errorResponse)

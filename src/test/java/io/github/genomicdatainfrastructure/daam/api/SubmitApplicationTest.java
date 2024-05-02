@@ -75,6 +75,5 @@ class SubmitApplicationTest extends BaseTest {
                 .then()
                 .statusCode(400)
                 .body("title", equalTo("Application could not be submitted"));
-
     }
 }

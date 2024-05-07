@@ -11,7 +11,7 @@ public class ApplicationSubmissionException extends RuntimeException {
     private final List<String> errorMessages;
 
     public ApplicationSubmissionException(Long applicationId, List<String> errorMessages) {
-        super(String.format(MESSAGE, applicationId, String.join("\n", errorMessages)));
+        super(String.format(MESSAGE, applicationId));
         this.errorMessages = errorMessages;
     }
 

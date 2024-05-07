@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ApplicationSubmissionException extends RuntimeException {
 
-    private static final String MESSAGE = "Application %s could not be submitted.";
+    private static final String MESSAGE = "Application %s could not be submitted due to the following errors:";
     private final List<String> errorMessages;
 
     public ApplicationSubmissionException(Long applicationId, List<String> errorMessages) {

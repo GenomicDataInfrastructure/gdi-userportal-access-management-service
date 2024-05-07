@@ -31,6 +31,14 @@ public class SubmitApplicationService {
         this.gateway = remsApiQueryGateway;
     }
 
+    private String formatError(String error) {
+        return switch (error) {
+            case "t.form.validation/required" -> "is required.";
+            case "t.form.validation/format_error" -> "has invalid format.";
+            default -> "encountered an unknown error.";
+        };
+    }
+
     public void submitApplication(Long id, String userId) {
         gateway.checkIfApplicationIsEditableByUser(id, userId);
 
@@ -44,7 +52,8 @@ public class SubmitApplicationService {
 
         if (Boolean.FALSE.equals(response.getSuccess())) {
             throw new ApplicationSubmissionException(id, response.getErrors().stream().map(
-                    error -> error.getFieldId() + " " + error.getType() + " " + error.getFormId())
+                    error -> "Field " + error.getFieldId() + " " + formatError(error
+                            .getType()))
                     .toList());
         }
     }

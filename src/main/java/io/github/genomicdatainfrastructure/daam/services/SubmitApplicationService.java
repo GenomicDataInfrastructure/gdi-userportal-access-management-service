@@ -9,12 +9,22 @@ import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationC
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.SubmitApplicationCommand;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.extern.java.Log;
+
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
+
+import java.util.List;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+@Log
 @ApplicationScoped
 public class SubmitApplicationService {
+
+    private static final String ERROR_MESSAGE = "Field %s %s";
+    private static final String SUBMISSION_LOG = "%s failed to submit application %s due to the following errors: %s";
 
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
@@ -35,7 +45,7 @@ public class SubmitApplicationService {
         return switch (error) {
             case "t.form.validation/required" -> "is required.";
             case "t.form.validation/format_error" -> "has invalid format.";
-            default -> "encountered an unknown error.";
+            default -> error;
         };
     }
 
@@ -51,10 +61,21 @@ public class SubmitApplicationService {
                 command);
 
         if (Boolean.FALSE.equals(response.getSuccess())) {
-            throw new ApplicationSubmissionException(id, response.getErrors().stream().map(
-                    error -> "Field " + error.getFieldId() + " " + formatError(error
-                            .getType()))
-                    .toList());
+            var nonNullErrors = ofNullable(response.getErrors()).orElseGet(List::of);
+
+            var concatenatedErrors = nonNullErrors.stream()
+                    .map(Object::toString)
+                    .collect(joining(";"));
+
+            log.warning(SUBMISSION_LOG.formatted(userId, id, concatenatedErrors));
+
+            var errorMessages = nonNullErrors.stream()
+                    .filter(it -> it.getFieldId() != null)
+                    .filter(it -> it.getType() != null)
+                    .map(it -> ERROR_MESSAGE.formatted(it.getFieldId(), formatError(it.getType())))
+                    .toList();
+
+            throw new ApplicationSubmissionException(id, errorMessages);
         }
     }
 }

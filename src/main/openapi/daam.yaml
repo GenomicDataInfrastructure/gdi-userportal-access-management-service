@@ -517,6 +517,23 @@ paths:
       summary: Retrieve granted dataset identifiers
       operationId: retrieve_granted_dataset_identifiers
       tags:
+        - "application-query"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveGrantedDatasetIdentifiers'
+      security:
+        - daam_auth:
+            - read:entitlements
+
+  /api/v1/test/{test}:
+    post:
+      summary: Test
+      operationId: test_v1
+      tags:
         - "entitlement-query"
       responses:
         "200":

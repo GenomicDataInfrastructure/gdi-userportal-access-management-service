@@ -6,8 +6,10 @@ package io.github.genomicdatainfrastructure.daam.api;
 
 import io.github.genomicdatainfrastructure.daam.model.ListedApplication;
 import io.github.genomicdatainfrastructure.daam.model.RetrievedApplication;
+import io.github.genomicdatainfrastructure.daam.model.RetrieveGrantedDatasetIdentifiers;
 import io.github.genomicdatainfrastructure.daam.services.ListApplicationsService;
 import io.github.genomicdatainfrastructure.daam.services.RetrieveApplicationService;
+import io.github.genomicdatainfrastructure.daam.services.RetrieveGrantedDatasetIdentifiersService;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
     private final SecurityIdentity identity;
     private final ListApplicationsService listApplicationsService;
     private final RetrieveApplicationService retrieveApplicationService;
+    private final RetrieveGrantedDatasetIdentifiersService retrieveGrantedDatasetIdentifiersService;
 
     @Override
     public List<ListedApplication> listApplicationsV1() {
@@ -39,6 +42,11 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
         throw new UnsupportedOperationException(
                 "Unimplemented method 'retrieveAttachmentFromApplicationV1'"
         );
+    }
+
+    @Override
+    public RetrieveGrantedDatasetIdentifiers retrieveGrantedDatasetIdentifiers() {
+        return retrieveGrantedDatasetIdentifiersService.retrieveGrantedDatasetIdentifiers(userId());
     }
 
     private String userId() {

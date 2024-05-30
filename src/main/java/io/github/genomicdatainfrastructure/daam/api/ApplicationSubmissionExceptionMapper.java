@@ -11,7 +11,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+import lombok.extern.java.Log;
 
+@Log
 @Provider
 public class ApplicationSubmissionExceptionMapper implements
         ExceptionMapper<ApplicationSubmissionException> {
@@ -24,6 +26,8 @@ public class ApplicationSubmissionExceptionMapper implements
                 exception.getMessage(),
                 exception.getErrorMessages()
         );
+        log.warning("Application could not be submitted: " + String.join(", ", exception
+                .getErrorMessages()));
         return Response
                 .status(BAD_REQUEST)
                 .entity(errorResponse)

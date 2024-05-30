@@ -13,6 +13,8 @@ import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantExcep
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationQueryApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsCatalogueItemQueryApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.Entitlement;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.EntitlementResponse;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application.ApplicationStateEnum;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.ApplicationOverview;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.CatalogueItem;
@@ -89,5 +91,11 @@ public class RemsApiQueryGateway {
             return null;
         }
         return items.getFirst();
+    }
+
+    public List<Entitlement> retrieveGrantedDatasetIdentifiers(String userId) {
+        EntitlementResponse response = applicationsApi.apiEntitlementsGet(remsApiKey, userId, null,
+                null, null);
+        return response.getEntitlements();
     }
 }

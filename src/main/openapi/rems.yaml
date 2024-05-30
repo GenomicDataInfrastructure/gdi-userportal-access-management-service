@@ -336,6 +336,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SuccessResponse"
+  /api/entitlements:
+     get:
+       tags:
+         - rems-application-query
+       summary: "Get all entitlements (roles: logged-in)"
+       parameters:
+         - name: x-rems-api-key
+           required: true
+           in: header
+           description: REMS API-Key (optional for UI, required for API)
+           schema:
+             type: string
+         - name: x-rems-user-id
+           required: true
+           in: header
+           description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute.
+           schema:
+             type: string
+         - name: user
+           in: query
+           description: Return entitlements for this user (optional), ignored if the user doesn't have appropriate privileges
+           schema:
+             type: string
+         - name: resource
+           in: query
+           description: Return entitlements for this resource (optional)
+           schema:
+             type: string
+         - name: expired
+           in: query
+           description: Whether to include expired entitlements
+           schema:
+             type: boolean
+       responses:
+         "200":
+           description: Successful Response
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/EntitlementResponse'
 components:
   schemas:
     CatalogueItem:
@@ -1315,3 +1355,51 @@ components:
       additionalProperties: false
       required:
         - id
+    EntitlementResponse:
+       type: object
+       properties:
+         entitlements:
+           type: array
+           items:
+             $ref: '#/components/schemas/Entitlement'
+       required:
+         - entitlements
+    Entitlement:
+       type: object
+       properties:
+         resource:
+           type: string
+         user:
+           $ref: '#/components/schemas/User'
+         application-id:
+           type: integer
+         start:
+           type: string
+           format: date-time
+         end:
+           type: string
+           format: date-time
+         mail:
+           type: string
+    User:
+       type: object
+       properties:
+         userid:
+           type: string
+         name:
+           type: string
+         email:
+           type: string
+         organizations:
+           type: array
+           items:
+             $ref: '#/components/schemas/Organization'
+         notification-email:
+           type: string
+         researcher-status-by:
+           type: string
+    Organization:
+       type: object
+       properties:
+         organization/id:
+           type: string

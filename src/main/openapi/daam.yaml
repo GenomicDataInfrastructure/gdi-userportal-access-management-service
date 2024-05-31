@@ -33,6 +33,8 @@ tags:
     description: All queries related to baskets
   - name: basket-command
     description: All commands related to baskets
+  - name: entitlement-query
+    description: All queries related to entitlements
 paths:
   /api/v1/applications:
     get:
@@ -515,7 +517,7 @@ paths:
       summary: Retrieve granted dataset identifiers
       operationId: retrieve_granted_dataset_identifiers
       tags:
-        - "application-query"
+        - "entitlement-query"
       responses:
         "200":
           description: Successful Response

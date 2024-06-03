@@ -982,7 +982,7 @@ components:
            items:
              type: object
              properties:
-               application-id:
+               resource:
                  type: string
                start:
                  type: string

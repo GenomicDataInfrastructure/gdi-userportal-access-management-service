@@ -982,7 +982,7 @@ components:
            items:
              type: object
              properties:
-               datasetId:
+               resource:
                  type: string
                start:
                  type: string

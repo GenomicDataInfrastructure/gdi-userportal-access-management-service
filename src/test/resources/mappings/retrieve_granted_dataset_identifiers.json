@@ -11,7 +11,7 @@
       "jsonBody": {
         "entitlements": [
           {
-            "datasetId": "mock-id",
+            "resource": "mock-id",
             "start": "2024-05-06T22:14:09.036Z",
             "end": "2024-05-06T22:14:09.036Z"
           }

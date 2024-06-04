@@ -28,7 +28,7 @@ public class RetrieveGrantedDatasetIdentifiersService {
         List<RetrieveGrantedDatasetIdentifiersEntitlementsInner> formattedEntitlements = entitlements
                 .stream()
                 .map(entitlement -> new RetrieveGrantedDatasetIdentifiersEntitlementsInner(
-                        entitlement.getDatasetId(),
+                        String.valueOf(entitlement.getResource()),
                         entitlement.getStart(),
                         entitlement.getEnd()
                 ))

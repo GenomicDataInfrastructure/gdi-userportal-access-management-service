@@ -9,7 +9,9 @@ import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
+import jakarta.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class TestCommandApiImpl implements TestCommandApi {
 
     @Override
@@ -28,3 +30,4 @@ public class TestCommandApiImpl implements TestCommandApi {
                 .build();
     }
 }
+

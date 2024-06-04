@@ -22,7 +22,7 @@ class RetrieveGrantedDatasetIdentifiersTest extends BaseTest {
                 .get("/api/v1/entitlements")
                 .then()
                 .statusCode(200)
-                .body("entitlements[0].resource", equalTo("mock-id"))
+                .body("entitlements[0].datasetId", equalTo("mock-id"))
                 .body("entitlements[0].start", equalTo("2024-05-06T22:14:09.036Z"))
                 .body("entitlements[0].end", equalTo("2024-05-06T22:14:09.036Z"));
     }

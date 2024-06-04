@@ -33,6 +33,8 @@ tags:
     description: All queries related to baskets
   - name: basket-command
     description: All commands related to baskets
+  - name: entitlement-query
+    description: All queries related to entitlements
 paths:
   /api/v1/applications:
     get:
@@ -510,7 +512,22 @@ paths:
       security:
         - daam_auth:
             - write:applications
-
+  /api/v1/entitlements:
+    get:
+      summary: Retrieve granted dataset identifiers
+      operationId: retrieve_granted_dataset_identifiers
+      tags:
+        - "entitlement-query"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RetrieveGrantedDatasetIdentifiers"
+      security:
+        - daam_auth:
+            - read:entitlements
   /api/v1/test/{test}:
     post:
       summary: Test
@@ -548,6 +565,7 @@ components:
             write:applications: create applications in your account
             read:baskets: read baskets in your account
             write:baskets: create baskets in your account
+            read:entitlements: read entitlements
   schemas:
     ListedApplication:
       properties:
@@ -979,3 +997,21 @@ components:
           items:
             type: string
           description: Additional error messages related to the response
+    RetrieveGrantedDatasetIdentifiers:
+      type: object
+      properties:
+        entitlements:
+          type: array
+          items:
+            type: object
+            properties:
+              datasetId:
+                type: string
+              start:
+                type: string
+                format: date-time
+              end:
+                type: string
+                format: date-time
+      required:
+        - entitlements

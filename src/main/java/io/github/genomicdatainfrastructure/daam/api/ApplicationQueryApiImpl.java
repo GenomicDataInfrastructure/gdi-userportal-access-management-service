@@ -11,10 +11,9 @@ import io.github.genomicdatainfrastructure.daam.services.RetrieveApplicationServ
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
 import lombok.RequiredArgsConstructor;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import java.util.List;
-
-import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
 

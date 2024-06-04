@@ -517,14 +517,14 @@ paths:
       summary: Retrieve granted dataset identifiers
       operationId: retrieve_granted_dataset_identifiers
       tags:
-        - "application-query"
+        - "entitlement-query"
       responses:
         "200":
           description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveGrantedDatasetIdentifiers'
+                $ref: "#/components/schemas/RetrieveGrantedDatasetIdentifiers"
       security:
         - daam_auth:
             - read:entitlements
@@ -998,20 +998,20 @@ components:
             type: string
           description: Additional error messages related to the response
     RetrieveGrantedDatasetIdentifiers:
-       type: object
-       properties:
-         entitlements:
-           type: array
-           items:
-             type: object
-             properties:
-               datasetId:
-                 type: string
-               start:
-                 type: string
-                 format: date-time
-               end:
-                 type: string
-                 format: date-time
-       required:
-         - entitlements 
+      type: object
+      properties:
+        entitlements:
+          type: array
+          items:
+            type: object
+            properties:
+              datasetId:
+                type: string
+              start:
+                type: string
+                format: date-time
+              end:
+                type: string
+                format: date-time
+      required:
+        - entitlements

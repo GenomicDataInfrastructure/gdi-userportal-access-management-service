@@ -30,4 +30,3 @@ public class TestCommandApiImpl implements TestCommandApi {
                 .build();
     }
 }
-

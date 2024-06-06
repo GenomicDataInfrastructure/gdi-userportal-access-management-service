@@ -1,21 +1,19 @@
 {
     "request": {
-      "method": "GET",
-      "url": "/api/entitlements"
+        "method": "GET",
+        "url": "/api/entitlements"
     },
     "response": {
-      "status": 200,
-      "headers": {
-        "Content-Type": "application/json"
-      },
-      "jsonBody": {
-        "entitlements": [
-          {
-            "resource": "mock-id",
-            "start": "2024-05-06T22:14:09.036Z",
-            "end": "2024-05-06T22:14:09.036Z"
-          }
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "jsonBody": [
+            {
+                "resource": "mock-id",
+                "start": "2024-05-06T22:14:09.036Z",
+                "end": "2024-05-06T22:14:09.036Z"
+            }
         ]
-      }
     }
-  }
+}

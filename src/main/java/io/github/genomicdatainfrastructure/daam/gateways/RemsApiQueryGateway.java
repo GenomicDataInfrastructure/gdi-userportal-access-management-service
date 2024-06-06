@@ -14,7 +14,6 @@ import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationQ
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsCatalogueItemQueryApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Entitlement;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.EntitlementResponse;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application.ApplicationStateEnum;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.ApplicationOverview;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.CatalogueItem;
@@ -94,8 +93,6 @@ public class RemsApiQueryGateway {
     }
 
     public List<Entitlement> retrieveGrantedDatasetIdentifiers(String userId) {
-        EntitlementResponse response = applicationsApi.apiEntitlementsGet(remsApiKey, userId, null,
-                null, null);
-        return response.getEntitlements();
+        return applicationsApi.apiEntitlementsGet(remsApiKey, userId, null, null, null);
     }
 }

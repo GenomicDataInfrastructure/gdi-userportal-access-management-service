@@ -21,8 +21,7 @@ public class EntitlementQueryApiImpl implements EntitlementQueryApi {
 
     @Override
     public RetrieveGrantedDatasetIdentifiers retrieveGrantedDatasetIdentifiers() {
-        return retrieveGrantedDatasetIdentifiersService.retrieveGrantedDatasetIdentifiers(
-                userId());
+        return retrieveGrantedDatasetIdentifiersService.retrieveGrantedDatasetIdentifiers(userId());
     }
 
     private String userId() {

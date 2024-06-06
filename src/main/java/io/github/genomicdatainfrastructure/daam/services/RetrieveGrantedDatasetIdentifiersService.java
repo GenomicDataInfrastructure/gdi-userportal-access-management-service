@@ -22,6 +22,7 @@ public class RetrieveGrantedDatasetIdentifiersService {
     }
 
     public RetrieveGrantedDatasetIdentifiers retrieveGrantedDatasetIdentifiers(String userId) {
+
         List<Entitlement> entitlements = remsApiQueryGateway.retrieveGrantedDatasetIdentifiers(
                 userId);
 

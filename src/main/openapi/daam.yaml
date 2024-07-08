@@ -17,7 +17,7 @@ info:
   license:
     name: Apache 2.0
     url: https://spdx.org/licenses/Apache-2.0.html
-  version: 0.0.0
+  version: 1.2.0
 externalDocs:
   description: Find out more about GDI
   url: https://genomicdatainfrastructure.github.io/gdi-userportal-docs/
@@ -201,6 +201,12 @@ paths:
                   $ref: "#/components/schemas/ValidationWarnings"
         "404":
           description: Catalogue Item not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Create application retrieves errors
           content:
             application/json:
               schema:

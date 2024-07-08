@@ -1199,15 +1199,26 @@ components:
           type: boolean
         errors:
           type: array
-          items: {}
+          items:
+            $ref: "#/components/schemas/CreateApplicationError"
         warnings:
           type: array
-          items: {}
+          items: { }
         application-id:
           type: integer
           format: int64
       required:
         - success
+    CreateApplicationError:
+      type: object
+      properties:
+        type:
+          type: string
+        catalogue-item-ids:
+          type: array
+          items:
+            type: integer
+            format: int64
     SubmitApplicationCommand:
       type: object
       properties:
@@ -1261,10 +1272,10 @@ components:
           type: boolean
         errors:
           type: array
-          items: {}
+          items: { }
         warnings:
           type: array
-          items: {}
+          items: { }
         id:
           type: integer
           format: int64

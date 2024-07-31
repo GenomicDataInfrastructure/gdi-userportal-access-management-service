@@ -1,0 +1,21 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/api/applications/accept-licenses",
+        "bodyPatterns": [
+            {
+                "matchesJsonPath": "$[?(@.application-id == 2)]"
+            }
+        ]
+    },
+    "response": {
+        "status": 428,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "jsonBody": {
+            "error": "Application not in submittable state"
+        }
+    },
+    "priority": 1
+}

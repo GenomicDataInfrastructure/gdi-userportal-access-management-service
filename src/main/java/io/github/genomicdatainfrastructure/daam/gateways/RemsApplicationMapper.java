@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class RemsApplicationMapper {
@@ -282,15 +283,17 @@ public class RemsApplicationMapper {
     private RetrievedApplicationLicense toLicense(V2License license) {
         var potentialLicense = ofNullable(license);
 
-        return new RetrievedApplicationLicense(
-                potentialLicense.map(this::toLicenseType)
-                        .orElse(null),
-                potentialLicense.map(l -> toLabelObject(l.getLicenseTitle()))
-                        .orElse(null),
-                potentialLicense.map(V2License::getLicenseEnabled)
-                        .orElse(null),
-                potentialLicense.map(V2License::getLicenseArchived)
-                        .orElse(null));
+        return RetrievedApplicationLicense.builder()
+                .type(potentialLicense.map(this::toLicenseType).orElse(null))
+                .title(potentialLicense.map(l -> toLabelObject(l.getLicenseTitle())).orElse(null))
+                .enabled(potentialLicense.map(V2License::getLicenseEnabled).orElse(null))
+                .archived(potentialLicense.map(V2License::getLicenseArchived).orElse(null))
+                .description(potentialLicense.map(l -> convertMapToString(l
+                        .getLicenseDescription())).orElse(null))
+                .url(potentialLicense.map(V2License::getLicenseUrl).orElse(null))
+                .version(potentialLicense.map(V2License::getLicenseVersion).orElse(null))
+                .terms(potentialLicense.map(V2License::getLicenseTerms).orElse(null))
+                .build();
     }
 
     private String toLicenseType(V2License license) {
@@ -318,5 +321,15 @@ public class RemsApplicationMapper {
                 .stream()
                 .map(entry -> new Label(entry.getKey(), entry.getValue()))
                 .toList();
+    }
+
+    private String convertMapToString(Map<String, String> map) {
+        if (map == null) {
+            return null;
+        }
+        return map.entrySet()
+                .stream()
+                .map(entry -> entry.getKey() + "=" + entry.getValue())
+                .collect(Collectors.joining(", "));
     }
 }

@@ -378,6 +378,38 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Entitlement"
+  /api/applications/accept-licenses:
+    post:
+      tags:
+        - rems-application-command
+      summary: "Submit an 'accept-licenses' command for an application. (roles: logged-in)"
+      parameters:
+        - name: x-rems-api-key
+          required: true
+          in: header
+          description: REMS API-Key (optional for UI, required for API)
+          schema:
+            type: string
+        - name: x-rems-user-id
+          required: true
+          in: header
+          description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          schema:
+            type: string
+      requestBody:
+        description: Accept licenses data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AcceptLicensesCommand"
+      responses:
+        "200":
+          description: Accept Licenses successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
 components:
   schemas:
     CatalogueItem:
@@ -1077,6 +1109,9 @@ components:
         - license/id
         - license/enabled
         - license/archived
+        - license/description
+        - license/version
+        - license/terms
       properties:
         license/type:
           type: string
@@ -1093,6 +1128,18 @@ components:
           type: boolean
         license/archived:
           type: boolean
+        license/description:
+          $ref: "#/components/schemas/LocalizedString"
+        license/url:
+          type: string
+          format: uri
+          description: URL to the license document
+        license/version:
+          type: string
+          description: Version of the license
+        license/terms:
+          type: string
+          description: Terms and conditions of the license
     Form:
       required:
         - form/id
@@ -1203,7 +1250,7 @@ components:
             $ref: "#/components/schemas/CreateApplicationError"
         warnings:
           type: array
-          items: { }
+          items: {}
         application-id:
           type: integer
           format: int64
@@ -1264,7 +1311,6 @@ components:
         error:
           type: string
           title: error description
-
     AttachFileResponse:
       type: object
       properties:
@@ -1272,10 +1318,10 @@ components:
           type: boolean
         errors:
           type: array
-          items: { }
+          items: {}
         warnings:
           type: array
-          items: { }
+          items: {}
         id:
           type: integer
           format: int64
@@ -1407,3 +1453,17 @@ components:
       properties:
         organization/id:
           type: string
+    AcceptLicensesCommand:
+      type: object
+      required:
+        - application-id
+        - accepted-licenses
+      properties:
+        application-id:
+          type: integer
+          format: int64
+        accepted-licenses:
+          type: array
+          items:
+            type: integer
+            format: int64

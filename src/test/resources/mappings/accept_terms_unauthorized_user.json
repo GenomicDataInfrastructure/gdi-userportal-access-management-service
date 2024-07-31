@@ -1,0 +1,26 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/api/applications/accept-terms",
+        "headers": {
+            "Authorization": {
+                "equalTo": "Bearer some-access-token-for-jdoe"
+            }
+        },
+        "bodyPatterns": [
+            {
+                "matchesJsonPath": "$[?(@.application-id == 1)]"
+            }
+        ]
+    },
+    "response": {
+        "status": 403,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "jsonBody": {
+            "message": "User is not the applicant for the application"
+        }
+    },
+    "priority": 1
+}

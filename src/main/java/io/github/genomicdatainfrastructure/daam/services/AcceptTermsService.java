@@ -4,13 +4,10 @@
 
 package io.github.genomicdatainfrastructure.daam.services;
 
-import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorrectStateException;
-import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.AcceptLicensesCommand;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -37,10 +34,7 @@ public class AcceptTermsService {
     }
 
     public void acceptTerms(Long id, String userId, AcceptLicensesCommand acceptLicensesCommand) {
-        Application application = remsApiQueryGateway.retrieveApplication(id, userId);
-        if (!application.getApplicationApplicant().getUserid().equals(userId)) {
-            throw new UserNotApplicantException(id, userId);
-        }
+        remsApiQueryGateway.checkIfApplicationIsEditableByUser(id, userId);
 
         try {
             remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(remsApiKey, userId,
@@ -48,13 +42,6 @@ public class AcceptTermsService {
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == Status.NOT_FOUND.getStatusCode()) {
                 throw new ApplicationNotFoundException(id);
-            }
-            if (e.getResponse().getStatus() == Status.FORBIDDEN.getStatusCode()) {
-                throw new UserNotApplicantException(id, userId);
-            }
-            if (e.getResponse().getStatus() == Status.PRECONDITION_REQUIRED.getStatusCode()) {
-                throw new ApplicationNotInCorrectStateException(id,
-                        "Application not in submittable state");
             }
             throw e;
         }

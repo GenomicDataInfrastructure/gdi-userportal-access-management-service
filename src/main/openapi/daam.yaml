@@ -274,7 +274,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AcceptLicensesCommand"
+              $ref: "#/components/schemas/AcceptTermsCommand"
       responses:
         "204":
           description: Successful Response (no content)
@@ -1066,7 +1066,7 @@ components:
                 format: date-time
       required:
         - entitlements
-    AcceptLicensesCommand:
+    AcceptTermsCommand:
       type: object
       required:
         - application-id

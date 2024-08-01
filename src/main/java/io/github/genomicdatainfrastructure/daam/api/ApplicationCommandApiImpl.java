@@ -107,13 +107,12 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     }
 
     @Override
-    public Response acceptApplicationTermsV1(Long id, AcceptLicensesCommand acceptLicensesCommand) {
+    public Response acceptApplicationTermsV1(Long id, AcceptTermsCommand acceptTermsCommand) {
         String userId = userId();
 
         io.github.genomicdatainfrastructure.daam.remote.rems.model.AcceptLicensesCommand remoteAcceptLicensesCommand = new io.github.genomicdatainfrastructure.daam.remote.rems.model.AcceptLicensesCommand();
-        remoteAcceptLicensesCommand.setApplicationId(acceptLicensesCommand.getApplicationId());
-        remoteAcceptLicensesCommand.setAcceptedLicenses(acceptLicensesCommand
-                .getAcceptedLicenses());
+        remoteAcceptLicensesCommand.setApplicationId(acceptTermsCommand.getApplicationId());
+        remoteAcceptLicensesCommand.setAcceptedLicenses(acceptTermsCommand.getAcceptedLicenses());
 
         acceptTermsService.acceptTerms(id, userId, remoteAcceptLicensesCommand);
         return Response.noContent().build();

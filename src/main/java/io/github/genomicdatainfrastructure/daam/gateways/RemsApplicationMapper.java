@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class RemsApplicationMapper {

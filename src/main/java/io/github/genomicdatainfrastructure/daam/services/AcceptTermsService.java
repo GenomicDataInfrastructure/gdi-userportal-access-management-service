@@ -15,7 +15,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
 
@@ -48,7 +47,7 @@ public class AcceptTermsService {
 
             List<String> errorStrings = nonNullErrors.stream()
                     .map(Object::toString)
-                    .collect(Collectors.toList());
+                    .toList();
 
             throw new AcceptTermsException(id, errorStrings);
         }

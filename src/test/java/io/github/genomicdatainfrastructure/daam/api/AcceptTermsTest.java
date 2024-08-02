@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
-public class AcceptTermsTest extends BaseTest {
+class AcceptTermsTest extends BaseTest {
 
     @Test
     void can_accept_terms() {

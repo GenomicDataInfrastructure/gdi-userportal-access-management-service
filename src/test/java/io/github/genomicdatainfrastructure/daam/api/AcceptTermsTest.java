@@ -66,4 +66,18 @@ class AcceptTermsTest extends BaseTest {
                 .statusCode(428)
                 .body("title", equalTo("Application Not In Correct State"));
     }
+
+    @Test
+    void cannot_accept_terms_when_success_false() {
+        given()
+                .auth()
+                .oauth2(getAccessToken("alice"))
+                .contentType("application/json")
+                .body("{ \"application-id\": 44, \"accepted-licenses\": [1, 2] }")
+                .when()
+                .post("/api/v1/applications/44/accept-terms")
+                .then()
+                .statusCode(400)
+                .body("title", equalTo("Could not accept terms"));
+    }
 }

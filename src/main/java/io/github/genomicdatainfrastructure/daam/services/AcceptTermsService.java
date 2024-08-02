@@ -12,15 +12,21 @@ import io.github.genomicdatainfrastructure.daam.remote.rems.model.AcceptLicenses
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.SuccessResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.extern.java.Log;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.List;
 
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 
+@Log
 @ApplicationScoped
 public class AcceptTermsService {
+
+    private static final String ERROR_MESSAGE = "Error: %s";
+    private static final String ACCEPT_TERMS_LOG = "Terms and Licenses of application %s could not be accepted, due to the following errors: %s";
 
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
@@ -50,11 +56,17 @@ public class AcceptTermsService {
         if (Boolean.FALSE.equals(response.getSuccess())) {
             var nonNullErrors = ofNullable(response.getErrors()).orElseGet(List::of);
 
-            List<String> errorStrings = nonNullErrors.stream()
+            var concatenatedErrors = nonNullErrors.stream()
                     .map(Object::toString)
+                    .collect(joining(";"));
+
+            log.warning(ACCEPT_TERMS_LOG.formatted(userId, id, concatenatedErrors));
+
+            var errorMessages = nonNullErrors.stream()
+                    .map(it -> ERROR_MESSAGE.formatted(it))
                     .toList();
 
-            throw new AcceptTermsException(id, errorStrings);
+            throw new AcceptTermsException(id, errorMessages);
         }
     }
 }

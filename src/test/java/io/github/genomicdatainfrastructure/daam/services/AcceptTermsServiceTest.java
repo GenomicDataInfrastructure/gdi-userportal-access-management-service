@@ -6,6 +6,7 @@ package io.github.genomicdatainfrastructure.daam.services;
 
 import io.github.genomicdatainfrastructure.daam.exceptions.AcceptTermsException;
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
+import io.github.genomicdatainfrastructure.daam.model.AcceptTermsCommand;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.AcceptLicensesCommand;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.SuccessResponse;
@@ -40,7 +41,7 @@ class AcceptTermsServiceTest {
     void can_accept_terms() {
         var applicationId = 1L;
         var userId = "userId";
-        AcceptLicensesCommand command = new AcceptLicensesCommand();
+        AcceptTermsCommand command = new AcceptTermsCommand();
         command.setApplicationId(applicationId);
         command.setAcceptedLicenses(List.of(1L, 2L));
 
@@ -62,7 +63,7 @@ class AcceptTermsServiceTest {
     void throws_exception_when_accept_terms_fails() {
         var applicationId = 1L;
         var userId = "userId";
-        AcceptLicensesCommand command = new AcceptLicensesCommand();
+        AcceptTermsCommand command = new AcceptTermsCommand();
         command.setApplicationId(applicationId);
         command.setAcceptedLicenses(List.of(1L, 2L));
 
@@ -86,7 +87,7 @@ class AcceptTermsServiceTest {
     void throws_web_application_exception() {
         var applicationId = 1L;
         var userId = "userId";
-        AcceptLicensesCommand command = new AcceptLicensesCommand();
+        AcceptTermsCommand command = new AcceptTermsCommand();
         command.setApplicationId(applicationId);
         command.setAcceptedLicenses(List.of(1L, 2L));
 

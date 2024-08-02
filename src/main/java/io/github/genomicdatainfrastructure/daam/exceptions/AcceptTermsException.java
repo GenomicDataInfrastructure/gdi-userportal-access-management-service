@@ -8,7 +8,7 @@ import java.util.List;
 
 public class AcceptTermsException extends RuntimeException {
 
-    private static final String MESSAGE = "Could not be accept terms for application %s due to the following errors:";
+    private static final String MESSAGE = "Terms and Licenses of application %s could not be accepted, due to the following errors:";
     private final List<String> errorMessages;
 
     public AcceptTermsException(Long applicationId, List<String> errorMessages) {

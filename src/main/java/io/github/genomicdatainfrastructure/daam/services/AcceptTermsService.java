@@ -6,6 +6,7 @@ package io.github.genomicdatainfrastructure.daam.services;
 
 import io.github.genomicdatainfrastructure.daam.exceptions.AcceptTermsException;
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
+import io.github.genomicdatainfrastructure.daam.model.AcceptTermsCommand;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.AcceptLicensesCommand;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.SuccessResponse;
@@ -36,11 +37,15 @@ public class AcceptTermsService {
         this.remsApiQueryGateway = remsApiQueryGateway;
     }
 
-    public void acceptTerms(Long id, String userId, AcceptLicensesCommand acceptLicensesCommand) {
+    public void acceptTerms(Long id, String userId, AcceptTermsCommand acceptTermsCommand) {
         remsApiQueryGateway.checkIfApplicationIsEditableByUser(id, userId);
 
+        AcceptLicensesCommand remoteAcceptLicensesCommand = new AcceptLicensesCommand();
+        remoteAcceptLicensesCommand.setApplicationId(acceptTermsCommand.getApplicationId());
+        remoteAcceptLicensesCommand.setAcceptedLicenses(acceptTermsCommand.getAcceptedLicenses());
+
         SuccessResponse response = remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(
-                remsApiKey, userId, acceptLicensesCommand);
+                remsApiKey, userId, remoteAcceptLicensesCommand);
 
         if (Boolean.FALSE.equals(response.getSuccess())) {
             var nonNullErrors = ofNullable(response.getErrors()).orElseGet(List::of);

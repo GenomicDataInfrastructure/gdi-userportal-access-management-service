@@ -268,9 +268,41 @@ paths:
           schema:
             type: integer
             format: int64
+      requestBody:
+        description: Accept terms data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AcceptTermsCommand"
       responses:
         "204":
           description: Successful Response (no content)
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "428":
+          description: Application not in submittable state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
       security:
         - daam_auth:
             - write:applications
@@ -896,6 +928,21 @@ components:
         archived:
           type: boolean
           title: License archived
+        description:
+          type: array
+          title: License description
+          items:
+            $ref: "#/components/schemas/Label"
+        url:
+          type: string
+          format: uri
+          title: License URL
+        version:
+          type: string
+          title: License version
+        terms:
+          type: string
+          title: License terms
     ListedBasket:
       properties:
         id:
@@ -1021,3 +1068,17 @@ components:
                 format: date-time
       required:
         - entitlements
+    AcceptTermsCommand:
+      type: object
+      required:
+        - application-id
+        - accepted-licenses
+      properties:
+        application-id:
+          type: integer
+          format: int64
+        accepted-licenses:
+          type: array
+          items:
+            type: integer
+            format: int64

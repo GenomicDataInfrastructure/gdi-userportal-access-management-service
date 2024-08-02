@@ -1,0 +1,21 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/api/applications/accept-licenses",
+        "bodyPatterns": [
+            {
+                "matchesJsonPath": "$[?(@.application-id == 1)]"
+            }
+        ]
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "jsonBody": {
+            "success": true
+        }
+    },
+    "priority": 1
+}

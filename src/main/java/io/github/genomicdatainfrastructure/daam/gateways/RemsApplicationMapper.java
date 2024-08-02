@@ -282,15 +282,17 @@ public class RemsApplicationMapper {
     private RetrievedApplicationLicense toLicense(V2License license) {
         var potentialLicense = ofNullable(license);
 
-        return new RetrievedApplicationLicense(
-                potentialLicense.map(this::toLicenseType)
-                        .orElse(null),
-                potentialLicense.map(l -> toLabelObject(l.getLicenseTitle()))
-                        .orElse(null),
-                potentialLicense.map(V2License::getLicenseEnabled)
-                        .orElse(null),
-                potentialLicense.map(V2License::getLicenseArchived)
-                        .orElse(null));
+        return RetrievedApplicationLicense.builder()
+                .type(potentialLicense.map(this::toLicenseType).orElse(null))
+                .title(potentialLicense.map(l -> toLabelObject(l.getLicenseTitle())).orElse(null))
+                .enabled(potentialLicense.map(V2License::getLicenseEnabled).orElse(null))
+                .archived(potentialLicense.map(V2License::getLicenseArchived).orElse(null))
+                .description(potentialLicense.map(l -> toLabelObject(l.getLicenseDescription()))
+                        .orElse(null))
+                .url(potentialLicense.map(V2License::getLicenseUrl).orElse(null))
+                .version(potentialLicense.map(V2License::getLicenseVersion).orElse(null))
+                .terms(potentialLicense.map(V2License::getLicenseTerms).orElse(null))
+                .build();
     }
 
     private String toLicenseType(V2License license) {

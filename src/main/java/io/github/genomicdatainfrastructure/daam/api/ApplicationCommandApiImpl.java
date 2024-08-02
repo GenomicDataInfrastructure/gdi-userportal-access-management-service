@@ -4,10 +4,7 @@
 package io.github.genomicdatainfrastructure.daam.api;
 
 import io.github.genomicdatainfrastructure.daam.model.*;
-import io.github.genomicdatainfrastructure.daam.services.AttachFileToApplicationService;
-import io.github.genomicdatainfrastructure.daam.services.CreateApplicationService;
-import io.github.genomicdatainfrastructure.daam.services.SaveApplicationService;
-import io.github.genomicdatainfrastructure.daam.services.SubmitApplicationService;
+import io.github.genomicdatainfrastructure.daam.services.*;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.ws.rs.core.Response;
@@ -25,13 +22,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     private final CreateApplicationService createApplicationService;
     private final SubmitApplicationService submitApplicationService;
     private final AttachFileToApplicationService attachFileToApplicationService;
-
-    @Override
-    public Response acceptApplicationTermsV1(Long id) {
-        throw new UnsupportedOperationException(
-                "Unimplemented method 'acceptApplicationTermsV1'"
-        );
-    }
+    private final AcceptTermsService acceptTermsService;
 
     @Override
     public Response addEventToApplicationV1(Long id, AddApplicationEvent addApplicationEvent) {
@@ -113,5 +104,12 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     private String userId() {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
         return principal.getClaim(USER_ID_CLAIM);
+    }
+
+    @Override
+    public Response acceptApplicationTermsV1(Long id, AcceptTermsCommand acceptTermsCommand) {
+        String userId = userId();
+        acceptTermsService.acceptTerms(id, userId, acceptTermsCommand);
+        return Response.noContent().build();
     }
 }

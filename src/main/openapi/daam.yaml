@@ -929,8 +929,10 @@ components:
           type: boolean
           title: License archived
         description:
-          type: string
+          type: array
           title: License description
+          items:
+            $ref: "#/components/schemas/Label"
         url:
           type: string
           format: uri

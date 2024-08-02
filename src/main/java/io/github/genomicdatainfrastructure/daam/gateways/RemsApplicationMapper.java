@@ -288,8 +288,8 @@ public class RemsApplicationMapper {
                 .title(potentialLicense.map(l -> toLabelObject(l.getLicenseTitle())).orElse(null))
                 .enabled(potentialLicense.map(V2License::getLicenseEnabled).orElse(null))
                 .archived(potentialLicense.map(V2License::getLicenseArchived).orElse(null))
-                .description(potentialLicense.map(l -> convertMapToString(l
-                        .getLicenseDescription())).orElse(null))
+                .description(potentialLicense.map(l -> toLabelObject(l.getLicenseDescription()))
+                        .orElse(null))
                 .url(potentialLicense.map(V2License::getLicenseUrl).orElse(null))
                 .version(potentialLicense.map(V2License::getLicenseVersion).orElse(null))
                 .terms(potentialLicense.map(V2License::getLicenseTerms).orElse(null))

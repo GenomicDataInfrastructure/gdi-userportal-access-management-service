@@ -4,17 +4,20 @@
         "url": "/api/applications/accept-licenses",
         "bodyPatterns": [
             {
-                "matchesJsonPath": "$[?(@.application-id == 2)]"
+                "matchesJsonPath": "$[?(@.application-id == 12345)]"
             }
         ]
     },
     "response": {
-        "status": 428,
+        "status": 200,
         "headers": {
             "Content-Type": "application/json"
         },
         "jsonBody": {
-            "error": "Application not in submittable state"
+            "success": false,
+            "errors": [
+                "Application not found"
+            ]
         }
     },
     "priority": 1

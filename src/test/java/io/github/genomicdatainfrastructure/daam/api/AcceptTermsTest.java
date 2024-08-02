@@ -7,6 +7,7 @@ package io.github.genomicdatainfrastructure.daam.api;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
 public class AcceptTermsTest extends BaseTest {
@@ -34,7 +35,8 @@ public class AcceptTermsTest extends BaseTest {
                 .when()
                 .post("/api/v1/applications/12345/accept-terms")
                 .then()
-                .statusCode(404);
+                .statusCode(404)
+                .body("title", equalTo("Application Not Found"));
     }
 
     @Test
@@ -47,7 +49,8 @@ public class AcceptTermsTest extends BaseTest {
                 .when()
                 .post("/api/v1/applications/1/accept-terms")
                 .then()
-                .statusCode(403);
+                .statusCode(403)
+                .body("title", equalTo("User Not Applicant"));
     }
 
     @Test
@@ -60,6 +63,7 @@ public class AcceptTermsTest extends BaseTest {
                 .when()
                 .post("/api/v1/applications/2/accept-terms")
                 .then()
-                .statusCode(428);
+                .statusCode(428)
+                .body("title", equalTo("Application Not In Correct State"));
     }
 }

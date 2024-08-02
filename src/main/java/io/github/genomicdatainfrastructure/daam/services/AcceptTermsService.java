@@ -4,16 +4,20 @@
 
 package io.github.genomicdatainfrastructure.daam.services;
 
-import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
+import io.github.genomicdatainfrastructure.daam.exceptions.AcceptTermsException;
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.AcceptLicensesCommand;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.SuccessResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response.Status;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 @ApplicationScoped
 public class AcceptTermsService {
@@ -36,14 +40,17 @@ public class AcceptTermsService {
     public void acceptTerms(Long id, String userId, AcceptLicensesCommand acceptLicensesCommand) {
         remsApiQueryGateway.checkIfApplicationIsEditableByUser(id, userId);
 
-        try {
-            remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(remsApiKey, userId,
-                    acceptLicensesCommand);
-        } catch (WebApplicationException e) {
-            if (e.getResponse().getStatus() == Status.NOT_FOUND.getStatusCode()) {
-                throw new ApplicationNotFoundException(id);
-            }
-            throw e;
+        SuccessResponse response = remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(
+                remsApiKey, userId, acceptLicensesCommand);
+
+        if (Boolean.FALSE.equals(response.getSuccess())) {
+            var nonNullErrors = ofNullable(response.getErrors()).orElseGet(List::of);
+
+            List<String> errorStrings = nonNullErrors.stream()
+                    .map(Object::toString)
+                    .collect(Collectors.toList());
+
+            throw new AcceptTermsException(id, errorStrings);
         }
     }
 }

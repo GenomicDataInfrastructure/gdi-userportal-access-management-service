@@ -322,14 +322,4 @@ public class RemsApplicationMapper {
                 .map(entry -> new Label(entry.getKey(), entry.getValue()))
                 .toList();
     }
-
-    private String convertMapToString(Map<String, String> map) {
-        if (map == null) {
-            return null;
-        }
-        return map.entrySet()
-                .stream()
-                .map(entry -> entry.getKey() + "=" + entry.getValue())
-                .collect(Collectors.joining(", "));
-    }
 }

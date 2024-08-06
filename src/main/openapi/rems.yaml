@@ -893,6 +893,14 @@ components:
       example:
         fi: text in Finnish
         en: text in English
+    LocalizedInt:
+      additionalProperties:
+        type: integer
+        format: int64
+      description: Integers keyed by languages
+      example:
+        fi: 1
+        en: 2
     DuoCodeFull:
       required:
         - description
@@ -1109,37 +1117,36 @@ components:
         - license/id
         - license/enabled
         - license/archived
-        - license/description
-        - license/version
-        - license/terms
       properties:
         license/type:
           type: string
+          title: License type
           enum:
-            - link
-            - attachment
-            - text
+            - license/link
+            - license/attachment-filename
+            - license/text
         license/title:
           $ref: "#/components/schemas/LocalizedString"
         license/id:
           type: integer
           format: int64
+          title: License ID
         license/enabled:
           type: boolean
         license/archived:
           type: boolean
-        license/description:
+        license/link:
+          type: object
           $ref: "#/components/schemas/LocalizedString"
-        license/url:
-          type: string
-          format: uri
-          description: URL to the license document
-        license/version:
-          type: string
-          description: Version of the license
-        license/terms:
-          type: string
-          description: Terms and conditions of the license
+        license/attachment-filename:
+          type: object
+          $ref: "#/components/schemas/LocalizedString"
+        license/text:
+          type: object
+          $ref: "#/components/schemas/LocalizedString"
+        license/attachment-id:
+          type: object
+          $ref: "#/components/schemas/LocalizedInt"
     Form:
       required:
         - form/id
@@ -1456,12 +1463,8 @@ components:
     AcceptLicensesCommand:
       type: object
       required:
-        - application-id
         - accepted-licenses
       properties:
-        application-id:
-          type: integer
-          format: int64
         accepted-licenses:
           type: array
           items:

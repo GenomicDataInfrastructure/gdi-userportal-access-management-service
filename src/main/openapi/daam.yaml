@@ -914,35 +914,44 @@ components:
           title: Attachment type
     RetrievedApplicationLicense:
       properties:
+        id:
+          type: integer
+          format: int64
+          title: License ID
         type:
           type: string
           title: License type
-        title:
-          type: array
-          title: License title
-          items:
-            $ref: "#/components/schemas/Label"
+          enum:
+            - license/link
+            - license/attachment-filename
+            - license/text
         enabled:
           type: boolean
           title: License enabled
         archived:
           type: boolean
           title: License archived
-        description:
+        link:
           type: array
-          title: License description
+          title: License link
           items:
             $ref: "#/components/schemas/Label"
-        url:
-          type: string
-          format: uri
-          title: License URL
-        version:
-          type: string
-          title: License version
-        terms:
-          type: string
-          title: License terms
+        text:
+          type: array
+          title: License text
+          items:
+            $ref: "#/components/schemas/Label"
+        attachmentFilename:
+          type: array
+          title: License attachment filename
+          items:
+            $ref: "#/components/schemas/Label"
+        attachmentId:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+          title: Attachment ID
     ListedBasket:
       properties:
         id:
@@ -1071,12 +1080,8 @@ components:
     AcceptTermsCommand:
       type: object
       required:
-        - application-id
         - accepted-licenses
       properties:
-        application-id:
-          type: integer
-          format: int64
         accepted-licenses:
           type: array
           items:

@@ -952,11 +952,10 @@ components:
           items:
             $ref: "#/components/schemas/Label"
         attachmentId:
-          type: object
-          additionalProperties:
-            type: integer
-            format: int64
+          type: array
           title: Attachment ID
+          items:
+            $ref: "#/components/schemas/Label"
     ListedBasket:
       properties:
         id:

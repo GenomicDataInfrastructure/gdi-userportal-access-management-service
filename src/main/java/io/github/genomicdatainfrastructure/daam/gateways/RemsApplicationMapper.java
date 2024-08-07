@@ -13,6 +13,7 @@ import static java.util.Optional.ofNullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -292,7 +293,8 @@ public class RemsApplicationMapper {
                 .text(potentialLicense.map(l -> toLabelObject(l.getLicenseText())).orElse(null))
                 .attachmentFilename(potentialLicense.map(l -> toLabelObject(l
                         .getLicenseAttachmentFilename())).orElse(null))
-                .attachmentId(potentialLicense.map(V2License::getLicenseAttachmentId).orElse(null))
+                .attachmentId(potentialLicense.map(l -> toLabelObjectFromLong(l
+                        .getLicenseAttachmentId())).orElse(null))
                 .build();
     }
 
@@ -322,4 +324,15 @@ public class RemsApplicationMapper {
                 .map(entry -> new Label(entry.getKey(), entry.getValue()))
                 .toList();
     }
+
+    private List<Label> toLabelObjectFromLong(Map<String, Long> map) {
+        if (map == null) {
+            return null;
+        }
+        return map.entrySet()
+                .stream()
+                .map(entry -> new Label(entry.getKey(), entry.getValue().toString()))
+                .toList();
+    }
+
 }

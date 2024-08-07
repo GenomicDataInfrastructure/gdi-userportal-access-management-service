@@ -88,7 +88,7 @@ class RetrieveApplicationTest extends BaseTest {
                 .body("attachments[0].filename", equalTo("research-proposal.pdf"))
                 .body("attachments[0].type", equalTo("pdf"))
 
-                .body("licenses[0].type", equalTo("text"))
+                .body("licenses[0].type", equalTo("license/text"))
                 .body("licenses[0].title[0].language", equalTo("fi"))
                 .body("licenses[0].title[0].name", equalTo("Lisenssi"))
                 .body("licenses[0].title[1].language", equalTo("en"))

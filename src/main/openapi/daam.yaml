@@ -918,6 +918,11 @@ components:
           type: integer
           format: int64
           title: License ID
+        title:
+          type: array
+          title: License title
+          items:
+            $ref: "#/components/schemas/Label"
         type:
           type: string
           title: License type

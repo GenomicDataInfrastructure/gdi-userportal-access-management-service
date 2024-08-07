@@ -285,6 +285,7 @@ public class RemsApplicationMapper {
         return RetrievedApplicationLicense.builder()
                 .id(potentialLicense.map(V2License::getLicenseId).orElse(null))
                 .type(potentialLicense.map(this::toLicenseType).orElse(null))
+                .title(potentialLicense.map(l -> toLabelObject(l.getLicenseTitle())).orElse(null))
                 .enabled(potentialLicense.map(V2License::getLicenseEnabled).orElse(null))
                 .archived(potentialLicense.map(V2License::getLicenseArchived).orElse(null))
                 .link(potentialLicense.map(l -> toLabelObject(l.getLicenseLink())).orElse(null))

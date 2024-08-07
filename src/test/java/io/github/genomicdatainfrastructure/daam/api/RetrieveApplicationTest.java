@@ -94,7 +94,35 @@ class RetrieveApplicationTest extends BaseTest {
                 .body("licenses[0].title[1].language", equalTo("en"))
                 .body("licenses[0].title[1].name", equalTo("License"))
                 .body("licenses[0].enabled", equalTo(true))
-                .body("licenses[0].archived", equalTo(true));
+                .body("licenses[0].archived", equalTo(true))
+                .body("licenses[0].attachmentId[0].language", equalTo("fi"))
+                .body("licenses[0].attachmentId[0].name", equalTo("1"))
+                .body("licenses[0].attachmentId[1].language", equalTo("en"))
+                .body("licenses[0].attachmentId[1].name", equalTo("2"))
+
+                .body("licenses[1].type", equalTo("license/attachment-filename"))
+                .body("licenses[1].title[0].language", equalTo("fi"))
+                .body("licenses[1].title[0].name", equalTo("Attachment Lisenssi"))
+                .body("licenses[1].title[1].language", equalTo("en"))
+                .body("licenses[1].title[1].name", equalTo("Attachment License"))
+                .body("licenses[1].enabled", equalTo(true))
+                .body("licenses[1].archived", equalTo(false))
+                .body("licenses[1].attachmentId[0].language", equalTo("fi"))
+                .body("licenses[1].attachmentId[0].name", equalTo("3"))
+                .body("licenses[1].attachmentId[1].language", equalTo("en"))
+                .body("licenses[1].attachmentId[1].name", equalTo("4"))
+
+                .body("licenses[2].type", equalTo("license/link"))
+                .body("licenses[2].title[0].language", equalTo("fi"))
+                .body("licenses[2].title[0].name", equalTo("Link Lisenssi"))
+                .body("licenses[2].title[1].language", equalTo("en"))
+                .body("licenses[2].title[1].name", equalTo("Link License"))
+                .body("licenses[2].enabled", equalTo(false))
+                .body("licenses[2].archived", equalTo(true))
+                .body("licenses[2].attachmentId[0].language", equalTo("fi"))
+                .body("licenses[2].attachmentId[0].name", equalTo("5"))
+                .body("licenses[2].attachmentId[1].language", equalTo("en"))
+                .body("licenses[2].attachmentId[1].name", equalTo("6"));
     }
 
     @Test

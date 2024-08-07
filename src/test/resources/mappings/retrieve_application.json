@@ -272,6 +272,58 @@
                     },
                     "license/enabled": true,
                     "license/archived": true
+                },
+                {
+                    "license/attachment-filename": {
+                        "fi": "attachment-license-fi.pdf",
+                        "en": "attachment-license-en.pdf"
+                    },
+                    "license/text": {
+                        "fi": "Attachment License text in Finnish.",
+                        "en": "Attachment License text in English."
+                    },
+                    "license/type": "license/attachment-filename",
+                    "license/title": {
+                        "fi": "Attachment Lisenssi",
+                        "en": "Attachment License"
+                    },
+                    "license/link": {
+                        "fi": "attachment-lisenssilinkki-suomeksi",
+                        "en": "attachment-license-link-in-english"
+                    },
+                    "license/id": 2,
+                    "license/attachment-id": {
+                        "fi": 3,
+                        "en": 4
+                    },
+                    "license/enabled": true,
+                    "license/archived": false
+                },
+                {
+                    "license/attachment-filename": {
+                        "fi": "link-license-fi.pdf",
+                        "en": "link-license-en.pdf"
+                    },
+                    "license/text": {
+                        "fi": "Link License text in Finnish.",
+                        "en": "Link License text in English."
+                    },
+                    "license/type": "license/link",
+                    "license/title": {
+                        "fi": "Link Lisenssi",
+                        "en": "Link License"
+                    },
+                    "license/link": {
+                        "fi": "link-lisenssilinkki-suomeksi",
+                        "en": "link-license-link-in-english"
+                    },
+                    "license/id": 3,
+                    "license/attachment-id": {
+                        "fi": 5,
+                        "en": 6
+                    },
+                    "license/enabled": false,
+                    "license/archived": true
                 }
             ],
             "application/created": "2024-03-20T15:18:24.97Z",

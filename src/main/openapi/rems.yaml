@@ -1463,8 +1463,12 @@ components:
     AcceptLicensesCommand:
       type: object
       required:
+        - application-id
         - accepted-licenses
       properties:
+        application-id:
+          type: integer
+          format: int64
         accepted-licenses:
           type: array
           items:

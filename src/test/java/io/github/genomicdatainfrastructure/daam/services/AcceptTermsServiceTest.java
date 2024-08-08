@@ -42,7 +42,6 @@ class AcceptTermsServiceTest {
         var applicationId = 1L;
         var userId = "userId";
         AcceptTermsCommand command = new AcceptTermsCommand();
-        command.setApplicationId(applicationId);
         command.setAcceptedLicenses(List.of(1L, 2L));
 
         SuccessResponse response = new SuccessResponse();
@@ -64,7 +63,6 @@ class AcceptTermsServiceTest {
         var applicationId = 1L;
         var userId = "userId";
         AcceptTermsCommand command = new AcceptTermsCommand();
-        command.setApplicationId(applicationId);
         command.setAcceptedLicenses(List.of(1L, 2L));
 
         SuccessResponse response = new SuccessResponse();
@@ -88,7 +86,6 @@ class AcceptTermsServiceTest {
         var applicationId = 1L;
         var userId = "userId";
         AcceptTermsCommand command = new AcceptTermsCommand();
-        command.setApplicationId(applicationId);
         command.setAcceptedLicenses(List.of(1L, 2L));
 
         when(remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(

@@ -13,6 +13,7 @@ import static java.util.Optional.ofNullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -283,22 +284,24 @@ public class RemsApplicationMapper {
         var potentialLicense = ofNullable(license);
 
         return RetrievedApplicationLicense.builder()
+                .id(potentialLicense.map(V2License::getLicenseId).orElse(null))
                 .type(potentialLicense.map(this::toLicenseType).orElse(null))
                 .title(potentialLicense.map(l -> toLabelObject(l.getLicenseTitle())).orElse(null))
                 .enabled(potentialLicense.map(V2License::getLicenseEnabled).orElse(null))
                 .archived(potentialLicense.map(V2License::getLicenseArchived).orElse(null))
-                .description(potentialLicense.map(l -> toLabelObject(l.getLicenseDescription()))
+                .link(potentialLicense.map(l -> toLabelObject(l.getLicenseLink())).orElse(null))
+                .text(potentialLicense.map(l -> toLabelObject(l.getLicenseText())).orElse(null))
+                .attachmentFilename(potentialLicense.map(l -> toLabelObject(l
+                        .getLicenseAttachmentFilename())).orElse(null))
+                .attachmentId(potentialLicense.map(l -> toLabelObject(l.getLicenseAttachmentId()))
                         .orElse(null))
-                .url(potentialLicense.map(V2License::getLicenseUrl).orElse(null))
-                .version(potentialLicense.map(V2License::getLicenseVersion).orElse(null))
-                .terms(potentialLicense.map(V2License::getLicenseTerms).orElse(null))
                 .build();
     }
 
-    private String toLicenseType(V2License license) {
+    private RetrievedApplicationLicense.TypeEnum toLicenseType(V2License license) {
         var licenseType = ofNullable(license.getLicenseType());
-
         return licenseType.map(V2License.LicenseTypeEnum::value)
+                .map(RetrievedApplicationLicense.TypeEnum::fromString)
                 .orElse(null);
     }
 
@@ -310,15 +313,16 @@ public class RemsApplicationMapper {
                 .orElse(null);
     }
 
-    private List<Label> toLabelObject(Map<String, String> map) {
+    private List<Label> toLabelObject(Map<String, ?> map) {
         if (map == null) {
             return List.of();
         }
 
-        return map
-                .entrySet()
+        return map.entrySet()
                 .stream()
-                .map(entry -> new Label(entry.getKey(), entry.getValue()))
+                .map(entry -> new Label(entry.getKey(), entry.getValue() != null ? entry.getValue()
+                        .toString() : null))
                 .toList();
     }
+
 }

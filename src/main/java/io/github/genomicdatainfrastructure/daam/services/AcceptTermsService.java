@@ -47,7 +47,7 @@ public class AcceptTermsService {
         remsApiQueryGateway.checkIfApplicationIsEditableByUser(id, userId);
 
         AcceptLicensesCommand remoteAcceptLicensesCommand = new AcceptLicensesCommand();
-        remoteAcceptLicensesCommand.setApplicationId(acceptTermsCommand.getApplicationId());
+        remoteAcceptLicensesCommand.setApplicationId(id);
         remoteAcceptLicensesCommand.setAcceptedLicenses(acceptTermsCommand.getAcceptedLicenses());
 
         SuccessResponse response = remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(
@@ -60,7 +60,7 @@ public class AcceptTermsService {
                     .map(Object::toString)
                     .collect(joining(";"));
 
-            log.warning(ACCEPT_TERMS_LOG.formatted(userId, id, concatenatedErrors));
+            log.warning(ACCEPT_TERMS_LOG.formatted(id, concatenatedErrors));
 
             var errorMessages = nonNullErrors.stream()
                     .map(it -> ERROR_MESSAGE.formatted(it))

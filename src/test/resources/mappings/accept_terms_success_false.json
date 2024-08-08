@@ -4,6 +4,9 @@
         "url": "/api/applications/accept-licenses",
         "bodyPatterns": [
             {
+                "matchesJsonPath": "$[?(@.application-id == 44)]"
+            },
+            {
                 "matchesJsonPath": "$[?(@.accepted-licenses == [3, 4])]"
             }
         ]
@@ -15,9 +18,7 @@
         },
         "jsonBody": {
             "success": false,
-            "errors": [
-                "Some error message indicating why the request failed"
-            ]
+            "errors": []
         }
     },
     "priority": 1

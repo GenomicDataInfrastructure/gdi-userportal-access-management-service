@@ -47,6 +47,7 @@ public class AcceptTermsService {
         remsApiQueryGateway.checkIfApplicationIsEditableByUser(id, userId);
 
         AcceptLicensesCommand remoteAcceptLicensesCommand = new AcceptLicensesCommand();
+        remoteAcceptLicensesCommand.setApplicationId(id);
         remoteAcceptLicensesCommand.setAcceptedLicenses(acceptTermsCommand.getAcceptedLicenses());
 
         SuccessResponse response = remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(

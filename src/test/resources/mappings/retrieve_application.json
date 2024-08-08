@@ -282,7 +282,7 @@
                         "fi": "Attachment License text in Finnish.",
                         "en": "Attachment License text in English."
                     },
-                    "license/type": "attachment-filename",
+                    "license/type": "attachment",
                     "license/title": {
                         "fi": "Attachment Lisenssi",
                         "en": "Attachment License"

@@ -1123,7 +1123,7 @@ components:
           title: License type
           enum:
             - link
-            - attachment-filename
+            - attachment
             - text
         license/title:
           $ref: "#/components/schemas/LocalizedString"

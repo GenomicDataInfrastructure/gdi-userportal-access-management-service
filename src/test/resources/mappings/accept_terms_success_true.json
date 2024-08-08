@@ -4,6 +4,9 @@
         "url": "/api/applications/accept-licenses",
         "bodyPatterns": [
             {
+                "matchesJsonPath": "$[?(@.application-id == 1)]"
+            },
+            {
                 "matchesJsonPath": "$[?(@.accepted-licenses == [1, 2])]"
             }
         ]

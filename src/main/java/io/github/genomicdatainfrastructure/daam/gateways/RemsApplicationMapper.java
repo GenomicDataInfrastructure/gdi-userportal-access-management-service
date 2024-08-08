@@ -293,8 +293,8 @@ public class RemsApplicationMapper {
                 .text(potentialLicense.map(l -> toLabelObject(l.getLicenseText())).orElse(null))
                 .attachmentFilename(potentialLicense.map(l -> toLabelObject(l
                         .getLicenseAttachmentFilename())).orElse(null))
-                .attachmentId(potentialLicense.map(l -> toLabelObjectFromLong(l
-                        .getLicenseAttachmentId())).orElse(null))
+                .attachmentId(potentialLicense.map(l -> toLabelObject(l.getLicenseAttachmentId()))
+                        .orElse(null))
                 .build();
     }
 
@@ -313,25 +313,15 @@ public class RemsApplicationMapper {
                 .orElse(null);
     }
 
-    private List<Label> toLabelObject(Map<String, String> map) {
+    private List<Label> toLabelObject(Map<String, ?> map) {
         if (map == null) {
             return List.of();
         }
 
-        return map
-                .entrySet()
-                .stream()
-                .map(entry -> new Label(entry.getKey(), entry.getValue()))
-                .toList();
-    }
-
-    private List<Label> toLabelObjectFromLong(Map<String, Long> map) {
-        if (map == null) {
-            return null;
-        }
         return map.entrySet()
                 .stream()
-                .map(entry -> new Label(entry.getKey(), entry.getValue().toString()))
+                .map(entry -> new Label(entry.getKey(), entry.getValue() != null ? entry.getValue()
+                        .toString() : null))
                 .toList();
     }
 

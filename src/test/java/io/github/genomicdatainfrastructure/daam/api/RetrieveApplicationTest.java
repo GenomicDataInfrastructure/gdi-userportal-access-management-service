@@ -88,7 +88,7 @@ class RetrieveApplicationTest extends BaseTest {
                 .body("attachments[0].filename", equalTo("research-proposal.pdf"))
                 .body("attachments[0].type", equalTo("pdf"))
 
-                .body("licenses[0].type", equalTo("license/text"))
+                .body("licenses[0].type", equalTo("text"))
                 .body("licenses[0].title[0].language", equalTo("fi"))
                 .body("licenses[0].title[0].name", equalTo("Lisenssi"))
                 .body("licenses[0].title[1].language", equalTo("en"))
@@ -100,7 +100,7 @@ class RetrieveApplicationTest extends BaseTest {
                 .body("licenses[0].attachmentId[1].language", equalTo("en"))
                 .body("licenses[0].attachmentId[1].name", equalTo("2"))
 
-                .body("licenses[1].type", equalTo("license/attachment-filename"))
+                .body("licenses[1].type", equalTo("attachment-filename"))
                 .body("licenses[1].title[0].language", equalTo("fi"))
                 .body("licenses[1].title[0].name", equalTo("Attachment Lisenssi"))
                 .body("licenses[1].title[1].language", equalTo("en"))
@@ -112,7 +112,7 @@ class RetrieveApplicationTest extends BaseTest {
                 .body("licenses[1].attachmentId[1].language", equalTo("en"))
                 .body("licenses[1].attachmentId[1].name", equalTo("4"))
 
-                .body("licenses[2].type", equalTo("license/link"))
+                .body("licenses[2].type", equalTo("link"))
                 .body("licenses[2].title[0].language", equalTo("fi"))
                 .body("licenses[2].title[0].name", equalTo("Link Lisenssi"))
                 .body("licenses[2].title[1].language", equalTo("en"))

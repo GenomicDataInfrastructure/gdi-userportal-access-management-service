@@ -927,9 +927,9 @@ components:
           type: string
           title: License type
           enum:
-            - license/link
-            - license/attachment-filename
-            - license/text
+            - link
+            - attachment-filename
+            - text
         enabled:
           type: boolean
           title: License enabled

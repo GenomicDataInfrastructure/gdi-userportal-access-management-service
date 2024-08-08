@@ -256,7 +256,7 @@
                         "fi": "Lisenssin teksti suomeksi.",
                         "en": "License text in English."
                     },
-                    "license/type": "license/text",
+                    "license/type": "text",
                     "license/title": {
                         "fi": "Lisenssi",
                         "en": "License"
@@ -282,7 +282,7 @@
                         "fi": "Attachment License text in Finnish.",
                         "en": "Attachment License text in English."
                     },
-                    "license/type": "license/attachment-filename",
+                    "license/type": "attachment-filename",
                     "license/title": {
                         "fi": "Attachment Lisenssi",
                         "en": "Attachment License"
@@ -308,7 +308,7 @@
                         "fi": "Link License text in Finnish.",
                         "en": "Link License text in English."
                     },
-                    "license/type": "license/link",
+                    "license/type": "link",
                     "license/title": {
                         "fi": "Link Lisenssi",
                         "en": "Link License"

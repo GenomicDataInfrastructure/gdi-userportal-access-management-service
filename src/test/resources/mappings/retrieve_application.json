@@ -107,14 +107,8 @@
             ],
             "application/deadline": "2024-03-20T15:18:24.969Z",
             "application/accepted-licenses": {
-                "additionalProp1": [
+                "eb4123a3-b722-4798-9af5-8957f823657a": [
                     1
-                ],
-                "additionalProp2": [
-                    2
-                ],
-                "additionalProp3": [
-                    3
                 ]
             },
             "application/forms": [

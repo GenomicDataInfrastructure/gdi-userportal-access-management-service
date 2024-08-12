@@ -6,12 +6,13 @@ package io.github.genomicdatainfrastructure.daam.gateways;
 
 import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,13 +21,13 @@ class RemsApplicationMapperTest {
     private RemsApplicationMapper underTest;
 
     @BeforeEach
-    private void setUp() {
+    void setUp() {
         underTest = new RemsApplicationMapper();
     }
 
     @Test
     void should_map_correctly_complete_rems_application_to_retrieved_application() {
-        RetrievedApplication retrievedApplication = underTest.from(createApplication());
+        RetrievedApplication retrievedApplication = underTest.from("dummy", createApplication());
 
         assertThat(retrievedApplication.getId()).isEqualTo(1L);
         assertThat(retrievedApplication.getExternalId()).isEqualTo("APP20240328");
@@ -87,7 +88,7 @@ class RemsApplicationMapperTest {
         assertThat(retrievedApplication.getAttachments()).containsExactlyInAnyOrder(
                 new RetrievedApplicationAttachment(14L, "file.pdf", "pdf"));
 
-        assertThat(retrievedApplication.getLicenses()).isNull();
+        assertThat(retrievedApplication.getLicenses()).isEmpty();
     }
 
     private Application createApplication() {

@@ -692,11 +692,6 @@ components:
         externalId:
           title: Application external id
           type: string
-        #blacklist: # TODO
-        #  type: array
-        #  title: Blacklist
-        #  items:
-        #    type: string
         id:
           title: application id
           type: integer
@@ -956,6 +951,9 @@ components:
           title: Attachment ID
           items:
             $ref: "#/components/schemas/Label"
+        acceptedByCurrentUser:
+          type: boolean
+          title: Accepted by current user
     ListedBasket:
       properties:
         id:
@@ -1084,9 +1082,9 @@ components:
     AcceptTermsCommand:
       type: object
       required:
-        - accepted-licenses
+        - acceptedLicenses
       properties:
-        accepted-licenses:
+        acceptedLicenses:
           type: array
           items:
             type: integer

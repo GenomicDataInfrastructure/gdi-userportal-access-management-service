@@ -8,19 +8,14 @@ import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import static java.util.Optional.ofNullable;
+import java.util.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.Comparator;
-import java.util.Objects;
+import static java.util.Optional.ofNullable;
 
 @ApplicationScoped
 public class RemsApplicationMapper {
 
-    public RetrievedApplication from(Application application) {
+    public RetrievedApplication from(String userId, Application application) {
         return RetrievedApplication
                 .builder()
                 .id(application.getApplicationId())
@@ -40,7 +35,7 @@ public class RemsApplicationMapper {
                 .permissions(toPermissions(application))
                 .events(toEvents(application))
                 .attachments(toAttachments(application))
-                .licenses(toLicences(application))
+                .licenses(toLicences(userId, application))
                 .state(toState(application))
                 .build();
     }
@@ -269,32 +264,39 @@ public class RemsApplicationMapper {
                         .orElse(null));
     }
 
-    private List<RetrievedApplicationLicense> toLicences(Application application) {
-        var potentialLicenses = ofNullable(application
-                .getApplicationLicenses());
+    private List<RetrievedApplicationLicense> toLicences(String userId, Application application) {
+        var potentialLicenses = ofNullable(application.getApplicationLicenses())
+                .orElseGet(List::of);
 
-        return potentialLicenses.map(licenses -> licenses
+        var acceptedLicenses = application.getApplicationAcceptedLicenses();
+
+        return potentialLicenses
                 .stream()
-                .map(this::toLicense)
-                .toList())
-                .orElse(null);
+                .filter(Objects::nonNull)
+                .map(it -> toLicense(it, userId, acceptedLicenses))
+                .toList();
     }
 
-    private RetrievedApplicationLicense toLicense(V2License license) {
-        var potentialLicense = ofNullable(license);
+    private RetrievedApplicationLicense toLicense(
+            V2License license,
+            String userId,
+            Map<String, Set<Long>> acceptedLicenses
+    ) {
+        var nonNullAcceptedLicenses = ofNullable(acceptedLicenses).orElseGet(Map::of);
+        var acceptedLicensesByCurrentUser = nonNullAcceptedLicenses.getOrDefault(userId, Set.of());
 
         return RetrievedApplicationLicense.builder()
-                .id(potentialLicense.map(V2License::getLicenseId).orElse(null))
-                .type(potentialLicense.map(this::toLicenseType).orElse(null))
-                .title(potentialLicense.map(l -> toLabelObject(l.getLicenseTitle())).orElse(null))
-                .enabled(potentialLicense.map(V2License::getLicenseEnabled).orElse(null))
-                .archived(potentialLicense.map(V2License::getLicenseArchived).orElse(null))
-                .link(potentialLicense.map(l -> toLabelObject(l.getLicenseLink())).orElse(null))
-                .text(potentialLicense.map(l -> toLabelObject(l.getLicenseText())).orElse(null))
-                .attachmentFilename(potentialLicense.map(l -> toLabelObject(l
-                        .getLicenseAttachmentFilename())).orElse(null))
-                .attachmentId(potentialLicense.map(l -> toLabelObject(l.getLicenseAttachmentId()))
-                        .orElse(null))
+                .id(license.getLicenseId())
+                .type(toLicenseType(license))
+                .title(toLabelObject(license.getLicenseTitle()))
+                .enabled(license.getLicenseEnabled())
+                .archived(license.getLicenseArchived())
+                .link(toLabelObject(license.getLicenseLink()))
+                .text(toLabelObject(license.getLicenseText()))
+                .attachmentFilename(toLabelObject(license.getLicenseAttachmentFilename()))
+                .attachmentId(toLabelObject(license.getLicenseAttachmentId()))
+                .acceptedByCurrentUser(acceptedLicensesByCurrentUser.contains(license
+                        .getLicenseId()))
                 .build();
     }
 

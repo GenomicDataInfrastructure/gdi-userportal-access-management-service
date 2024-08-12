@@ -14,7 +14,7 @@ import java.util.List;
 @ApplicationScoped
 public class ListApplicationsService {
 
-    private RemsApplicationMapper applicationMapper;
+    private final RemsApplicationMapper applicationMapper;
     private final RemsApiQueryGateway gateway;
 
     public ListApplicationsService(

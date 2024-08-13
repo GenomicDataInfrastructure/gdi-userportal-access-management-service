@@ -6,6 +6,7 @@ package io.github.genomicdatainfrastructure.daam.api;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -18,7 +19,7 @@ class AcceptTermsTest extends BaseTest {
                 .auth()
                 .oauth2(getAccessToken("alice"))
                 .contentType("application/json")
-                .body("{ \"accepted-licenses\": [1, 2] }")
+                .body("{ \"acceptedLicenses\": [1, 2] }")
                 .when()
                 .post("/api/v1/applications/1/accept-terms")
                 .then()
@@ -31,7 +32,7 @@ class AcceptTermsTest extends BaseTest {
                 .auth()
                 .oauth2(getAccessToken("alice"))
                 .contentType("application/json")
-                .body("{ \"accepted-licenses\": [1, 2] }")
+                .body("{ \"acceptedLicenses\": [1, 2] }")
                 .when()
                 .post("/api/v1/applications/12345/accept-terms")
                 .then()
@@ -45,7 +46,7 @@ class AcceptTermsTest extends BaseTest {
                 .auth()
                 .oauth2(getAccessToken("jdoe"))
                 .contentType("application/json")
-                .body("{ \"accepted-licenses\": [1, 2] }")
+                .body("{ \"acceptedLicenses\": [1, 2] }")
                 .when()
                 .post("/api/v1/applications/1/accept-terms")
                 .then()
@@ -59,7 +60,7 @@ class AcceptTermsTest extends BaseTest {
                 .auth()
                 .oauth2(getAccessToken("alice"))
                 .contentType("application/json")
-                .body("{ \"accepted-licenses\": [1, 2] }")
+                .body("{ \"acceptedLicenses\": [1, 2] }")
                 .when()
                 .post("/api/v1/applications/2/accept-terms")
                 .then()
@@ -73,7 +74,7 @@ class AcceptTermsTest extends BaseTest {
                 .auth()
                 .oauth2(getAccessToken("alice"))
                 .contentType("application/json")
-                .body("{\"accepted-licenses\": [3, 4]}")
+                .body("{\"acceptedLicenses\": [3, 4]}")
                 .when()
                 .post("/api/v1/applications/44/accept-terms")
                 .then()

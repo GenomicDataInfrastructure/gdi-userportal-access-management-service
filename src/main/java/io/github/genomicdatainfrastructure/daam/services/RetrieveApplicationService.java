@@ -13,7 +13,7 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class RetrieveApplicationService {
 
-    private RemsApplicationMapper applicationMapper;
+    private final RemsApplicationMapper applicationMapper;
     private final RemsApiQueryGateway gateway;
 
     @Inject
@@ -27,7 +27,6 @@ public class RetrieveApplicationService {
 
     public RetrievedApplication retrieveApplication(Long applicationId, String userId) {
         var application = gateway.retrieveApplication(applicationId, userId);
-
-        return applicationMapper.from(application);
+        return applicationMapper.from(userId, application);
     }
 }

@@ -20,6 +20,9 @@
             "field-id": "requiredField",
             "type": "Missing",
             "form-id": 1
+          },
+          {
+            "type": "not-accepted-licenses"
           }
         ],
         "warnings": [],

@@ -169,7 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SubmitApplicationResponse"
+                $ref: "#/components/schemas/SuccessApplicationResponse"
   /api/applications/{application-id}:
     get:
       tags:
@@ -335,7 +335,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessResponse"
+                $ref: "#/components/schemas/SuccessApplicationResponse"
   /api/entitlements:
     get:
       tags:
@@ -409,7 +409,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessResponse"
+                $ref: "#/components/schemas/SuccessApplicationResponse"
 components:
   schemas:
     CatalogueItem:
@@ -1281,7 +1281,7 @@ components:
           format: int64
       required:
         - application-id
-    SubmitApplicationResponse:
+    SuccessApplicationResponse:
       type: object
       properties:
         success:

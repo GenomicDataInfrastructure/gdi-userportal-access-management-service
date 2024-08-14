@@ -9,7 +9,8 @@ import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
 import io.github.genomicdatainfrastructure.daam.model.AcceptTermsCommand;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.AcceptLicensesCommand;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.SuccessResponse;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.SuccessApplicationResponse;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.ValidationField;
 import jakarta.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,11 +42,13 @@ class AcceptTermsServiceTest {
     void can_accept_terms() {
         var applicationId = 1L;
         var userId = "userId";
-        AcceptTermsCommand command = new AcceptTermsCommand();
-        command.setAcceptedLicenses(List.of(1L, 2L));
+        var command = AcceptTermsCommand.builder()
+                .acceptedLicenses(List.of(1L, 2L))
+                .build();
 
-        SuccessResponse response = new SuccessResponse();
-        response.setSuccess(true);
+        var response = SuccessApplicationResponse.builder()
+                .success(true)
+                .build();
 
         when(remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(
                 eq(REMS_API_KEY), eq(userId), any(AcceptLicensesCommand.class)))
@@ -65,9 +68,14 @@ class AcceptTermsServiceTest {
         AcceptTermsCommand command = new AcceptTermsCommand();
         command.setAcceptedLicenses(List.of(1L, 2L));
 
-        SuccessResponse response = new SuccessResponse();
-        response.setSuccess(false);
-        response.setErrors(List.of("Error 1", "Error 2"));
+        var response = SuccessApplicationResponse.builder()
+                .success(false)
+                .errors(List.of(
+                        ValidationField.builder()
+                                .type("test")
+                                .build()
+                ))
+                .build();
 
         when(remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(
                 eq(REMS_API_KEY), eq(userId), any(AcceptLicensesCommand.class)))

@@ -7,5 +7,5 @@ package io.github.genomicdatainfrastructure.daam.api;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-public class AcceptTermsTestIT extends AcceptTermsTest {
+public class AcceptTermsIT extends AcceptTermsTest {
 }

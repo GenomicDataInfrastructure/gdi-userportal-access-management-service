@@ -191,14 +191,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateApplicationResponse"
-        "422":
-          description: Validation warnings
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ValidationWarnings"
         "404":
           description: Catalogue Item not found
           content:
@@ -976,27 +968,20 @@ components:
         title:
           type: string
           title: dataset title
-    ValidationWarnings:
-      properties:
-        warnings:
-          type: array
-          title: validation warnings
-          items:
-            $ref: "#/components/schemas/ValidationWarning"
     ValidationWarning:
       properties:
         key:
           type: string
           title: validation key
         formId:
-          type: string
+          type: integer
+          format: int64
           title: form id
         fieldId:
           title: field id
           type: string
-        fieldValidationKey:
-          type: string
-          title: field validation key
+      required:
+        - key
     AddedAttachment:
       properties:
         id:
@@ -1056,11 +1041,11 @@ components:
         detail:
           type: string
           title: Error detail
-        errorMessages:
+        validationWarnings:
           type: array
           items:
-            type: string
-          description: Additional error messages related to the response
+            $ref: "#/components/schemas/ValidationWarning"
+          description: List of validation warnings, to be send to the frontend, where the translation will happen.
     RetrieveGrantedDatasetIdentifiers:
       type: object
       properties:

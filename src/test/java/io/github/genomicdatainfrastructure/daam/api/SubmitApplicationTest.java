@@ -4,10 +4,15 @@
 
 package io.github.genomicdatainfrastructure.daam.api;
 
+import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
+import io.github.genomicdatainfrastructure.daam.model.ValidationWarning;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
 class SubmitApplicationTest extends BaseTest {
@@ -67,13 +72,32 @@ class SubmitApplicationTest extends BaseTest {
 
     @Test
     void cannot_submit_application_due_to_submission_errors() {
-        given()
+        var response = given()
                 .auth()
                 .oauth2(getAccessToken("alice"))
                 .when()
-                .post("api/v1/applications/44/submit")
-                .then()
-                .statusCode(400)
-                .body("title", equalTo("Application could not be submitted"));
+                .post("api/v1/applications/44/submit");
+
+        var actual = response.getBody().as(ErrorResponse.class);
+
+        var expected = ErrorResponse.builder()
+                .status(400)
+                .title("Application could not be submitted")
+                .detail("Application 44 could not be submitted.")
+                .validationWarnings(List.of(
+                        ValidationWarning.builder()
+                                .key("Missing")
+                                .formId(1L)
+                                .fieldId("requiredField")
+                                .build(),
+                        ValidationWarning.builder()
+                                .key("not-accepted-licenses")
+                                .build()
+                ))
+                .build();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 }

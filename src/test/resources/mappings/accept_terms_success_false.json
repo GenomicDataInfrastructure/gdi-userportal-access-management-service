@@ -18,7 +18,11 @@
         },
         "jsonBody": {
             "success": false,
-            "errors": []
+            "errors": [
+                {
+                    "type": "dummy-error"
+                }
+            ]
         }
     },
     "priority": 1

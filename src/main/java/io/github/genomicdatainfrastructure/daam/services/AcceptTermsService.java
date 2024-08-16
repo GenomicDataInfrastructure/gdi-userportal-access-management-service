@@ -7,9 +7,9 @@ package io.github.genomicdatainfrastructure.daam.services;
 import io.github.genomicdatainfrastructure.daam.exceptions.AcceptTermsException;
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
 import io.github.genomicdatainfrastructure.daam.model.AcceptTermsCommand;
+import io.github.genomicdatainfrastructure.daam.model.ValidationWarning;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.AcceptLicensesCommand;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.SuccessResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.java.Log;
@@ -25,8 +25,7 @@ import static java.util.stream.Collectors.joining;
 @ApplicationScoped
 public class AcceptTermsService {
 
-    private static final String ERROR_MESSAGE = "Error: %s";
-    private static final String ACCEPT_TERMS_LOG = "Terms and Licenses of application %s could not be accepted, due to the following errors: %s";
+    private static final String ACCEPT_TERMS_LOG = "Terms and Licenses of application %s could not be accepted: %s";
 
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
@@ -46,11 +45,12 @@ public class AcceptTermsService {
     public void acceptTerms(Long id, String userId, AcceptTermsCommand acceptTermsCommand) {
         remsApiQueryGateway.checkIfApplicationIsEditableByUser(id, userId);
 
-        AcceptLicensesCommand remoteAcceptLicensesCommand = new AcceptLicensesCommand();
-        remoteAcceptLicensesCommand.setApplicationId(id);
-        remoteAcceptLicensesCommand.setAcceptedLicenses(acceptTermsCommand.getAcceptedLicenses());
+        var remoteAcceptLicensesCommand = AcceptLicensesCommand.builder()
+                .applicationId(id)
+                .acceptedLicenses(acceptTermsCommand.getAcceptedLicenses())
+                .build();
 
-        SuccessResponse response = remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(
+        var response = remsApplicationCommandApi.apiApplicationsAcceptLicensesPost(
                 remsApiKey, userId, remoteAcceptLicensesCommand);
 
         if (Boolean.FALSE.equals(response.getSuccess())) {
@@ -62,11 +62,15 @@ public class AcceptTermsService {
 
             log.warning(ACCEPT_TERMS_LOG.formatted(id, concatenatedErrors));
 
-            var errorMessages = nonNullErrors.stream()
-                    .map(it -> ERROR_MESSAGE.formatted(it))
+            var warnings = nonNullErrors.stream()
+                    .map(it -> ValidationWarning.builder()
+                            .key(it.getType())
+                            .formId(it.getFormId())
+                            .fieldId(it.getFieldId())
+                            .build())
                     .toList();
 
-            throw new AcceptTermsException(id, errorMessages);
+            throw new AcceptTermsException(id, warnings);
         }
     }
 }

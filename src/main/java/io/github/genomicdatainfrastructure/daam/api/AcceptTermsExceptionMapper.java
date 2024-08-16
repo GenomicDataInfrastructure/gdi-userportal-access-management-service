@@ -5,13 +5,13 @@
 package io.github.genomicdatainfrastructure.daam.api;
 
 import io.github.genomicdatainfrastructure.daam.exceptions.AcceptTermsException;
-import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
-
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+
+import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
 @Provider
 public class AcceptTermsExceptionMapper implements ExceptionMapper<AcceptTermsException> {
@@ -22,7 +22,7 @@ public class AcceptTermsExceptionMapper implements ExceptionMapper<AcceptTermsEx
                 "Could not accept terms",
                 BAD_REQUEST.getStatusCode(),
                 exception.getMessage(),
-                exception.getErrorMessages()
+                exception.getWarnings()
         );
 
         return Response

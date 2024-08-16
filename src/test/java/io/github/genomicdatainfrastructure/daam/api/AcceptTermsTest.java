@@ -4,10 +4,15 @@
 
 package io.github.genomicdatainfrastructure.daam.api;
 
+import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
+import io.github.genomicdatainfrastructure.daam.model.ValidationWarning;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
@@ -70,16 +75,30 @@ class AcceptTermsTest extends BaseTest {
 
     @Test
     void cannot_accept_terms_when_success_false() {
-        given()
+        var response = given()
                 .auth()
                 .oauth2(getAccessToken("alice"))
                 .contentType("application/json")
                 .body("{\"acceptedLicenses\": [3, 4]}")
                 .when()
-                .post("/api/v1/applications/44/accept-terms")
-                .then()
-                .statusCode(400)
-                .body("title", equalTo("Could not accept terms"));
+                .post("/api/v1/applications/44/accept-terms");
+
+        var actual = response.getBody().as(ErrorResponse.class);
+
+        var expected = ErrorResponse.builder()
+                .status(400)
+                .title("Could not accept terms")
+                .detail("Terms and Licenses of application 44 could not be accepted.")
+                .validationWarnings(List.of(
+                        ValidationWarning.builder()
+                                .key("dummy-error")
+                                .build()
+                ))
+                .build();
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
 }

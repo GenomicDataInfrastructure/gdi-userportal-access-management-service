@@ -68,7 +68,7 @@ public class SubmitApplicationService {
                             .build())
                     .toList();
 
-            throw new ApplicationSubmissionException(id, warnings);
+            throw new ApplicationSubmissionException(warnings);
         }
     }
 }

@@ -14,11 +14,11 @@ import static java.util.Optional.ofNullable;
 @Getter
 public class AcceptTermsException extends RuntimeException {
 
-    private static final String MESSAGE = "Terms and Licenses of application %s could not be accepted.";
+    private static final String MESSAGE = "Terms and conditions could not be accepted.";
     private final transient List<ValidationWarning> warnings;
 
-    public AcceptTermsException(Long applicationId, List<ValidationWarning> warnings) {
-        super(String.format(MESSAGE, applicationId));
+    public AcceptTermsException(List<ValidationWarning> warnings) {
+        super(MESSAGE);
         this.warnings = ofNullable(warnings).orElseGet(List::of);
     }
 }

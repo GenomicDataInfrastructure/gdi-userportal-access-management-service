@@ -5,9 +5,9 @@ package io.github.genomicdatainfrastructure.daam.exceptions;
 
 public class UserNotApplicantException extends RuntimeException {
 
-    private static final String MESSAGE = "User %s is not an applicant for application %s";
+    private static final String MESSAGE = "The user %s is not an applicant.";
 
-    public UserNotApplicantException(Long applicationId, String userId) {
-        super(MESSAGE.formatted(userId, applicationId));
+    public UserNotApplicantException(String userId) {
+        super(MESSAGE.formatted(userId));
     }
 }

@@ -83,7 +83,7 @@ class SubmitApplicationTest extends BaseTest {
         var expected = ErrorResponse.builder()
                 .status(400)
                 .title("Application could not be submitted")
-                .detail("Application 44 could not be submitted.")
+                .detail("The application could not be submitted.")
                 .validationWarnings(List.of(
                         ValidationWarning.builder()
                                 .key("Missing")

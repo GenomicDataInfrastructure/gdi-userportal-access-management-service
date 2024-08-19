@@ -1293,7 +1293,7 @@ components:
         warnings:
           type: array
           items:
-            type: string
+            $ref: "#/components/schemas/ValidationField"
         application-id:
           type: integer
           format: int64

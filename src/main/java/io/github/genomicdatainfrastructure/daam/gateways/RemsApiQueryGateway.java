@@ -4,19 +4,16 @@
 
 package io.github.genomicdatainfrastructure.daam.gateways;
 
-import static java.util.Comparator.comparing;
-import static java.util.Optional.ofNullable;
-
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotInCorrectStateException;
 import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationQueryApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsCatalogueItemQueryApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.Entitlement;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application.ApplicationStateEnum;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.ApplicationOverview;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.CatalogueItem;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.Entitlement;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.WebApplicationException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -24,6 +21,9 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.List;
 import java.util.Set;
+
+import static java.util.Comparator.comparing;
+import static java.util.Optional.ofNullable;
 
 @ApplicationScoped
 public class RemsApiQueryGateway {
@@ -54,7 +54,7 @@ public class RemsApiQueryGateway {
             );
         } catch (WebApplicationException e) {
             if (e.getResponse().getStatus() == 404) {
-                throw new ApplicationNotFoundException(applicationId);
+                throw new ApplicationNotFoundException();
             }
             throw e;
         }
@@ -73,12 +73,11 @@ public class RemsApiQueryGateway {
         var application = retrieveApplication(id, userId);
 
         if (!application.getApplicationApplicant().getUserid().equals(userId)) {
-            throw new UserNotApplicantException(id, userId);
+            throw new UserNotApplicantException(userId);
         }
 
         if (!EDITABLE_STATES.contains(application.getApplicationState())) {
             throw new ApplicationNotInCorrectStateException(
-                    id,
                     application.getApplicationState().value()
             );
         }

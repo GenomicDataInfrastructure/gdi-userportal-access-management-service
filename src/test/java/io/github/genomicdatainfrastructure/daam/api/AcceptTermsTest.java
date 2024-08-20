@@ -87,8 +87,8 @@ class AcceptTermsTest extends BaseTest {
 
         var expected = ErrorResponse.builder()
                 .status(400)
-                .title("Could not accept terms")
-                .detail("Terms and Licenses of application 44 could not be accepted.")
+                .title("Terms and conditions could not be accepted")
+                .detail("Terms and conditions could not be accepted.")
                 .validationWarnings(List.of(
                         ValidationWarning.builder()
                                 .key("dummy-error")

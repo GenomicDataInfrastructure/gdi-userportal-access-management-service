@@ -70,7 +70,7 @@ public class AcceptTermsService {
                             .build())
                     .toList();
 
-            throw new AcceptTermsException(id, warnings);
+            throw new AcceptTermsException(warnings);
         }
     }
 }

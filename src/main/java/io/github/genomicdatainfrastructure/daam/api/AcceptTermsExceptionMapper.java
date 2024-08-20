@@ -19,7 +19,7 @@ public class AcceptTermsExceptionMapper implements ExceptionMapper<AcceptTermsEx
     @Override
     public Response toResponse(AcceptTermsException exception) {
         var errorResponse = new ErrorResponse(
-                "Could not accept terms",
+                "Terms and conditions could not be accepted",
                 BAD_REQUEST.getStatusCode(),
                 exception.getMessage(),
                 exception.getWarnings()

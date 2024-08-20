@@ -13,11 +13,11 @@ import static java.util.Optional.ofNullable;
 @Getter
 public class ApplicationSubmissionException extends RuntimeException {
 
-    private static final String MESSAGE = "Application %s could not be submitted.";
+    private static final String MESSAGE = "The application could not be submitted.";
     private final transient List<ValidationWarning> warnings;
 
-    public ApplicationSubmissionException(Long applicationId, List<ValidationWarning> warnings) {
-        super(String.format(MESSAGE, applicationId));
+    public ApplicationSubmissionException(List<ValidationWarning> warnings) {
+        super(MESSAGE);
         this.warnings = ofNullable(warnings).orElseGet(List::of);
     }
 }

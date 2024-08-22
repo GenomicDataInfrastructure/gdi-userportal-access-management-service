@@ -10,19 +10,29 @@ import io.github.genomicdatainfrastructure.daam.services.ListApplicationsService
 import io.github.genomicdatainfrastructure.daam.services.RetrieveApplicationService;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
-import lombok.RequiredArgsConstructor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import java.util.List;
 
-import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
-
-@RequiredArgsConstructor
 public class ApplicationQueryApiImpl implements ApplicationQueryApi {
 
     private final SecurityIdentity identity;
     private final ListApplicationsService listApplicationsService;
     private final RetrieveApplicationService retrieveApplicationService;
+    private final String userIdClaim;
+
+    public ApplicationQueryApiImpl(
+            SecurityIdentity identity,
+            ListApplicationsService listApplicationsService,
+            RetrieveApplicationService retrieveApplicationService,
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") String userIdClaim
+    ) {
+        this.identity = identity;
+        this.listApplicationsService = listApplicationsService;
+        this.retrieveApplicationService = retrieveApplicationService;
+        this.userIdClaim = userIdClaim;
+    }
 
     @Override
     public List<ListedApplication> listApplicationsV1() {
@@ -43,6 +53,6 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
 
     private String userId() {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
-        return principal.getClaim(USER_ID_CLAIM);
+        return principal.getClaim(userIdClaim);
     }
 }

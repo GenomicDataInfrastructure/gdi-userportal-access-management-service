@@ -8,13 +8,10 @@ import io.github.genomicdatainfrastructure.daam.services.*;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.ws.rs.core.Response;
-import lombok.RequiredArgsConstructor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.List;
 
-import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
-
-@RequiredArgsConstructor
 public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     private final SecurityIdentity identity;
@@ -23,6 +20,25 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     private final SubmitApplicationService submitApplicationService;
     private final AttachFileToApplicationService attachFileToApplicationService;
     private final AcceptTermsService acceptTermsService;
+    private final String userIdClaim;
+
+    public ApplicationCommandApiImpl(
+            SecurityIdentity identity,
+            SaveApplicationService saveApplicationService,
+            CreateApplicationService createApplicationService,
+            SubmitApplicationService submitApplicationService,
+            AttachFileToApplicationService attachFileToApplicationService,
+            AcceptTermsService acceptTermsService,
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") String userIdClaim
+    ) {
+        this.identity = identity;
+        this.saveApplicationService = saveApplicationService;
+        this.createApplicationService = createApplicationService;
+        this.submitApplicationService = submitApplicationService;
+        this.attachFileToApplicationService = attachFileToApplicationService;
+        this.acceptTermsService = acceptTermsService;
+        this.userIdClaim = userIdClaim;
+    }
 
     @Override
     public Response addEventToApplicationV1(Long id, AddApplicationEvent addApplicationEvent) {
@@ -101,15 +117,15 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
         );
     }
 
-    private String userId() {
-        var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
-        return principal.getClaim(USER_ID_CLAIM);
-    }
-
     @Override
     public Response acceptApplicationTermsV1(Long id, AcceptTermsCommand acceptTermsCommand) {
         String userId = userId();
         acceptTermsService.acceptTerms(id, userId, acceptTermsCommand);
         return Response.noContent().build();
+    }
+
+    private String userId() {
+        var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
+        return principal.getClaim(userIdClaim);
     }
 }

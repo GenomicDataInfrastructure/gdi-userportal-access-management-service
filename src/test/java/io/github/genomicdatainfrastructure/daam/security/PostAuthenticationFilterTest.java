@@ -27,8 +27,8 @@ class PostAuthenticationFilterTest {
     private CreateRemsUserService createRemsUserService;
 
     @BeforeEach
-    private void setUp() {
-        underTest = new PostAuthenticationFilter(securityIdentity, createRemsUserService);
+    void setUp() {
+        underTest = new PostAuthenticationFilter(securityIdentity, createRemsUserService, "sub");
     }
 
     @Test
@@ -44,7 +44,7 @@ class PostAuthenticationFilterTest {
 
         var principalMock = mock(OidcJwtCallerPrincipal.class);
 
-        when(principalMock.getClaim("elixir_id")).thenReturn("dummy_id");
+        when(principalMock.getClaim("sub")).thenReturn("dummy_id");
         when(principalMock.getClaim("preferred_username")).thenReturn("dummy_username");
         when(principalMock.getClaim("email")).thenReturn("dummy_email");
         when(securityIdentity.getPrincipal()).thenReturn(principalMock);

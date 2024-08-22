@@ -8,16 +8,23 @@ import io.github.genomicdatainfrastructure.daam.model.RetrieveGrantedDatasetIden
 import io.github.genomicdatainfrastructure.daam.services.RetrieveGrantedDatasetIdentifiersService;
 import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
 import io.quarkus.security.identity.SecurityIdentity;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import lombok.RequiredArgsConstructor;
-
-import static io.github.genomicdatainfrastructure.daam.security.PostAuthenticationFilter.USER_ID_CLAIM;
-
-@RequiredArgsConstructor
 public class EntitlementQueryApiImpl implements EntitlementQueryApi {
 
     private final SecurityIdentity identity;
     private final RetrieveGrantedDatasetIdentifiersService retrieveGrantedDatasetIdentifiersService;
+    private final String userIdClaim;
+
+    public EntitlementQueryApiImpl(
+            SecurityIdentity identity,
+            RetrieveGrantedDatasetIdentifiersService retrieveGrantedDatasetIdentifiersService,
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") String userIdClaim
+    ) {
+        this.identity = identity;
+        this.retrieveGrantedDatasetIdentifiersService = retrieveGrantedDatasetIdentifiersService;
+        this.userIdClaim = userIdClaim;
+    }
 
     @Override
     public RetrieveGrantedDatasetIdentifiers retrieveGrantedDatasetIdentifiers() {
@@ -26,6 +33,6 @@ public class EntitlementQueryApiImpl implements EntitlementQueryApi {
 
     private String userId() {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
-        return principal.getClaim(USER_ID_CLAIM);
+        return principal.getClaim(userIdClaim);
     }
 }

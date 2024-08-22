@@ -12,6 +12,7 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static java.util.Optional.of;
 import static org.mockito.Mockito.*;
 
 @QuarkusTest
@@ -28,7 +29,8 @@ class PostAuthenticationFilterTest {
 
     @BeforeEach
     void setUp() {
-        underTest = new PostAuthenticationFilter(securityIdentity, createRemsUserService, "sub");
+        underTest = new PostAuthenticationFilter(securityIdentity, createRemsUserService, of(
+                "sub"));
     }
 
     @Test

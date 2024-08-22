@@ -14,6 +14,10 @@ import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.ext.Provider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import java.util.Optional;
+
+import static io.github.genomicdatainfrastructure.daam.api.ApplicationQueryApiImpl.DEFAULT_USER_ID_CLAIM;
+
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class PostAuthenticationFilter implements ContainerRequestFilter {
@@ -23,13 +27,13 @@ public class PostAuthenticationFilter implements ContainerRequestFilter {
 
     private final SecurityIdentity identity;
     private final CreateRemsUserService createRemsUserService;
-    private final String userIdClaim;
+    private final Optional<String> userIdClaim;
 
     @Inject
     public PostAuthenticationFilter(
             SecurityIdentity identity,
             CreateRemsUserService createRemsUserService,
-            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim", defaultValue = "elixir_id") String userIdClaim
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") Optional<String> userIdClaim
     ) {
         this.identity = identity;
         this.createRemsUserService = createRemsUserService;
@@ -42,7 +46,7 @@ public class PostAuthenticationFilter implements ContainerRequestFilter {
             var oidcPrincipal = (OidcJwtCallerPrincipal) identity.getPrincipal();
 
             createRemsUserService.createRemsUser(
-                    oidcPrincipal.getClaim(userIdClaim),
+                    oidcPrincipal.getClaim(userIdClaim.orElse(DEFAULT_USER_ID_CLAIM)),
                     oidcPrincipal.getClaim(USER_NAME_CLAIM),
                     oidcPrincipal.getClaim(EMAIL_CLAIM)
             );

@@ -14,19 +14,22 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ApplicationQueryApiImpl implements ApplicationQueryApi {
+
+    public static final String DEFAULT_USER_ID_CLAIM = "elixir_id";
 
     private final SecurityIdentity identity;
     private final ListApplicationsService listApplicationsService;
     private final RetrieveApplicationService retrieveApplicationService;
-    private final String userIdClaim;
+    private final Optional<String> userIdClaim;
 
     public ApplicationQueryApiImpl(
             SecurityIdentity identity,
             ListApplicationsService listApplicationsService,
             RetrieveApplicationService retrieveApplicationService,
-            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim", defaultValue = "elixir_id") String userIdClaim
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") Optional<String> userIdClaim
     ) {
         this.identity = identity;
         this.listApplicationsService = listApplicationsService;
@@ -53,6 +56,6 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
 
     private String userId() {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
-        return principal.getClaim(userIdClaim);
+        return principal.getClaim(userIdClaim.orElse(DEFAULT_USER_ID_CLAIM));
     }
 }

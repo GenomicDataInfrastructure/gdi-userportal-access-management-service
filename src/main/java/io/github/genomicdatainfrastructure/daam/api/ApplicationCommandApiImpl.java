@@ -11,6 +11,9 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.List;
+import java.util.Optional;
+
+import static io.github.genomicdatainfrastructure.daam.api.ApplicationQueryApiImpl.DEFAULT_USER_ID_CLAIM;
 
 public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
@@ -20,7 +23,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     private final SubmitApplicationService submitApplicationService;
     private final AttachFileToApplicationService attachFileToApplicationService;
     private final AcceptTermsService acceptTermsService;
-    private final String userIdClaim;
+    private final Optional<String> userIdClaim;
 
     public ApplicationCommandApiImpl(
             SecurityIdentity identity,
@@ -29,7 +32,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
             SubmitApplicationService submitApplicationService,
             AttachFileToApplicationService attachFileToApplicationService,
             AcceptTermsService acceptTermsService,
-            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim", defaultValue = "elixir_id") String userIdClaim
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") Optional<String> userIdClaim
     ) {
         this.identity = identity;
         this.saveApplicationService = saveApplicationService;
@@ -126,6 +129,6 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     private String userId() {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
-        return principal.getClaim(userIdClaim);
+        return principal.getClaim(userIdClaim.orElse(DEFAULT_USER_ID_CLAIM));
     }
 }

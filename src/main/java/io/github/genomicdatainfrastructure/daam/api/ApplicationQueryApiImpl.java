@@ -26,7 +26,7 @@ public class ApplicationQueryApiImpl implements ApplicationQueryApi {
             SecurityIdentity identity,
             ListApplicationsService listApplicationsService,
             RetrieveApplicationService retrieveApplicationService,
-            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") String userIdClaim
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim", defaultValue = "elixir_id") String userIdClaim
     ) {
         this.identity = identity;
         this.listApplicationsService = listApplicationsService;

@@ -29,7 +29,7 @@ public class PostAuthenticationFilter implements ContainerRequestFilter {
     public PostAuthenticationFilter(
             SecurityIdentity identity,
             CreateRemsUserService createRemsUserService,
-            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") String userIdClaim
+            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim", defaultValue = "elixir_id") String userIdClaim
     ) {
         this.identity = identity;
         this.createRemsUserService = createRemsUserService;

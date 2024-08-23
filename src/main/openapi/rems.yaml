@@ -931,7 +931,6 @@ components:
         values:
           type: array
           items:
-            type: object
             $ref: "#/components/schemas/Response10953ResourcesDuoCodesRestrictionsValues"
     Response10953ResourcesDuoCodesRestrictionsValues:
       required:
@@ -1111,6 +1110,7 @@ components:
           items:
             type: object
     V2License:
+      type: object
       required:
         - license/type
         - license/title
@@ -1136,16 +1136,12 @@ components:
         license/archived:
           type: boolean
         license/link:
-          type: object
           $ref: "#/components/schemas/LocalizedString"
         license/attachment-filename:
-          type: object
           $ref: "#/components/schemas/LocalizedString"
         license/text:
-          type: object
           $ref: "#/components/schemas/LocalizedString"
         license/attachment-id:
-          type: object
           $ref: "#/components/schemas/LocalizedInt"
     Form:
       required:
@@ -1157,6 +1153,8 @@ components:
         form/id:
           type: integer
           format: int64
+        form/title:
+          type: string
         form/internal-name:
           type: string
         form/external-title:
@@ -1198,13 +1196,61 @@ components:
             - attachment
             - text
         field/value:
-          type: string
+          # Parsing from OpenAPI to Java does not support oneOf
+          #oneOf:
+          #  - type: string
+          #  - type: array
+          #    items:
+          #      $ref: "#/components/schemas/FormTemplateTableValue"
+          type: object
           example: value
           description: 'A string for most fields, or [[{"column": string, "value": string}]] for table fields'
         field/id:
           type: string
+        field/info-text:
+          $ref: "#/components/schemas/LocalizedString"
         field/optional:
           type: boolean
+        field/max-length:
+          type: integer
+          format: int64
+        field/privacy:
+          type: string
+          nullable: true
+          enum:
+            - private
+            - public
+        field/options:
+          type: array
+          items:
+            $ref: "#/components/schemas/FormTemplateFieldOption"
+        field/columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/FormTemplateFieldColumn"
+        field/placeholder:
+          $ref: "#/components/schemas/LocalizedString"
+    FormTemplateTableValue:
+      type: object
+      properties:
+        column:
+          type: string
+        value:
+          type: string
+    FormTemplateFieldOption:
+      type: object
+      properties:
+        key:
+          type: string
+        label:
+          $ref: "#/components/schemas/LocalizedString"
+    FormTemplateFieldColumn:
+      type: object
+      properties:
+        key:
+          type: string
+        label:
+          $ref: "#/components/schemas/LocalizedString"
     Event:
       required:
         - event/type
@@ -1360,9 +1406,9 @@ components:
         field:
           type: string
         value:
+          type: object
           example: value
           description: 'A string for most fields, or [[{"column": string, "value": string}]] for table fields'
-          type: string
       additionalProperties: false
       required:
         - form

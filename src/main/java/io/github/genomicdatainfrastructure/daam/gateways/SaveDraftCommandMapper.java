@@ -4,17 +4,20 @@
 
 package io.github.genomicdatainfrastructure.daam.gateways;
 
-import static java.util.Optional.ofNullable;
+import io.github.genomicdatainfrastructure.daam.model.SaveForm;
+import io.github.genomicdatainfrastructure.daam.model.SaveFormField;
+import io.github.genomicdatainfrastructure.daam.model.SaveFormsAndDuos;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.FormTemplateTableValue;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.SaveDraftCommand;
+import io.github.genomicdatainfrastructure.daam.remote.rems.model.SaveDraftCommandFieldValues;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import io.github.genomicdatainfrastructure.daam.model.SaveForm;
-import io.github.genomicdatainfrastructure.daam.model.SaveFormField;
-import io.github.genomicdatainfrastructure.daam.model.SaveFormsAndDuos;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.SaveDraftCommand;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.SaveDraftCommandFieldValues;
+import static java.util.Optional.ofNullable;
+import static java.util.function.Predicate.not;
 
 public class SaveDraftCommandMapper {
 
@@ -47,10 +50,23 @@ public class SaveDraftCommandMapper {
     }
 
     private static SaveDraftCommandFieldValues parseFieldValue(SaveForm form, SaveFormField field) {
+        Object value = field.getValue();
+        if (Objects.nonNull(field.getTableValues())) {
+            value = field.getTableValues().stream()
+                    .filter(Objects::nonNull)
+                    .filter(not(Collection::isEmpty))
+                    .map(it -> it.stream()
+                            .map(columnValue -> FormTemplateTableValue.builder()
+                                    .column(columnValue.getColumn())
+                                    .value(columnValue.getValue())
+                                    .build()).toList()
+                    )
+                    .toList();
+        }
         return SaveDraftCommandFieldValues.builder()
                 .form(form.getFormId())
                 .field(field.getFieldId())
-                .value(field.getValue())
+                .value(value)
                 .build();
     }
 }

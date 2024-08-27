@@ -4,6 +4,7 @@
 
 package io.github.genomicdatainfrastructure.daam.gateways;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,12 +24,12 @@ class RemsApplicationMapperTest {
 
     @BeforeEach
     void setUp() {
-        underTest = new RemsApplicationMapper();
+        underTest = new RemsApplicationMapper(new ObjectMapper());
     }
 
     @Test
     void should_map_correctly_complete_rems_application_to_retrieved_application() {
-        RetrievedApplication retrievedApplication = underTest.from("dummy", createApplication());
+        var retrievedApplication = underTest.from("dummy", createApplication());
 
         assertThat(retrievedApplication.getId()).isEqualTo(1L);
         assertThat(retrievedApplication.getExternalId()).isEqualTo("APP20240328");
@@ -63,16 +65,111 @@ class RemsApplicationMapperTest {
                         new Label("de", "Title in German")), List.of(new Label("fr",
                                 "Url info in French"), new Label("de", "Url info in German"))));
 
-        assertThat(retrievedApplication.getForms()).containsExactlyInAnyOrder(
-                new RetrievedApplicationForm(
-                        4L,
-                        "form-access-1",
-                        List.of(new Label("en", "External title in English"), new Label("fr",
-                                "External title in French")),
-                        List.of(new RetrievedApplicationFormField("98", "ulrich.smith@outlook.de",
-                                true, false, true,
-                                List.of(new Label("en", "Field in English"), new Label("fr",
-                                        "Field in French")), "email"))));
+        assertThat(retrievedApplication.getForms())
+                .containsExactlyInAnyOrder(RetrievedApplicationForm.builder()
+                        .id(4L)
+                        .internalName("form-access-1")
+                        .externalTitle(List.of(
+                                new Label("en", "External title in English"),
+                                new Label("fr", "External title in French")
+                        ))
+                        .fields(List.of(
+                                RetrievedApplicationFormField.builder()
+                                        .id("98")
+                                        .value("ulrich.smith@outlook.de")
+                                        .optional(true)
+                                        ._private(false)
+                                        .visible(true)
+                                        .title(List.of(
+                                                new Label("en", "Field in English"),
+                                                new Label("fr", "Field in French")
+                                        ))
+                                        .type("email")
+                                        .options(List.of())
+                                        .tableValues(List.of())
+                                        .tableColumns(List.of())
+                                        .infoText(List.of())
+                                        .placeholder(List.of())
+                                        .build(),
+                                RetrievedApplicationFormField.builder()
+                                        .id("99")
+                                        .infoText(List.of(
+                                                new Label("en", "Additional information")
+                                        ))
+                                        .placeholder(List.of(
+                                                new Label("en", "Placeholder")
+                                        ))
+                                        .maxLength(100L)
+                                        .privacy(RetrievedApplicationFormField.PrivacyEnum.PRIVATE)
+                                        .tableValues(List.of())
+                                        .tableColumns(List.of())
+                                        .options(List.of(
+                                                FormFieldOption.builder()
+                                                        .key("option1")
+                                                        .label(List.of(Label.builder()
+                                                                .language("en")
+                                                                .name("option 1")
+                                                                .build()))
+                                                        .build(),
+                                                FormFieldOption.builder()
+                                                        .key("option2")
+                                                        .label(List.of(Label.builder()
+                                                                .language("en")
+                                                                .name("option 2")
+                                                                .build()))
+                                                        .build()
+                                        ))
+                                        .optional(true)
+                                        ._private(false)
+                                        .visible(true)
+                                        .title(List.of(
+                                                new Label("en", "Field in English"),
+                                                new Label("fr", "Field in French")
+                                        ))
+                                        .type("multiselect")
+                                        .build(),
+                                RetrievedApplicationFormField.builder()
+                                        .id("100")
+                                        .tableValues(List.of(
+                                                List.of(
+                                                        FormFieldTableValue.builder()
+                                                                .column("column1")
+                                                                .value("value1")
+                                                                .build(),
+                                                        FormFieldTableValue.builder()
+                                                                .column("column2")
+                                                                .value("value2")
+                                                                .build()
+                                                )
+                                        ))
+                                        .tableColumns(List.of(
+                                                FormFieldTableColumn.builder()
+                                                        .key("column1")
+                                                        .label(List.of(
+                                                                new Label("en", "Column 1")
+                                                        ))
+                                                        .build(),
+                                                FormFieldTableColumn.builder()
+                                                        .key("column2")
+                                                        .label(List.of(
+                                                                new Label("en", "Column 2")
+                                                        ))
+                                                        .build()
+                                        ))
+                                        .options(List.of())
+                                        .optional(true)
+                                        ._private(false)
+                                        .visible(true)
+                                        .title(List.of(
+                                                new Label("en", "Field in English"),
+                                                new Label("fr", "Field in French")
+                                        ))
+                                        .type("table")
+                                        .infoText(List.of())
+                                        .placeholder(List.of())
+                                        .build()
+                        ))
+                        .build());
 
         assertThat(retrievedApplication.getInvitedMembers()).containsExactlyInAnyOrder(
                 new RetrievedApplicationInvitedMember("Kate", "kate.tominay@gmail.com"),
@@ -161,9 +258,74 @@ class RemsApplicationMapperTest {
         fieldTitleResourceId4.put("fr", "Field in French");
 
         return List.of(
-                new Form(4L, "form-access-1", formTitleResourceId4,
-                        List.of(new Field(false, fieldTitleResourceId4, true,
-                                Field.FieldTypeEnum.EMAIL, "ulrich.smith@outlook.de", "98", true)))
+                Form.builder()
+                        .formId(4L)
+                        .formInternalName("form-access-1")
+                        .formExternalTitle(formTitleResourceId4)
+                        .formFields(List.of(
+                                Field.builder()
+                                        .fieldId("98")
+                                        .fieldValue("ulrich.smith@outlook.de")
+                                        .fieldOptional(true)
+                                        .fieldPrivate(false)
+                                        .fieldVisible(true)
+                                        .fieldTitle(fieldTitleResourceId4)
+                                        .fieldType(Field.FieldTypeEnum.EMAIL)
+                                        .build(),
+                                Field.builder()
+                                        .fieldId("99")
+                                        .fieldInfoText(Map.of("en", "Additional information"))
+                                        .fieldPlaceholder(Map.of("en", "Placeholder"))
+                                        .fieldMaxLength(100L)
+                                        .fieldPrivacy(Field.FieldPrivacyEnum.PRIVATE)
+                                        .fieldOptions(List.of(
+                                                FormTemplateFieldOption.builder()
+                                                        .key("option1")
+                                                        .label(Map.of("en", "option 1"))
+                                                        .build(),
+                                                FormTemplateFieldOption.builder()
+                                                        .key("option2")
+                                                        .label(Map.of("en", "option 2"))
+                                                        .build()
+                                        ))
+                                        .fieldOptional(true)
+                                        .fieldPrivate(false)
+                                        .fieldVisible(true)
+                                        .fieldTitle(fieldTitleResourceId4)
+                                        .fieldType(Field.FieldTypeEnum.MULTISELECT)
+                                        .build(),
+                                Field.builder()
+                                        .fieldId("100")
+                                        .fieldValue(List.of(
+                                                List.of(
+                                                        FormTemplateTableValue.builder()
+                                                                .column("column1")
+                                                                .value("value1")
+                                                                .build(),
+                                                        FormTemplateTableValue.builder()
+                                                                .column("column2")
+                                                                .value("value2")
+                                                                .build()
+                                                )
+                                        ))
+                                        .fieldColumns(List.of(
+                                                FormTemplateFieldColumn.builder()
+                                                        .key("column1")
+                                                        .label(Map.of("en", "Column 1"))
+                                                        .build(),
+                                                FormTemplateFieldColumn.builder()
+                                                        .key("column2")
+                                                        .label(Map.of("en", "Column 2"))
+                                                        .build()
+                                        ))
+                                        .fieldOptional(true)
+                                        .fieldPrivate(false)
+                                        .fieldVisible(true)
+                                        .fieldTitle(fieldTitleResourceId4)
+                                        .fieldType(Field.FieldTypeEnum.TABLE)
+                                        .build()
+                        ))
+                        .build()
         );
     }
 

@@ -656,6 +656,12 @@ components:
         value:
           type: string
           title: Field value
+        tableValues:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/FormFieldTableValue"
     SaveDUOCode:
       properties:
         duoId:
@@ -689,7 +695,6 @@ components:
           type: integer
           format: int64
         applicant:
-          title: Applicant
           $ref: "#/components/schemas/RetrievedApplicationApplicant"
         members:
           type: array
@@ -867,6 +872,60 @@ components:
         type:
           type: string
           title: Field type
+        tableValues:
+          title: Table Values
+          type: array
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/FormFieldTableValue"
+        tableColumns:
+          title: Table Columns
+          type: array
+          items:
+            $ref: "#/components/schemas/FormFieldTableColumn"
+        infoText:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+        placeholder:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+        maxLength:
+          type: integer
+          format: int64
+        privacy:
+          type: string
+          enum:
+            - private
+            - public
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/FormFieldOption"
+    FormFieldTableValue:
+      properties:
+        column:
+          type: string
+        value:
+          type: string
+    FormFieldOption:
+      properties:
+        key:
+          type: string
+        label:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+    FormFieldTableColumn:
+      properties:
+        key:
+          type: string
+        label:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
     Label:
       properties:
         language:

@@ -4,16 +4,22 @@
 
 package io.github.genomicdatainfrastructure.daam.gateways;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.genomicdatainfrastructure.daam.model.*;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.*;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
 import static java.util.Optional.ofNullable;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class RemsApplicationMapper {
+
+    private final ObjectMapper mapper;
 
     public RetrievedApplication from(String userId, Application application) {
         return RetrievedApplication
@@ -172,29 +178,78 @@ public class RemsApplicationMapper {
 
         return potentialFields.map(fields -> fields
                 .stream()
+                .filter(Objects::nonNull)
                 .map(this::toFormField)
                 .toList())
                 .orElse(null);
     }
 
     private RetrievedApplicationFormField toFormField(Field formField) {
-        var potentialFormField = ofNullable(formField);
+        var type = formField.getFieldType();
 
-        return new RetrievedApplicationFormField(potentialFormField.map(Field::getFieldId).orElse(
-                null),
-                potentialFormField.map(Field::getFieldValue).orElse(null),
-                potentialFormField.map(Field::getFieldOptional).orElse(null),
-                potentialFormField.map(Field::getFieldPrivate).orElse(null),
-                potentialFormField.map(Field::getFieldVisible).orElse(null),
-                potentialFormField.map(f -> toLabelObject(f.getFieldTitle())).orElse(null),
-                potentialFormField.map(this::toFieldType).orElse(null));
+        var value = formField.getFieldValue();
+
+        String stringValue = null;
+        var tableValues = List.<List<FormFieldTableValue>>of();
+
+        if (Field.FieldTypeEnum.TABLE == type) {
+            tableValues = mapper.convertValue(value, new TypeReference<>() {
+            });
+        } else {
+            stringValue = ofNullable(value).map(Object::toString).orElse(null);
+        }
+
+        return RetrievedApplicationFormField.builder()
+                .id(formField.getFieldId())
+                .value(stringValue)
+                .optional(formField.getFieldOptional())
+                ._private(formField.getFieldPrivate())
+                .visible(formField.getFieldVisible())
+                .title(toLabelObject(formField.getFieldTitle()))
+                .type(ofNullable(type).map(Field.FieldTypeEnum::value).orElse(null))
+                .tableValues(tableValues)
+                .infoText(toLabelObject(formField.getFieldInfoText()))
+                .placeholder(toLabelObject(formField.getFieldPlaceholder()))
+                .maxLength(formField.getFieldMaxLength())
+                .privacy(toPrivacy(formField))
+                .options(toOptions(formField))
+                .tableColumns(toColumns(formField))
+                .build();
     }
 
-    private String toFieldType(Field field) {
-        var fieldType = Optional.of(field.getFieldType());
-
-        return fieldType.map(Field.FieldTypeEnum::value)
+    private RetrievedApplicationFormField.PrivacyEnum toPrivacy(Field formField) {
+        return ofNullable(formField)
+                .map(Field::getFieldPrivacy)
+                .map(it -> RetrievedApplicationFormField.PrivacyEnum.fromString(it.value()))
                 .orElse(null);
+    }
+
+    private List<FormFieldOption> toOptions(Field formField) {
+        var nonNullOptions = ofNullable(formField)
+                .map(Field::getFieldOptions)
+                .orElseGet(List::of);
+
+        return nonNullOptions.stream()
+                .filter(Objects::nonNull)
+                .map(it -> FormFieldOption.builder()
+                        .key(it.getKey())
+                        .label(toLabelObject(it.getLabel()))
+                        .build())
+                .toList();
+    }
+
+    private List<FormFieldTableColumn> toColumns(Field formField) {
+        var nonNullOptions = ofNullable(formField)
+                .map(Field::getFieldColumns)
+                .orElseGet(List::of);
+
+        return nonNullOptions.stream()
+                .filter(Objects::nonNull)
+                .map(it -> FormFieldTableColumn.builder()
+                        .key(it.getKey())
+                        .label(toLabelObject(it.getLabel()))
+                        .build())
+                .toList();
     }
 
     private List<String> toPermissions(Application application) {
@@ -210,7 +265,8 @@ public class RemsApplicationMapper {
     private String toPermission(Application.ApplicationPermissionsEnum permission) {
         var potentialPermission = ofNullable(permission);
 
-        return potentialPermission.map(Application.ApplicationPermissionsEnum::value)
+        return potentialPermission
+                .map(Application.ApplicationPermissionsEnum::value)
                 .orElse(null);
     }
 
@@ -220,25 +276,22 @@ public class RemsApplicationMapper {
 
         return potentialEvents
                 .stream()
-                .map(this::toEvent)
                 .filter(Objects::nonNull)
+                .map(this::toEvent)
                 .sorted(Comparator.comparing(RetrievedApplicationEvent::getEventTime).reversed())
                 .toList();
     }
 
     private RetrievedApplicationEvent toEvent(Event event) {
-        var potentialEvent = ofNullable(event);
-
-        return new RetrievedApplicationEvent(
-                potentialEvent.map(this::toUserId).orElse(null),
-                potentialEvent.map(Event::getEventTime).orElse(null),
-                potentialEvent.map(Event::getEventType).orElse(null));
+        return RetrievedApplicationEvent.builder()
+                .actorId(toUserId(event))
+                .eventTime(event.getEventTime())
+                .eventType(event.getEventType())
+                .build();
     }
 
     private String toUserId(Event event) {
-        var eventActorAttributes = ofNullable(event
-                .getEventActorAttributes());
-
+        var eventActorAttributes = ofNullable(event.getEventActorAttributes());
         return eventActorAttributes.map(UserWithAttributes::getUserid).orElse(null);
     }
 

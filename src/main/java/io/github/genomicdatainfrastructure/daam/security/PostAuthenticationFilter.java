@@ -12,9 +12,7 @@ import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.ext.Provider;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
-import java.util.Optional;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import static io.github.genomicdatainfrastructure.daam.api.ApplicationQueryApiImpl.DEFAULT_USER_ID_CLAIM;
 
@@ -27,22 +25,22 @@ public class PostAuthenticationFilter implements ContainerRequestFilter {
 
     private final SecurityIdentity identity;
     private final CreateRemsUserService createRemsUserService;
-    private final Optional<String> userIdClaim;
 
     @Inject
     public PostAuthenticationFilter(
             SecurityIdentity identity,
-            CreateRemsUserService createRemsUserService,
-            @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") Optional<String> userIdClaim
+            CreateRemsUserService createRemsUserService
     ) {
         this.identity = identity;
         this.createRemsUserService = createRemsUserService;
-        this.userIdClaim = userIdClaim;
     }
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
         if (!identity.isAnonymous()) {
+            var userIdClaim = ConfigProvider.getConfig().getOptionalValue(
+                    "quarkus.rest-client.rems_yaml.user-id-claim", String.class);
+
             var oidcPrincipal = (OidcJwtCallerPrincipal) identity.getPrincipal();
 
             createRemsUserService.createRemsUser(

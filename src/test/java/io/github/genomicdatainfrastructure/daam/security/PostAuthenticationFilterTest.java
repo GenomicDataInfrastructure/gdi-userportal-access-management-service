@@ -12,7 +12,6 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static java.util.Optional.of;
 import static org.mockito.Mockito.*;
 
 @QuarkusTest
@@ -29,8 +28,7 @@ class PostAuthenticationFilterTest {
 
     @BeforeEach
     void setUp() {
-        underTest = new PostAuthenticationFilter(securityIdentity, createRemsUserService, of(
-                "sub"));
+        underTest = new PostAuthenticationFilter(securityIdentity, createRemsUserService);
     }
 
     @Test
@@ -46,7 +44,7 @@ class PostAuthenticationFilterTest {
 
         var principalMock = mock(OidcJwtCallerPrincipal.class);
 
-        when(principalMock.getClaim("sub")).thenReturn("dummy_id");
+        when(principalMock.getClaim("elixir_id")).thenReturn("dummy_id");
         when(principalMock.getClaim("preferred_username")).thenReturn("dummy_username");
         when(principalMock.getClaim("email")).thenReturn("dummy_email");
         when(securityIdentity.getPrincipal()).thenReturn(principalMock);

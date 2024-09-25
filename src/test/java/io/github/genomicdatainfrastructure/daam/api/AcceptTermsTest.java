@@ -69,7 +69,7 @@ class AcceptTermsTest extends BaseTest {
                 .when()
                 .post("/api/v1/applications/2/accept-terms")
                 .then()
-                .statusCode(428)
+                .statusCode(409)
                 .body("title", equalTo("Application Not In Correct State"));
     }
 

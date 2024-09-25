@@ -8,6 +8,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
 class DeleteApplicationTest extends BaseTest {
@@ -31,7 +32,9 @@ class DeleteApplicationTest extends BaseTest {
                 .when()
                 .delete("/api/v1/applications/12345")
                 .then()
-                .statusCode(404);
+                .statusCode(404)
+                .body("title", equalTo("Application Not Found"))
+                .body("detail", equalTo("The application was not found."));
     }
 
     @Test
@@ -42,7 +45,8 @@ class DeleteApplicationTest extends BaseTest {
                 .when()
                 .delete("/api/v1/applications/1")
                 .then()
-                .statusCode(403);
+                .statusCode(403)
+                .body("title", equalTo("User Not Applicant"));
     }
 
     @Test
@@ -53,7 +57,10 @@ class DeleteApplicationTest extends BaseTest {
                 .when()
                 .delete("/api/v1/applications/2")
                 .then()
-                .statusCode(409);
+                .statusCode(409)
+                .body("title", equalTo("Application Not In Correct State"))
+                .body("detail", equalTo(
+                        "The application is not in correct state: application.state/submitted."));
     }
 
     @Test

@@ -358,7 +358,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeleteDraftCommand"
+              $ref: "#/components/schemas/DeleteApplicationCommand"
         required: true
       responses:
         "200":
@@ -1537,15 +1537,12 @@ components:
       properties:
         organization/id:
           type: string
-    DeleteDraftCommand:
+    DeleteApplicationCommand:
       type: object
       properties:
         application-id:
           type: integer
           format: int64
-        expires-on:
-          type: string
-          format: date-time
       required:
         - application-id
     AcceptLicensesCommand:

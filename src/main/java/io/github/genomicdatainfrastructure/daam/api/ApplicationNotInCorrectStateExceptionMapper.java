@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package io.github.genomicdatainfrastructure.daam.api;
 
-import static jakarta.ws.rs.core.Response.Status.PRECONDITION_REQUIRED;
+import static jakarta.ws.rs.core.Response.Status.CONFLICT;
 
 import java.util.List;
 
@@ -22,13 +22,13 @@ public class ApplicationNotInCorrectStateExceptionMapper implements
     public Response toResponse(ApplicationNotInCorrectStateException exception) {
         var errorResponse = new ErrorResponse(
                 "Application Not In Correct State",
-                PRECONDITION_REQUIRED.getStatusCode(),
+                CONFLICT.getStatusCode(),
                 exception.getMessage(),
                 List.of()
         );
 
         return Response
-                .status(PRECONDITION_REQUIRED)
+                .status(CONFLICT)
                 .entity(errorResponse)
                 .type(MediaType.APPLICATION_JSON)
                 .build();

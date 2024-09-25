@@ -21,6 +21,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     private final SaveApplicationService saveApplicationService;
     private final CreateApplicationService createApplicationService;
     private final SubmitApplicationService submitApplicationService;
+    private final DeleteApplicationService deleteApplicationService;
     private final AttachFileToApplicationService attachFileToApplicationService;
     private final AcceptTermsService acceptTermsService;
     private final Optional<String> userIdClaim;
@@ -30,6 +31,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
             SaveApplicationService saveApplicationService,
             CreateApplicationService createApplicationService,
             SubmitApplicationService submitApplicationService,
+            DeleteApplicationService deleteApplicationService,
             AttachFileToApplicationService attachFileToApplicationService,
             AcceptTermsService acceptTermsService,
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") Optional<String> userIdClaim
@@ -38,6 +40,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
         this.saveApplicationService = saveApplicationService;
         this.createApplicationService = createApplicationService;
         this.submitApplicationService = submitApplicationService;
+        this.deleteApplicationService = deleteApplicationService;
         this.attachFileToApplicationService = attachFileToApplicationService;
         this.acceptTermsService = acceptTermsService;
         this.userIdClaim = userIdClaim;
@@ -70,6 +73,12 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
                 userId());
 
         return new CreateApplicationResponse().applicationId(applicationId);
+    }
+
+    @java.lang.Override
+    public Response deleteApplicationV1(Long id) {
+        deleteApplicationService.deleteApplication(id, userId());
+        return Response.noContent().build();
     }
 
     @Override

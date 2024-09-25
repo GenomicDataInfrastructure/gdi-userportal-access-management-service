@@ -336,6 +336,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SuccessApplicationResponse"
+  /api/applications/delete:
+    post:
+      tags:
+        - rems-application-command
+      summary: "Submit a `delete` command for an application. Only drafts can be deleted. Only applications can delete drafts. (roles: logged-in)"
+      parameters:
+        - name: x-rems-api-key
+          required: true
+          in: header
+          description: REMS API-Key (optional for UI, required for API)
+          schema:
+            type: string
+        - name: x-rems-user-id
+          required: true
+          in: header
+          description: user (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteApplicationCommand"
+        required: true
+      responses:
+        "200":
+          description: Attachment addition successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessApplicationResponse"
   /api/entitlements:
     get:
       tags:
@@ -1506,6 +1537,14 @@ components:
       properties:
         organization/id:
           type: string
+    DeleteApplicationCommand:
+      type: object
+      properties:
+        application-id:
+          type: integer
+          format: int64
+      required:
+        - application-id
     AcceptLicensesCommand:
       type: object
       required:

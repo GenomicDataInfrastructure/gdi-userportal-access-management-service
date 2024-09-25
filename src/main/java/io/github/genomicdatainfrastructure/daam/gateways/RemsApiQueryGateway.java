@@ -83,6 +83,20 @@ public class RemsApiQueryGateway {
         }
     }
 
+    public void checkIfApplicationIsDeletableByUser(Long id, String userId) {
+        var application = retrieveApplication(id, userId);
+
+        if (!application.getApplicationApplicant().getUserid().equals(userId)) {
+            throw new UserNotApplicantException(userId);
+        }
+
+        if (application.getApplicationState() != ApplicationStateEnum.DRAFT) {
+            throw new ApplicationNotInCorrectStateException(
+                    application.getApplicationState().value()
+            );
+        }
+    }
+
     public CatalogueItem retrieveCatalogueItemByResourceId(String userId, String resourceId) {
         var items = catalogueItemApi.apiCatalogueItemsGet(remsApiKey, userId, resourceId);
         if (items.isEmpty()) {

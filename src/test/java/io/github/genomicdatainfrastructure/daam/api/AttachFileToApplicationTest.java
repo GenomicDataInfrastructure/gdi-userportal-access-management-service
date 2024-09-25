@@ -63,7 +63,7 @@ class AttachFileToApplicationTest extends BaseTest {
                 .when()
                 .post("/api/v1/applications/2/attachments")
                 .then()
-                .statusCode(428);
+                .statusCode(409);
     }
 
     @Test

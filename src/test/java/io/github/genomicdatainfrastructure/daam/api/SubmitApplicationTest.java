@@ -58,7 +58,7 @@ class SubmitApplicationTest extends BaseTest {
                 .when()
                 .post("/api/v1/applications/2/submit")
                 .then()
-                .statusCode(428);
+                .statusCode(409);
     }
 
     @Test

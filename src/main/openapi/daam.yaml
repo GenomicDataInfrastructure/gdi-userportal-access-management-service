@@ -85,6 +85,43 @@ paths:
       security:
         - daam_auth:
             - read:applications
+    delete:
+      summary: Delete application
+      operationId: delete_application_v1
+      tags:
+        - "application-command"
+      parameters:
+        - name: id
+          in: path
+          description: ID of application to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Successful Response (no content)
+        "403":
+          description: Application does not belong to applicant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Application not in draft state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - daam_auth:
+            - read:applications
   /api/v1/applications/{id}/save-forms-and-duos:
     post:
       summary: save application forms and duos
@@ -119,7 +156,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "428":
+        "409":
           description: Application not in submittable state
           content:
             application/json:
@@ -163,7 +200,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "428":
+        "409":
           description: Application not in submittable state
           content:
             application/json:
@@ -288,7 +325,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "428":
+        "409":
           description: Application not in submittable state
           content:
             application/json:
@@ -346,7 +383,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "428":
+        "409":
           description: Application not in submittable state
           content:
             application/json:

@@ -19,7 +19,7 @@ class DeleteApplicationTest extends BaseTest {
                 .auth()
                 .oauth2(getAccessToken("alice"))
                 .when()
-                .post("/api/v1/applications/1/delete")
+                .delete("/api/v1/applications/1")
                 .then()
                 .statusCode(204);
     }
@@ -30,7 +30,7 @@ class DeleteApplicationTest extends BaseTest {
                 .auth()
                 .oauth2(getAccessToken("alice"))
                 .when()
-                .post("/api/v1/applications/12345/delete")
+                .delete("/api/v1/applications/12345")
                 .then()
                 .statusCode(404)
                 .body("title", equalTo("Application Not Found"))
@@ -43,7 +43,7 @@ class DeleteApplicationTest extends BaseTest {
                 .auth()
                 .oauth2(getAccessToken("jdoe"))
                 .when()
-                .post("/api/v1/applications/1/delete")
+                .delete("/api/v1/applications/1")
                 .then()
                 .statusCode(403)
                 .body("title", equalTo("User Not Applicant"));
@@ -55,7 +55,7 @@ class DeleteApplicationTest extends BaseTest {
                 .auth()
                 .oauth2(getAccessToken("alice"))
                 .when()
-                .post("/api/v1/applications/2/delete")
+                .delete("/api/v1/applications/2")
                 .then()
                 .statusCode(409)
                 .body("title", equalTo("Application Not In Correct State"))
@@ -67,7 +67,7 @@ class DeleteApplicationTest extends BaseTest {
     void cannot_delete_application_when_anonymous_request() {
         given()
                 .when()
-                .post("/api/v1/applications/1/delete")
+                .delete("/api/v1/applications/1")
                 .then()
                 .statusCode(401);
     }

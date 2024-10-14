@@ -128,9 +128,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore: point examples to gdi-userportal-deployment by @brunopacheco1 in https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service/pull/39
 - chore: improve code by @admy7 in https://github.com/GenomicDataInfrastructure/gdi-userportal-access-management-service/pull/31
 
-### Deprecated
-
-### Removed
 
 ### Fixed
 

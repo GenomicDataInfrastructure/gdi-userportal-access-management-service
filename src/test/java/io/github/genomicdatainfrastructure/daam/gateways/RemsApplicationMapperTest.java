@@ -44,7 +44,7 @@ class RemsApplicationMapperTest {
         assertThat(retrievedApplication.getModifiedAt()).isEqualTo(OffsetDateTime.parse(
                 "2024-03-20T15:18:24.97Z"));
         assertThat(retrievedApplication.getState()).isEqualTo(
-                RetrievedApplication.StateEnum.APPROVED);
+                RetrievedApplicationState.APPROVED);
         assertThat(retrievedApplication.getWorkflow()).isEqualTo(new RetrievedApplicationWorkflow(
                 1L, "workflowType"));
         assertThat(retrievedApplication.getApplicant()).isEqualTo(new RetrievedApplicationApplicant(
@@ -84,7 +84,7 @@ class RemsApplicationMapperTest {
                                                 new Label("en", "Field in English"),
                                                 new Label("fr", "Field in French")
                                         ))
-                                        .type("email")
+                                        .type(FormFieldType.EMAIL)
                                         .options(List.of())
                                         .tableValues(List.of())
                                         .tableColumns(List.of())
@@ -100,7 +100,7 @@ class RemsApplicationMapperTest {
                                                 new Label("en", "Placeholder")
                                         ))
                                         .maxLength(100L)
-                                        .privacy(RetrievedApplicationFormField.PrivacyEnum.PRIVATE)
+                                        .privacy(FormFieldPrivacy.PRIVATE)
                                         .tableValues(List.of())
                                         .tableColumns(List.of())
                                         .options(List.of(
@@ -126,7 +126,7 @@ class RemsApplicationMapperTest {
                                                 new Label("en", "Field in English"),
                                                 new Label("fr", "Field in French")
                                         ))
-                                        .type("multiselect")
+                                        .type(FormFieldType.MULTISELECT)
                                         .build(),
                                 RetrievedApplicationFormField.builder()
                                         .id("100")
@@ -164,7 +164,7 @@ class RemsApplicationMapperTest {
                                                 new Label("en", "Field in English"),
                                                 new Label("fr", "Field in French")
                                         ))
-                                        .type("table")
+                                        .type(FormFieldType.TABLE)
                                         .infoText(List.of())
                                         .placeholder(List.of())
                                         .build()

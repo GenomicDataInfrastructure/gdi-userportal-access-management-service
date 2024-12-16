@@ -206,7 +206,9 @@ public class RemsApplicationMapper {
                 ._private(formField.getFieldPrivate())
                 .visible(formField.getFieldVisible())
                 .title(toLabelObject(formField.getFieldTitle()))
-                .type(ofNullable(type).map(Field.FieldTypeEnum::value).orElse(null))
+                .type(ofNullable(type).map(Field.FieldTypeEnum::value).map(
+                        FormFieldType::fromString)
+                        .orElse(null))
                 .tableValues(tableValues)
                 .infoText(toLabelObject(formField.getFieldInfoText()))
                 .placeholder(toLabelObject(formField.getFieldPlaceholder()))
@@ -217,10 +219,10 @@ public class RemsApplicationMapper {
                 .build();
     }
 
-    private RetrievedApplicationFormField.PrivacyEnum toPrivacy(Field formField) {
+    private FormFieldPrivacy toPrivacy(Field formField) {
         return ofNullable(formField)
                 .map(Field::getFieldPrivacy)
-                .map(it -> RetrievedApplicationFormField.PrivacyEnum.fromString(it.value()))
+                .map(it -> FormFieldPrivacy.fromString(it.value()))
                 .orElse(null);
     }
 
@@ -353,18 +355,18 @@ public class RemsApplicationMapper {
                 .build();
     }
 
-    private RetrievedApplicationLicense.TypeEnum toLicenseType(V2License license) {
+    private LicenseType toLicenseType(V2License license) {
         var licenseType = ofNullable(license.getLicenseType());
         return licenseType.map(V2License.LicenseTypeEnum::value)
-                .map(RetrievedApplicationLicense.TypeEnum::fromString)
+                .map(LicenseType::fromString)
                 .orElse(null);
     }
 
-    private RetrievedApplication.StateEnum toState(Application application) {
+    private RetrievedApplicationState toState(Application application) {
         var potentialState = ofNullable(application
                 .getApplicationState());
 
-        return potentialState.map(state -> RetrievedApplication.StateEnum.fromString(state.value()))
+        return potentialState.map(state -> RetrievedApplicationState.fromString(state.value()))
                 .orElse(null);
     }
 

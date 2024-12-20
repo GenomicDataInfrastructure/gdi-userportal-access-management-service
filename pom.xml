@@ -9,7 +9,7 @@
     <version>0.0.0</version>
     <name>gdi-userportal-access-management-service</name>
     <properties>
-        <assertj.version>3.26.3</assertj.version>
+        <assertj.version>3.27.0</assertj.version>
         <checkstyle-maven-plugin.version>3.3.1</checkstyle-maven-plugin.version>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
         <lombok.version>1.18.36</lombok.version>

@@ -1,0 +1,32 @@
+package io.github.genomicdatainfrastructure.daam.api;
+
+import io.github.genomicdatainfrastructure.daam.exceptions.MemberNotInvitedException;
+import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+
+import java.util.List;
+
+import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
+
+@Provider
+public class MemberNotInvitedExceptionMapper implements ExceptionMapper<MemberNotInvitedException> {
+
+    @Override
+    public Response toResponse(MemberNotInvitedException exception) {
+        var errorResponse = new ErrorResponse(
+                exception.getMessage(),
+                BAD_REQUEST.getStatusCode(),
+                "",
+                List.of()
+        );
+
+        return Response
+                .status(BAD_REQUEST)
+                .entity(errorResponse)
+                .type(MediaType.APPLICATION_JSON)
+                .build();
+    }
+}

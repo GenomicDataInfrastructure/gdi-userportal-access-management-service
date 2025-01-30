@@ -60,6 +60,19 @@ public class RemsApiQueryGateway {
         }
     }
 
+    public boolean doesApplicationExist(Long applicationId, String userId) {
+        try {
+            applicationsApi.apiApplicationsApplicationIdGet(
+                    remsApiKey, userId, applicationId);
+        } catch (WebApplicationException e) {
+            if (e.getResponse().getStatus() == 404) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public List<ApplicationOverview> listApplications(String userId) {
         var list = applicationsApi.apiMyApplicationsGet(remsApiKey, userId, null);
         return ofNullable(list)

@@ -24,6 +24,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     private final DeleteApplicationService deleteApplicationService;
     private final AttachFileToApplicationService attachFileToApplicationService;
     private final AcceptTermsService acceptTermsService;
+    private final InviteMemberService inviteMemberService;
     private final Optional<String> userIdClaim;
 
     public ApplicationCommandApiImpl(
@@ -34,6 +35,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
             DeleteApplicationService deleteApplicationService,
             AttachFileToApplicationService attachFileToApplicationService,
             AcceptTermsService acceptTermsService,
+            InviteMemberService inviteMemberService,
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.user-id-claim") Optional<String> userIdClaim
     ) {
         this.identity = identity;
@@ -43,6 +45,7 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
         this.deleteApplicationService = deleteApplicationService;
         this.attachFileToApplicationService = attachFileToApplicationService;
         this.acceptTermsService = acceptTermsService;
+        this.inviteMemberService = inviteMemberService;
         this.userIdClaim = userIdClaim;
     }
 
@@ -82,10 +85,9 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
     }
 
     @Override
-    public Response inviteMemberToApplicationV1(Long id) {
-        throw new UnsupportedOperationException(
-                "Unimplemented method 'inviteMemberToApplicationV1'"
-        );
+    public Response inviteMemberToApplicationV1(Long applicationId, InviteMember inviteMember) {
+        inviteMemberService.invite(applicationId, userId(), inviteMember);
+        return Response.noContent().build();
     }
 
     @Override

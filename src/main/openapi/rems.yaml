@@ -169,7 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateApplicationResponse"
+                $ref: "#/components/schemas/InviteMemberResponse"
   /api/applications/submit:
     post:
       tags:
@@ -1602,4 +1602,18 @@ components:
       required:
         - application-id
         - member
+    InviteMemberResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errors:
+          type: array
+          items: { }
+        warnings:
+          type: array
+          items: { }
+      required:
+        - success
+
 

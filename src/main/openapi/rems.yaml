@@ -620,6 +620,14 @@ components:
             - application.state/rejected
             - application.state/revoked
             - application.state/submitted
+          x-enum-varnames:
+            - DRAFT
+            - CLOSED
+            - APPROVED
+            - RETURNED
+            - REJECTED
+            - REVOKED
+            - SUBMITTED
         application/copied-to:
           type: array
           items:
@@ -776,6 +784,14 @@ components:
             - application.state/rejected
             - application.state/revoked
             - application.state/submitted
+          x-enum-varnames:
+            - DRAFT
+            - CLOSED
+            - APPROVED
+            - RETURNED
+            - REJECTED
+            - REVOKED
+            - SUBMITTED
         application/copied-to:
           type: array
           items:

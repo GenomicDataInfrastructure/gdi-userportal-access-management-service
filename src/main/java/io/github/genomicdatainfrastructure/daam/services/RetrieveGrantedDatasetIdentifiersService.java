@@ -6,8 +6,8 @@ package io.github.genomicdatainfrastructure.daam.services;
 
 import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
 import io.github.genomicdatainfrastructure.daam.model.RetrieveGrantedDatasetIdentifiers;
-import io.github.genomicdatainfrastructure.daam.model.RetrieveGrantedDatasetIdentifiersEntitlementsInner;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.Entitlement;
+import io.github.genomicdatainfrastructure.daam.model.Entitlement;
+
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
@@ -23,12 +23,12 @@ public class RetrieveGrantedDatasetIdentifiersService {
 
     public RetrieveGrantedDatasetIdentifiers retrieveGrantedDatasetIdentifiers(String userId) {
 
-        List<Entitlement> entitlements = remsApiQueryGateway.retrieveGrantedDatasetIdentifiers(
+        var entitlements = remsApiQueryGateway.retrieveGrantedDatasetIdentifiers(
                 userId);
 
-        List<RetrieveGrantedDatasetIdentifiersEntitlementsInner> formattedEntitlements = entitlements
+        List<Entitlement> formattedEntitlements = entitlements
                 .stream()
-                .map(entitlement -> new RetrieveGrantedDatasetIdentifiersEntitlementsInner(
+                .map(entitlement -> new Entitlement(
                         entitlement.getResource(),
                         entitlement.getStart(),
                         entitlement.getEnd()

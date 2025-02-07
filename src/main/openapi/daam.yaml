@@ -795,15 +795,7 @@ components:
           title: Created at
         state:
           title: Application state
-          type: string
-          enum:
-            - application.state/draft
-            - application.state/closed
-            - application.state/approved
-            - application.state/returned
-            - application.state/rejected
-            - application.state/revoked
-            - application.state/submitted
+          $ref: "#/components/schemas/RetrievedApplicationState"
         modifiedAt:
           type: string
           format: date-time
@@ -909,6 +901,7 @@ components:
         type:
           type: string
           title: Field type
+          $ref: "#/components/schemas/FormFieldType"
         tableValues:
           title: Table Values
           type: array
@@ -934,13 +927,25 @@ components:
           format: int64
         privacy:
           type: string
-          enum:
-            - private
-            - public
+          $ref: "#/components/schemas/FormFieldPrivacy"
         options:
           type: array
           items:
             $ref: "#/components/schemas/FormFieldOption"
+    FormFieldType:
+      type: string
+      enum:
+        - text
+        - texta
+        - attachment
+        - phone-number
+        - date
+        - email
+        - header
+        - option
+        - multiselect
+        - label
+        - table
     FormFieldTableValue:
       properties:
         column:
@@ -955,6 +960,9 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Label"
+      required:
+        - key
+        - label
     FormFieldTableColumn:
       properties:
         key:
@@ -963,6 +971,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Label"
+    FormFieldPrivacy:
+      type: string
+      enum:
+        - private
+        - public
     Label:
       properties:
         language:
@@ -971,6 +984,9 @@ components:
         name:
           type: string
           title: Label name
+      required:
+        - language
+        - name
     RetrievedApplicationEvent:
       properties:
         actorId:
@@ -1009,10 +1025,7 @@ components:
         type:
           type: string
           title: License type
-          enum:
-            - link
-            - attachment
-            - text
+          $ref: "#/components/schemas/LicenseType"
         enabled:
           type: boolean
           title: License enabled
@@ -1042,6 +1055,22 @@ components:
         acceptedByCurrentUser:
           type: boolean
           title: Accepted by current user
+    LicenseType:
+      type: string
+      enum:
+        - link
+        - attachment
+        - text
+    RetrievedApplicationState:
+      type: string
+      enum:
+        - application.state/draft
+        - application.state/closed
+        - application.state/approved
+        - application.state/returned
+        - application.state/rejected
+        - application.state/revoked
+        - application.state/submitted
     ListedBasket:
       properties:
         id:
@@ -1102,11 +1131,15 @@ components:
         comment:
           title: the reason the datasets are changing
           type: string
+      required:
+        - datasetIds
     RemoveMember:
       properties:
         memberId:
           type: string
           title: member id
+      required:
+        - memberId
     CreateApplication:
       properties:
         datasetIds:
@@ -1114,11 +1147,15 @@ components:
           title: dataset ids
           items:
             type: string
+      required:
+        - datasetIds
     CreateApplicationResponse:
       properties:
         applicationId:
           type: integer
           format: int64
+      required:
+        - applicationId
     AddDatasetToBasket:
       properties:
         datasetIds:
@@ -1126,6 +1163,8 @@ components:
           title: dataset ids
           items:
             type: string
+      required:
+        - datasetIds
     ErrorResponse:
       properties:
         title:
@@ -1142,31 +1181,36 @@ components:
           items:
             $ref: "#/components/schemas/ValidationWarning"
           description: List of validation warnings, to be send to the frontend, where the translation will happen.
+      required:
+        - title
+        - status
     RetrieveGrantedDatasetIdentifiers:
-      type: object
       properties:
         entitlements:
           type: array
           items:
-            type: object
-            properties:
-              datasetId:
-                type: string
-              start:
-                type: string
-                format: date-time
-              end:
-                type: string
-                format: date-time
+            $ref: "#/components/schemas/Entitlement"
       required:
         - entitlements
-    AcceptTermsCommand:
-      type: object
+    Entitlement:
+      properties:
+        datasetId:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
       required:
-        - acceptedLicenses
+        - datasetId
+        - start
+    AcceptTermsCommand:
       properties:
         acceptedLicenses:
           type: array
           items:
             type: integer
             format: int64
+      required:
+        - acceptedLicenses

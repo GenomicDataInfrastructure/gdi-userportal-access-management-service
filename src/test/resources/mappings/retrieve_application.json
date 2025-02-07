@@ -153,7 +153,7 @@
                                     "string"
                                 ]
                             },
-                            "field/type": "description",
+                            "field/type": "text",
                             "field/value": "",
                             "field/previous-value": "",
                             "field/id": "1112",

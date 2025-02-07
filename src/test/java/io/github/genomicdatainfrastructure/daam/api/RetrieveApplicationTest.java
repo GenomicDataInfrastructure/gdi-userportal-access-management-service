@@ -77,7 +77,7 @@ class RetrieveApplicationTest extends BaseTest {
                 .body("forms[0].fields[0].title[0].name", equalTo("Kuvaus"))
                 .body("forms[0].fields[0].title[1].language", equalTo("en"))
                 .body("forms[0].fields[0].title[1].name", equalTo("Description"))
-                .body("forms[0].fields[0].type", equalTo("description"))
+                .body("forms[0].fields[0].type", equalTo("text"))
                 .body("forms[0].fields[0].value", equalTo(""))
 
                 .body("events[0].actorId", equalTo("6"))

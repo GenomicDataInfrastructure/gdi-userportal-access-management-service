@@ -1226,3 +1226,6 @@ components:
         email:
           type: string
           format: email
+      required:
+        - name
+        - email

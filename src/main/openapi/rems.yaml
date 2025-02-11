@@ -1366,7 +1366,7 @@ components:
             $ref: "#/components/schemas/CreateApplicationError"
         warnings:
           type: array
-          items: {}
+          items: { }
         application-id:
           type: integer
           format: int64
@@ -1434,10 +1434,10 @@ components:
           type: boolean
         errors:
           type: array
-          items: {}
+          items: { }
         warnings:
           type: array
-          items: {}
+          items: { }
         id:
           type: integer
           format: int64
@@ -1609,10 +1609,14 @@ components:
           type: boolean
         errors:
           type: array
-          items: { }
+          items:
+            type: object
+            additionalProperties: true
         warnings:
           type: array
-          items: { }
+          items:
+            type: object
+            additionalProperties: true
       required:
         - success
 

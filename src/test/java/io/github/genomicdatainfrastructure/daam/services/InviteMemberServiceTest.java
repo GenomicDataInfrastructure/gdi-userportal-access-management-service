@@ -5,8 +5,7 @@
 package io.github.genomicdatainfrastructure.daam.services;
 
 import io.github.genomicdatainfrastructure.daam.exceptions.ApplicationNotFoundException;
-import io.github.genomicdatainfrastructure.daam.exceptions.MemberNotInvitedException;
-import io.github.genomicdatainfrastructure.daam.gateways.RemsApiQueryGateway;
+import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantException;
 import io.github.genomicdatainfrastructure.daam.model.InviteMember;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationQueryApi;
@@ -14,12 +13,11 @@ import io.github.genomicdatainfrastructure.daam.remote.rems.model.Application;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.InviteMemberCommand;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.InviteMemberResponse;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Response10953InvitedMembers;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
@@ -33,16 +31,13 @@ class InviteMemberServiceTest {
 
     private RemsApplicationCommandApi remsApplicationCommandApi;
     private RemsApplicationQueryApi remsApplicationQueryApi;
-    private RemsApiQueryGateway remsApiQueryGateway;
     private InviteMemberService service;
 
     @BeforeEach
     void setUp() {
         remsApplicationCommandApi = mock(RemsApplicationCommandApi.class);
         remsApplicationQueryApi = mock(RemsApplicationQueryApi.class);
-        remsApiQueryGateway = new RemsApiQueryGateway(remsApiKey, remsApplicationQueryApi, null);
-        service = new InviteMemberService(remsApiKey, remsApplicationCommandApi,
-                remsApiQueryGateway);
+        service = new InviteMemberService(remsApiKey, remsApplicationCommandApi);
     }
 
     @Test
@@ -73,26 +68,7 @@ class InviteMemberServiceTest {
     }
 
     @Test
-    void whenApplicationDoesNotExist_inviteMember_shouldThrow() {
-        when(remsApplicationQueryApi.apiApplicationsApplicationIdGet(
-                remsApiKey,
-                userId,
-                applicationId))
-                .thenThrow(new WebApplicationException(
-                        Response
-                                .status(Response.Status.NOT_FOUND)
-                                .entity("Resource not found")
-                                .build()));
-
-        assertThatThrownBy(
-                () -> service.invite(applicationId, userId, new InviteMember("John",
-                        "john@genomicdata.com"))
-        ).isInstanceOf(ApplicationNotFoundException.class)
-                .as("The application was not found");
-    }
-
-    @Test
-    void whenRemsReturnsFailure_inviteMember_shouldThrow() {
+    void whenRemsReturnsNotFound_inviteMember_shouldThrowNotFoundException() {
         when(remsApplicationQueryApi.apiApplicationsApplicationIdGet(
                 remsApiKey,
                 userId,
@@ -104,12 +80,35 @@ class InviteMemberServiceTest {
                 userId,
                 new InviteMemberCommand(applicationId, new Response10953InvitedMembers("John",
                         "john@genomicdata.com"))))
-                .thenReturn(new InviteMemberResponse(false, List.of(), List.of()));
+                .thenReturn(new InviteMemberResponse(false, List.of(Map.of("type", "application-not-found")), List.of()));
 
         assertThatThrownBy(
                 () -> service.invite(applicationId, userId, new InviteMember("John",
                         "john@genomicdata.com"))
-        ).isInstanceOf(MemberNotInvitedException.class)
-                .as("Member John could not be invited");
+        ).isInstanceOf(ApplicationNotFoundException.class)
+                .hasMessage("The application was not found.", applicationId);
+    }
+
+    @Test
+    void whenRemsReturnsForbidden_inviteMember_shouldThrowApplicationDoesNotBelongToUser() {
+        when(remsApplicationQueryApi.apiApplicationsApplicationIdGet(
+                remsApiKey,
+                userId,
+                applicationId))
+                .thenReturn(Application.builder().build());
+
+        when(remsApplicationCommandApi.apiApplicationsInviteMemberPost(
+                remsApiKey,
+                userId,
+                new InviteMemberCommand(applicationId, new Response10953InvitedMembers("John",
+                        "john@genomicdata.com"))))
+                .thenReturn(new InviteMemberResponse(false, List.of(Map.of("type", "forbidden")), List.of()));
+
+        assertThatThrownBy(
+                () -> service.invite(applicationId, userId, new InviteMember("John",
+                        "john@genomicdata.com"))
+        )
+                .isInstanceOf(UserNotApplicantException.class)
+                .hasMessage("The user %s is not an applicant.", userId);
     }
 }

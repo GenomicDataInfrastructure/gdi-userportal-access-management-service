@@ -13,7 +13,7 @@ import jakarta.ws.rs.ext.Provider;
 
 import java.util.List;
 
-import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
+import static jakarta.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 @Provider
 public class MemberNotInvitedExceptionMapper implements ExceptionMapper<MemberNotInvitedException> {
@@ -22,13 +22,13 @@ public class MemberNotInvitedExceptionMapper implements ExceptionMapper<MemberNo
     public Response toResponse(MemberNotInvitedException exception) {
         var errorResponse = new ErrorResponse(
                 exception.getMessage(),
-                BAD_REQUEST.getStatusCode(),
+                INTERNAL_SERVER_ERROR.getStatusCode(),
                 "",
                 List.of()
         );
 
         return Response
-                .status(BAD_REQUEST)
+                .status(INTERNAL_SERVER_ERROR)
                 .entity(errorResponse)
                 .type(MediaType.APPLICATION_JSON)
                 .build();

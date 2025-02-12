@@ -80,13 +80,14 @@ class InviteMemberServiceTest {
                 userId,
                 new InviteMemberCommand(applicationId, new Response10953InvitedMembers("John",
                         "john@genomicdata.com"))))
-                .thenReturn(new InviteMemberResponse(false, List.of(Map.of("type", "application-not-found")), List.of()));
+                .thenReturn(new InviteMemberResponse(false, List.of(Map.of("type",
+                        "application-not-found")), List.of()));
 
         assertThatThrownBy(
                 () -> service.invite(applicationId, userId, new InviteMember("John",
                         "john@genomicdata.com"))
         ).isInstanceOf(ApplicationNotFoundException.class)
-                .hasMessage("The application was not found.", applicationId);
+                .hasMessage("The application with Id 1 was not found.");
     }
 
     @Test
@@ -102,13 +103,14 @@ class InviteMemberServiceTest {
                 userId,
                 new InviteMemberCommand(applicationId, new Response10953InvitedMembers("John",
                         "john@genomicdata.com"))))
-                .thenReturn(new InviteMemberResponse(false, List.of(Map.of("type", "forbidden")), List.of()));
+                .thenReturn(new InviteMemberResponse(false, List.of(Map.of("type", "forbidden")),
+                        List.of()));
 
         assertThatThrownBy(
                 () -> service.invite(applicationId, userId, new InviteMember("John",
                         "john@genomicdata.com"))
         )
                 .isInstanceOf(UserNotApplicantException.class)
-                .hasMessage("The user %s is not an applicant.", userId);
+                .hasMessage("The user 1 cannot add to application 1");
     }
 }

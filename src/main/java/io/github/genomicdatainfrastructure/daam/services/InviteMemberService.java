@@ -18,8 +18,8 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import java.util.List;
-import java.util.Map;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.function.BiFunction;
 
 @ApplicationScoped
@@ -28,10 +28,14 @@ public class InviteMemberService {
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
 
-    private static final Map<String, BiFunction<String, String, RuntimeException>> EXCEPTION_MAP = Map.of(
-            "application-not-found", (userId, memberName) -> new ApplicationNotFoundException(),
-            "forbidden", (userId, memberName) -> new UserNotApplicantException(userId)
-    );
+    private static final Map<String, BiFunction<Long, String, RuntimeException>> EXCEPTION_MAP = Map
+            .of(
+                    "application-not-found",
+                    (applicationID, username) -> new ApplicationNotFoundException(applicationID),
+                    "forbidden",
+                    (applicationID, username) -> new UserNotApplicantException(username,
+                            applicationID)
+            );
 
     @Inject
     public InviteMemberService(
@@ -42,30 +46,40 @@ public class InviteMemberService {
         this.remsApplicationCommandApi = remsApplicationCommandApi;
     }
 
-    @Retry(maxRetries = 3, retryOn = MemberNotInvitedException.class)
-    public void invite(Long applicationId, String userId, InviteMember member) {
+    @Retry(maxRetries = 5, retryOn = MemberNotInvitedException.class, delay = 1000, delayUnit = ChronoUnit.MILLIS)
+    public void invite(final Long applicationId, final String existingUserId,
+            final InviteMember member) {
         var remsMember = new Response10953InvitedMembers(member.getName(), member.getEmail());
         var remsCommand = new InviteMemberCommand(applicationId, remsMember);
 
         var response = remsApplicationCommandApi.apiApplicationsInviteMemberPost(
-                remsApiKey, userId, remsCommand
+                remsApiKey, existingUserId, remsCommand
         );
 
         if (!response.getSuccess()) {
-            mapToException(response, userId, remsMember.getName());
+            handleFailedInvite(response, applicationId, existingUserId, remsMember.getName());
         }
     }
 
-    private void mapToException(InviteMemberResponse response, String userId, String username) {
-        List<Map<String, Object>> errors = response.getErrors();
+    private void handleFailedInvite(final InviteMemberResponse response, final Long applicationId,
+            final String existingUserId, final String invitedUserName) {
 
+        throw EXCEPTION_MAP.getOrDefault(extractErrorType(invitedUserName, response.getErrors()),
+                (appId, userId) -> new MemberNotInvitedException(invitedUserName))
+                .apply(applicationId, existingUserId);
+    }
+
+    private static String extractErrorType(String invitedUserName,
+            List<Map<String, Object>> errors) {
         if (errors == null || errors.isEmpty()) {
-            throw new MemberNotInvitedException(username);
+            throw new MemberNotInvitedException(invitedUserName);
         }
-
-        Map<String, Object> firstError = errors.get(0);
-        String errorType = (String) firstError.get("type");
-
-        throw EXCEPTION_MAP.getOrDefault(errorType, (id, memberName) -> new MemberNotInvitedException(memberName)).apply(userId, username);
+        return errors.stream()
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(m -> m.get("type"))
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .orElseThrow(() -> new MemberNotInvitedException(invitedUserName));
     }
 }

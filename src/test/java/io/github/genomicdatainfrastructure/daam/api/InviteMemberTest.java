@@ -28,6 +28,6 @@ public class InviteMemberTest extends BaseTest {
                 .when()
                 .post("/api/v1/applications/12/invite-member")
                 .then()
-                .statusCode(200);
+                .statusCode(204);
     }
 }

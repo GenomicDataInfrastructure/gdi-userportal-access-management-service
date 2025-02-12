@@ -8,4 +8,8 @@ public class ApplicationNotFoundException extends RuntimeException {
     public ApplicationNotFoundException() {
         super("The application was not found.");
     }
+
+    public ApplicationNotFoundException(Long id) {
+        super("The application with Id %s was not found.".formatted(id));
+    }
 }

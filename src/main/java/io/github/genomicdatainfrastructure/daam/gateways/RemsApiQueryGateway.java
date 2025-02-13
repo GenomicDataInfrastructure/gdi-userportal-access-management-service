@@ -73,7 +73,7 @@ public class RemsApiQueryGateway {
         var application = retrieveApplication(id, userId);
 
         if (!application.getApplicationApplicant().getUserid().equals(userId)) {
-            throw new UserNotApplicantException(userId);
+            throw new UserNotApplicantException(userId, id);
         }
 
         if (!EDITABLE_STATES.contains(application.getApplicationState())) {
@@ -87,7 +87,7 @@ public class RemsApiQueryGateway {
         var application = retrieveApplication(id, userId);
 
         if (!application.getApplicationApplicant().getUserid().equals(userId)) {
-            throw new UserNotApplicantException(userId);
+            throw new UserNotApplicantException(userId, id);
         }
 
         if (application.getApplicationState() != ApplicationStateEnum.DRAFT) {

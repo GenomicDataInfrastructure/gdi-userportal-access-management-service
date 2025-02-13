@@ -1,8 +1,5 @@
-<?xml version="1.0"?>
-<project
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.genomicdatainfrastructure</groupId>
     <artifactId>gdi-userportal-access-management-service</artifactId>
@@ -24,6 +21,7 @@
         <surefire.version>3.5.2</surefire.version>
         <quarkus-wiremock.version>1.4.1</quarkus-wiremock.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+        <sonar.exclusions>**/**/*ExceptionMapper.java</sonar.exclusions>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -92,6 +90,10 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-opentelemetry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -186,8 +188,7 @@
                 </executions>
                 <configuration>
                     <systemPropertyVariables>
-                        <native.image.path>
-                            ${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <maven.home>${maven.home}</maven.home>
                     </systemPropertyVariables>

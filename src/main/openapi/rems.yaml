@@ -138,6 +138,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateApplicationResponse"
+  /api/applications/invite-member:
+    post:
+      tags:
+        - rems-application-command
+      summary: "Invite member to join application (roles: logged-in)"
+      parameters:
+        - in: header
+          name: x-rems-api-key
+          required: true
+          description: REMS API-Key (optional for UI, required for API)
+          schema:
+            type: string
+        - in: header
+          name: x-rems-user-id
+          required: true
+          description: User (optional for UI, required for API). This can be a REMS internal or an external user identity attribute (specified in config.edn).
+          schema:
+            type: string
+      requestBody:
+        description: Member invitation data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InviteMemberCommand"
+      responses:
+        "200":
+          description: Application creation successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InviteMemberResponse"
   /api/applications/submit:
     post:
       tags:
@@ -1350,7 +1382,7 @@ components:
             $ref: "#/components/schemas/CreateApplicationError"
         warnings:
           type: array
-          items: {}
+          items: { }
         application-id:
           type: integer
           format: int64
@@ -1418,10 +1450,10 @@ components:
           type: boolean
         errors:
           type: array
-          items: {}
+          items: { }
         warnings:
           type: array
-          items: {}
+          items: { }
         id:
           type: integer
           format: int64
@@ -1575,3 +1607,33 @@ components:
           items:
             type: integer
             format: int64
+    InviteMemberCommand:
+      type: object
+      properties:
+        application-id:
+          type: integer
+          format: int64
+        member:
+          $ref: "#/components/schemas/Response10953InvitedMembers"
+      required:
+        - application-id
+        - member
+    InviteMemberResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        warnings:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+      required:
+        - success
+
+

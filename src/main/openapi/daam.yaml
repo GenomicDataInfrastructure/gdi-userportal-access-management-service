@@ -440,6 +440,11 @@ paths:
           schema:
             type: integer
             format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InviteMember"
       responses:
         "204":
           description: Successful Response (no content)
@@ -1222,3 +1227,13 @@ components:
             format: int64
       required:
         - acceptedLicenses
+    InviteMember:
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+      required:
+        - name
+        - email

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/applications/invite-member",
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "application-id": 15,
+          "member": {
+            "name": "John",
+            "email": "john@example.com"
+          }
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "success": false,
+      "errors": {
+        "type": ["something-else"]
+      }
+    }
+  }
+}

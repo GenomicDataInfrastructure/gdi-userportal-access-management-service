@@ -10,7 +10,6 @@ import io.github.genomicdatainfrastructure.daam.exceptions.UserNotApplicantExcep
 import io.github.genomicdatainfrastructure.daam.model.InviteMember;
 import io.github.genomicdatainfrastructure.daam.remote.rems.api.RemsApplicationCommandApi;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.InviteMemberCommand;
-import io.github.genomicdatainfrastructure.daam.remote.rems.model.InviteMemberResponse;
 import io.github.genomicdatainfrastructure.daam.remote.rems.model.Response10953InvitedMembers;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -19,7 +18,9 @@ import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 @ApplicationScoped
@@ -49,6 +50,7 @@ public class InviteMemberService {
     @Retry(maxRetries = 5, retryOn = MemberNotInvitedException.class, delay = 1000, delayUnit = ChronoUnit.MILLIS)
     public void invite(final Long applicationId, final String existingUserId,
             final InviteMember member) {
+
         var remsMember = new Response10953InvitedMembers(member.getName(), member.getEmail());
         var remsCommand = new InviteMemberCommand(applicationId, remsMember);
 
@@ -56,15 +58,17 @@ public class InviteMemberService {
                 remsApiKey, existingUserId, remsCommand
         );
 
-        if (!response.getSuccess()) {
-            handleFailedInvite(response, applicationId, existingUserId, remsMember.getName());
+        if (Boolean.FALSE.equals(response.getSuccess())) {
+            handleFailedInvite(response.getErrors(), applicationId, existingUserId, remsMember
+                    .getName());
         }
     }
 
-    private void handleFailedInvite(final InviteMemberResponse response, final Long applicationId,
+    private void handleFailedInvite(final List<Map<String, Object>> errors,
+            final Long applicationId,
             final String existingUserId, final String invitedUserName) {
 
-        throw EXCEPTION_MAP.getOrDefault(extractErrorType(invitedUserName, response.getErrors()),
+        throw EXCEPTION_MAP.getOrDefault(extractErrorType(invitedUserName, errors),
                 (appId, userId) -> new MemberNotInvitedException(invitedUserName))
                 .apply(applicationId, existingUserId);
     }

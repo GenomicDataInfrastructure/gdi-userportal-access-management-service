@@ -140,8 +140,6 @@ public class ApplicationCommandApiImpl implements ApplicationCommandApi {
 
     private String userId() {
         var principal = (OidcJwtCallerPrincipal) identity.getPrincipal();
-        String t = principal.getClaim(userIdClaim.orElse(DEFAULT_USER_ID_CLAIM));
-        System.out.println(t);
-        return t;
+        return principal.getClaim(userIdClaim.orElse(DEFAULT_USER_ID_CLAIM));
     }
 }

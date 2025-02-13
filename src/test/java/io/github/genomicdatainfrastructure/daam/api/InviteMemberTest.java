@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
-public class InviteMemberTest extends BaseTest {
+class InviteMemberTest extends BaseTest {
 
     @Test
     void inviteMember() {

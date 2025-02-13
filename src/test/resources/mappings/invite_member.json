@@ -2,15 +2,8 @@
   "request": {
     "method": "POST",
     "url": "/api/applications/invite-member",
-    "bodyPatterns": [
-      {
-        "equalToJson": {
-          "application-id": 12,
-          "member": {
-            "name": "John",
-            "email": "john@example.com"
-          }
-        }
+    "bodyPatterns": [{
+        "equalToJson": "{\n          \"application-id\": 12,\n          \"member\": {\n            \"name\": \"John\",\n            \"email\": \"john@example.com\"\n          }\n        }"
       }
     ]
   },

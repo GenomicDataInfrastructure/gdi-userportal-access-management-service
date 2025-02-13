@@ -4,13 +4,7 @@
     "url": "/api/applications/invite-member",
     "bodyPatterns": [
       {
-        "equalToJson": {
-          "application-id": 15,
-          "member": {
-            "name": "John",
-            "email": "john@example.com"
-          }
-        }
+        "equalToJson": "{\n          \"application-id\": 15,\n          \"member\": {\n            \"name\": \"John\",\n            \"email\": \"john@example.com\"\n          }\n        }"
       }
     ]
   },

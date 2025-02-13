@@ -21,9 +21,9 @@ public class MemberNotInvitedExceptionMapper implements ExceptionMapper<MemberNo
     @Override
     public Response toResponse(MemberNotInvitedException exception) {
         var errorResponse = new ErrorResponse(
-                exception.getMessage(),
+                "Issue Inviting Member",
                 INTERNAL_SERVER_ERROR.getStatusCode(),
-                "",
+                exception.getMessage(),
                 List.of()
         );
 

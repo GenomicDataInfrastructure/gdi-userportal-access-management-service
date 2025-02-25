@@ -1111,13 +1111,16 @@ components:
         key:
           type: string
           title: validation key
+          description: The validation error key that will be translated by the frontend
         formId:
           type: integer
           format: int64
           title: form id
+          description: The ID of the form containing the field with the validation error
         fieldId:
           title: field id
           type: string
+          description: The ID of the field that failed validation
       required:
         - key
     AddedAttachment:
@@ -1183,12 +1186,15 @@ components:
         title:
           type: string
           title: Error title
+          description: A short, human-readable title for the error
         status:
           type: integer
           title: Error status
+          description: The HTTP status code for the error
         detail:
           type: string
           title: Error detail
+          description: A detailed description of what went wrong
         validationWarnings:
           type: array
           items:
@@ -1231,6 +1237,7 @@ components:
       properties:
         name:
           type: string
+          minLength: 1
         email:
           type: string
           format: email

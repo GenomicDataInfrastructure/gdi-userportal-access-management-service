@@ -11,19 +11,83 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
 
-### Added
+## [v1.3.3] - 2025-03-31
 
 ### Changed
+- chore(deps): update quarkus.platform.version to v3.18.2 by @Renovate Bot in c224083
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1738816775 by @Renovate Bot in 643dad3
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1738643652 by @Renovate Bot in b7fc258
+- chore(deps): update quarkus.platform.version to v3.17.8 by @Renovate Bot in 9969e8a
+- chore(deps): update dependency org.assertj:assertj-core to v3.27.3 by @Renovate Bot in 4f06d51
+- chore(deps): update quarkus.platform.version to v3.17.7 by @Renovate Bot in 61f120c
+- chore: add labels to docker image by @Bruno Pacheco in d85a252
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1736404155 by @Renovate Bot in 5fe1070
+- chore(deps): update quarkus.platform.version to v3.17.6 by @Renovate Bot in f4b2246
+- chore(deps): update dependency org.assertj:assertj-core to v3.27.2 by @Renovate Bot in 8b69cda
+- chore(deps): update dependency org.assertj:assertj-core to v3.27.0 by @Renovate Bot in 91d5c68
+- chore(deps): update quarkus.platform.version to v3.17.5 by @Renovate Bot in 86d0513
 
-### Deprecated
-
-### Removed
 
 ### Fixed
+- chore: fix REPOSITORY_URL by @Bruno Pacheco in ee76a22
+- chore: (ART-11568) fix quarkus open-api-gen issue by @jadz94 in 851e174
+- fix(deps): update dependency io.quarkiverse.openapi.generator:quarkus-openapi-generator to v2.7.1-lts by @Renovate Bot in f91f35b
+- chore: automerge patches by @Bruno Pacheco in e5d26c8
 
-### Security
+
+
+## [v1.3.2] - 2025-03-31
+
+### Changed
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1734497536 by @Renovate Bot in 09f3e75
+- chore: add required fields and extract enums in open-api specs by @Younès Adem in 830b248
+- chore(deps): update quarkus-wiremock.version to v1.4.1 by @Renovate Bot in 23317d5
+- chore(deps): update quarkus.platform.version to v3.17.4 by @Renovate Bot in 064b351
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1733767867 by @Renovate Bot in 98f6aaa
+- chore(deps): update quarkus.platform.version to v3.17.3 by @Renovate Bot in cabb317
+
+
+
+## [v1.3.1] - 2025-03-31
+
+### Changed
+- chore(deps): update quarkus.platform.version to v3.17.2 by @Renovate Bot in 5a27420
+- chore(deps): update quarkus.platform.version to v3.17.0 by @Renovate Bot in d040638
+- chore(deps): update quarkus.platform.version to v3.16.4 by @Renovate Bot in 66beb8f
+- chore(deps): update aquasecurity/trivy-action action to v0.29.0 by @Renovate Bot in fc8c761
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1731604394 by @Renovate Bot in e0c0318
+- Revert "chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1731604394" by @Bruno Pacheco in c7acea2
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1731604394 by @Renovate Bot in 6319fcf
+- chore(deps): update fsfe/reuse-action action to v5 by @Renovate Bot in f2a095e
+- chore(deps): update quarkus.platform.version to v3.16.3 by @Renovate Bot in cca3e3f
+- Revert "chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1730489338" by @Kacem Bechka in b6bbe30
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1730489338 by @Renovate Bot in 7a8e717
+- chore(deps): update quarkus.platform.version to v3.16.2 by @Renovate Bot in 81a20f6
+- chore(deps): update surefire.version to v3.5.2 by @Renovate Bot in fbcc9e5
+- chore: add OTEL by @Bruno Pacheco in b188a87
+- chore: use trivy cached db by @Bruno Pacheco in 55c7be9
+- chore: add trivy db cache by @Bruno Pacheco in 55d0746
+- chore(deps): update quarkus.platform.version to v3.16.1 by @Renovate Bot in e5ee178
+- chore(deps): update quarkus-wiremock.version to v1.4.0 by @Renovate Bot in d593a15
+- chore(deps): update aquasecurity/trivy-action action to v0.28.0 by @Renovate Bot in 5549bc9
+- docs: update CHANGELOG.md by @Bruno Pacheco in c20abac
+- chore(deps): update aquasecurity/trivy-action action to v0.27.0 (#146) by @LNDS-Sysadmins in 6c62ddb
+- chore(deps): update aquasecurity/trivy-action action to v0.26.0 (#144) by @LNDS-Sysadmins in 855f8e3
+
+
+### Fixed
+- fix(deps): update dependency org.projectlombok:lombok to v1.18.36 by @Renovate Bot in 61afaae
+- fix(deps): update dependency io.quarkiverse.openapi.generator:quarkus-openapi-generator to v2.6.0-lts by @Renovate Bot in 01b7b25
+- fix(deps): update dependency io.quarkiverse.openapi.generator:quarkus-openapi-generator to v2.6.0 by @Renovate Bot in 666eec6
+- fix(deps): add missing dependency by @Bruno Pacheco in e4817ec
+- fix(deps): update dependency io.quarkiverse.openapi.generator:quarkus-openapi-generator to v2.5.0 by @Renovate Bot in 02d0b8b
+
+
+### Removed
+- docs: remove empty sections from CHANGELOG.md by @Bruno Pacheco in a0ccb64
+
+
 
 ## [v1.3.0] - 2024-10-07
 

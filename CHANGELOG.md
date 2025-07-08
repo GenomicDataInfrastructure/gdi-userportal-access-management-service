@@ -12,6 +12,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [v1.3.5] - 2025-07-08
+
+### Added
+- feat(ART-12204): update release process by @jadzlnds in e54c2ab
+- feat(ART-12204): changelog.sh by @jadzlnds in 6143b09
+- feat(ART-12204): changelog.sh by @jadzlnds in b5fbe1d
+- feat(ART-12204): changelog.sh by @jadzlnds in 775593b
+- feat(ART-12204): changelog.sh by @jadzlnds in 9c14f45
+- feat(ART-12204): changelog.sh by @jadzlnds in 5ed04d3
+
+
+### Changed
+- chore(deps): update aquasecurity/trivy-action action to v0.32.0 by @Renovate Bot in c18d5a9
+- chore(deps): update quarkus.platform.version to v3.24.2 by @Renovate Bot in 760eb74
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1751286687 by @Renovate Bot in 43ac493
+- chore(deps): update dependency net.revelc.code.formatter:formatter-maven-plugin to v2.27.0 by @Renovate Bot in 8543ba3
+- chore(deps): update quarkus-wiremock.version to v1.5.0 by @Renovate Bot in ba25058
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1747111267 by @Renovate Bot in c1d9d21
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.5-1745855087 by @Renovate Bot in a7744ae
+- chore(deps): update quarkus.platform.version to v3.21.4 by @Renovate Bot in e508331
+- chore(deps): update quarkus.platform.version to v3.21.3 by @Renovate Bot in 778fd8e
+- chore(deps): update quarkus.platform.version to v3.21.2 by @Renovate Bot in f31b0ce
+
+
+### Fixed
+- fix(deps): update quarkus-openapi-generator.version to v2.11.0-lts by @Renovate Bot in beaf441
+
+
 ## [v1.3.3] - 2025-03-31
 
 ### Changed

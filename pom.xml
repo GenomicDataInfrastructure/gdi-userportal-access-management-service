@@ -22,6 +22,7 @@
         <quarkus-wiremock.version>1.5.3</quarkus-wiremock.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <netty.version>4.2.9.Final</netty.version>
+        <sonar-maven-plugin.version>3.11.0.453</sonar-maven-plugin.version>
         <sonar.exclusions>**/**/*ExceptionMapper.java</sonar.exclusions>
     </properties>
     <dependencyManagement>
@@ -238,7 +239,22 @@
                             <append>true</append>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

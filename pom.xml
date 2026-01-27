@@ -22,7 +22,7 @@
         <quarkus-wiremock.version>1.5.3</quarkus-wiremock.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <netty.version>4.2.9.Final</netty.version>
-        <sonar-maven-plugin.version>3.11.0.453</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
         <sonar.exclusions>**/**/*ExceptionMapper.java</sonar.exclusions>
     </properties>
     <dependencyManagement>

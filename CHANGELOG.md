@@ -12,6 +12,87 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [v1.3.6] - 2026-03-02
+
+### Changed
+- chore(deps): update quarkus.platform.version to v3.32.1 by @Renovate Bot in c21f9ff
+- chore(deps): update surefire.version to v3.5.5 by @Renovate Bot in b1b6128
+- chore(deps): update aquasecurity/trivy-action action to v0.34.1 by @Renovate Bot in 0565984
+- chore(deps): update quarkus.platform.version to v3.31.4 by @Renovate Bot in 0a3588b
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1771346502 by @Renovate Bot in 50c281c
+- chore(deps): update aquasecurity/trivy-action action to v0.34.0 by @Renovate Bot in 5aac117
+- chore(deps): update quarkus.platform.version to v3.31.3 by @Renovate Bot in eb6adf1
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1770267347 by @Renovate Bot in 0c83490
+- chore(deps): update quarkus.platform.version to v3.31.2 by @Renovate Bot in 0a21735
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1770203734 by @Renovate Bot in 5e338cb
+- chore(deps): update dependency org.apache.maven.plugins:maven-compiler-plugin to v3.15.0 by @Renovate Bot in 6efbc05
+- chore(deps): update quarkus.platform.version to v3.31.1 by @Renovate Bot in 245f8a2
+- chore(deps): update dependency org.assertj:assertj-core to v3.27.7 by @Renovate Bot in 230b269
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1769056855 by @Renovate Bot in 41f7f17
+- chore(deps): update quarkus-wiremock.version to v1.5.3 by @Renovate Bot in ad28e25
+- chore(deps): update quarkus.platform.version to v3.30.8 by @Renovate Bot in 554a2ce
+- chore(deps): update fsfe/reuse-action action to v6 by @Renovate Bot in 363d831
+- chore(deps): update actions/checkout action to v6 by @Renovate Bot in ea57fe6
+- chore(deps): update actions/cache action to v5 by @Renovate Bot in 26ae767
+- chore(deps): update quarkus.platform.version to v3.30.3 by @Renovate Bot in 6fc8728
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1764794109 by @Renovate Bot in 7d9cdd4
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1764578379 by @Renovate Bot in e334160
+- chore(deps): update quarkus.platform.version to v3.29.4 by @Renovate Bot in ba6a3fc
+- chore(deps): update quarkus-wiremock.version to v1.5.2 by @Renovate Bot in 0009af1
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1763362218 by @Renovate Bot in 3938f86
+- chore(deps): update quarkus.platform.version to v3.29.3 by @Renovate Bot in b9ec771
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1762956380 by @Renovate Bot in f5bd61d
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1762180032 by @Renovate Bot in da95e3a
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1760515502 by @Renovate Bot in b8fa4d5
+- chore(deps): update quarkus.platform.version to v3.29.2 (#213) by @LNDS-Sysadmins in dd95384
+- chore(deps): update dependency net.revelc.code.formatter:formatter-maven-plugin to v2.29.0 by @Renovate Bot in e249f5f
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1760515502 by @Renovate Bot in 8db84b2
+- chore(deps): update dependency org.jacoco:jacoco-maven-plugin to v0.8.14 by @Renovate Bot in 544ccd6
+- chore(deps): update dependency org.assertj:assertj-core to v3.27.6 by @Renovate Bot in 5623ab3
+- chore(deps): update dependency org.apache.maven.plugins:maven-compiler-plugin to v3.14.1 by @Renovate Bot in 0356967
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1758184547 by @Renovate Bot in f15c613
+- chore(deps): update dependency org.assertj:assertj-core to v3.27.5 by @Renovate Bot in 718b639
+- chore(deps): update quarkus.platform.version to v3.26.4 by @Renovate Bot in 78efbe0
+- chore(deps): update surefire.version to v3.5.4 by @Renovate Bot in 47da468
+- chore(deps): update dependency net.revelc.code.formatter:formatter-maven-plugin to v2.28.0 by @Renovate Bot in f7b0afe
+- chore(deps): update quarkus.platform.version to v3.26.3 by @Renovate Bot in 88e0cd7
+- chore(deps): update quarkus.platform.version to v3.26.2 by @Renovate Bot in fa310f3
+- chore(deps): update aquasecurity/trivy-action action to v0.33.1 by @Renovate Bot in 4537a23
+- chore(deps): update actions/checkout action to v5 by @Renovate Bot in beece5c
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1755695350 by @Renovate Bot in fd0e1d2
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1754584681 by @Renovate Bot in 2fe53a8
+- chore(deps): update dependency org.assertj:assertj-core to v3.27.4 by @Renovate Bot in cb50186
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1754456323 by @Renovate Bot in 08c8ea4
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1754356396 by @Renovate Bot in 6fea4e7
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1754000177 by @Renovate Bot in 6387274
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1753762263 by @Renovate Bot in e5c2c00
+- chore(deps): update quarkus.platform.version to v3.24.5 by @Renovate Bot in 904cba4
+- chore(deps): update quarkus.platform.version to v3.24.4 by @Renovate Bot in 7629dee
+- chore(deps): update quarkus-wiremock.version to v1.5.1 by @Renovate Bot in 94a7419
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1752587672 by @Renovate Bot in 118ee09
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.6-1752069876 by @Renovate Bot in af05845
+- chore(deps): update quarkus.platform.version to v3.24.3 by @Renovate Bot in f00ec9b
+- doc: update CHANGELOG.md for v1.3.5 by @LNDS-Sysadmins in d09a8b2
+
+
+### Fixed
+- fix: update version increment logic in release workflow by @nolliia in 876e76e
+- fix(deps): update dependency io.netty:netty-bom to v4.2.10.final by @Renovate Bot in affff27
+- fix(deps): update quarkus-openapi-generator.version to v2.14.0-lts by @Renovate Bot in 081c840
+- fix: add sonar-project.properties for consistent SonarCloud exclusions by @nolliia in 2495ed6
+- fix: exclude build files from SonarCloud security hotspot analysis by @nolliia in 50e82a4
+- fix: add SonarQube Maven plugin configuration by @nolliia in 69c7cae
+- fix: add SonarQube Maven plugin configuration by @nolliia in b3f118c
+- fix(deps): update dependency io.netty:netty-bom to v4.2.9.final by @Renovate Bot in d2ed039
+- fix(deps): update dependency io.netty:netty-bom to v4.2.8.final by @Renovate Bot in e8b5e8c
+- fix(deps): update dependency io.netty:netty-bom to v4.2.7.final by @Renovate Bot in 080d8a5
+- Merge pull request #216 from GenomicDataInfrastructure/fix/snyk-vulnerabilities by @RaniaHamdani2 in 5f4f74f
+- fix(deps): update quarkus-openapi-generator.version to v2.13.0-lts by @Renovate Bot in 1600b02
+- fix(deps): update dependency org.projectlombok:lombok to v1.18.42 by @Renovate Bot in b37a8de
+- fix(deps): update dependency org.projectlombok:lombok to v1.18.40 by @Renovate Bot in 4fe735a
+- fix(deps): update quarkus-openapi-generator.version to v2.12.1-lts by @Renovate Bot in 5617856
+
+
 ## [v1.3.5] - 2025-07-08
 
 ### Added

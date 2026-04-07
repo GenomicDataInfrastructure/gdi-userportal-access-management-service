@@ -25,7 +25,7 @@ jobs:
         run: sudo service docker start
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v4
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -70,12 +70,12 @@ jobs:
           done
 
       - name: OSS Review Toolkit (ORT) Analysis
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           repository: ${{ github.repository }}
           persist-credentials: false
 
-      - uses: oss-review-toolkit/ort-ci-github-action@v1
+      - uses: oss-review-toolkit/ort-ci-github-action@1805edcf1f4f55f35ae6e4d2d9795ccfb29b6021 # v1
         with:
           allow-dynamic-versions: "true"
           fail-on: "issues"

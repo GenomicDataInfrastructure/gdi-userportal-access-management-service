@@ -5,26 +5,29 @@
 name: Publish main
 
 on:
-  workflow_run:
-    workflows: ["Run Tests"]
-    branches: [main]
-    types:
-      - completed
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions: {}
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/genomicdatainfrastructure/gdi-userportal-access-management-service
   AZURE_WEBAPP_NAME: access-management-service-test
   REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
-  BUILD_DATE: ""
 
 jobs:
   ort:
     strategy:
       fail-fast: false
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - uses: oss-review-toolkit/ort-ci-github-action@v1
         with:
           allow-dynamic-versions: "true"
@@ -52,9 +55,12 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Set BUILD_DATE
-        run: echo "BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
+        id: build_date
+        run: echo "value=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
 
       - name: Build project
         run: mvn package -Dnative
@@ -74,9 +80,9 @@ jobs:
             type=sha,priority=1000
           labels: |
             vcs-ref=${{env.GITHUB_SHA}}
-            build-date=${{env.BUILD_DATE}}
-            org.opencontainers.image.created=${{env.BUILD_DATE}}
-            release=${{env.BUILD_DATE}}
+            build-date=${{steps.build_date.outputs.value}}
+            org.opencontainers.image.created=${{steps.build_date.outputs.value}}
+            release=${{steps.build_date.outputs.value}}
             version=${{env.GITHUB_REF_NAME}}
             org.opencontainers.image.version=${{env.GITHUB_REF_NAME}}
             org.opencontainers.image.url=${{env.REPOSITORY_URL}}
@@ -88,8 +94,10 @@ jobs:
 
       - name: Extract last tag
         id: tag
+        env:
+          META_TAGS: ${{ steps.meta.outputs.tags }}
         run: |
-          IFS=',' read -ra TAGS <<< "${{ steps.meta.outputs.tags }}"
+          IFS=',' read -ra TAGS <<< "$META_TAGS"
           LAST_INDEX=$((${#TAGS[@]} - 1))
           echo "last_tag=${TAGS[LAST_INDEX]}" >> $GITHUB_OUTPUT
 

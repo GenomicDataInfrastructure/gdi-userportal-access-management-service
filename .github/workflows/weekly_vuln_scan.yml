@@ -8,14 +8,18 @@ on:
     - cron: "0 14 * * 1" # Works on Every Monday at 14:00 UTC
   workflow_dispatch:
 
+permissions: {}
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/genomicdatainfrastructure/gdi-userportal-access-management-service
-  LATEST_PATCHES: ""
 
 jobs:
   fetch-and-scan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - name: Setup Docker
         run: sudo service docker start
@@ -28,10 +32,13 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: List Docker Image Tags and Fetch Latest Two
+        id: latest_tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           IMAGE="ghcr.io/genomicdatainfrastructure/gdi-userportal-access-management-service"
           echo "Fetching Docker image tags..."
-          RESPONSE=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/orgs/genomicdatainfrastructure/packages/container/gdi-userportal-access-management-service/versions")
+          RESPONSE=$(curl -s -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/orgs/genomicdatainfrastructure/packages/container/gdi-userportal-access-management-service/versions")
 
           # Log the response for debugging
           echo "Response from curl: $RESPONSE"
@@ -45,11 +52,13 @@ jobs:
           # Print the results
           echo "Tags fetched: $LATEST_TAGS"
 
-          echo "LATEST_PATCHES=$LATEST_TAGS" >> $GITHUB_ENV
+          echo "tags=$LATEST_TAGS" >> "$GITHUB_OUTPUT"
 
       - name: Pull and Scan Docker Images with Trivy
+        env:
+          LATEST_PATCHES: ${{ steps.latest_tags.outputs.tags }}
         run: |
-          IFS=' ' read -ra TAGS <<< "${{ env.LATEST_PATCHES }}"
+          IFS=' ' read -ra TAGS <<< "$LATEST_PATCHES"
           for TAG in "${TAGS[@]}"
           do
             IMAGE_TAG="ghcr.io/genomicdatainfrastructure/gdi-userportal-access-management-service:$TAG"
@@ -64,6 +73,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: ${{ github.repository }}
+          persist-credentials: false
 
       - uses: oss-review-toolkit/ort-ci-github-action@v1
         with:

@@ -12,6 +12,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [v1.4.0] - 2026-05-05
+
+### Changed
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1777857961 by @Renovate Bot in e153945
+- chore(deps): update quarkus.platform.version to v3.34.6 by @Renovate Bot in 26ab078
+- chore(deps): update aquasecurity/trivy-action action to v0.36.0 by @Renovate Bot in ca46d6a
+- chore(deps): update dependency org.sonarsource.scanner.maven:sonar-maven-plugin to v5.6.0.6792 by @Renovate Bot in 76cebdc
+- chore(deps): update astral-sh/setup-uv action to v8.1.0 by @Renovate Bot in 5099cd1
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1776833838 by @Renovate Bot in b256f67
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1776645941 by @Renovate Bot in 07018d7
+- chore(deps): update quarkus.platform.version to v3.34.5 by @Renovate Bot in 97855b2
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1776104705 by @Renovate Bot in 860a5b9
+- chore(deps): update actions/cache digest to 27d5ce7 by @Renovate Bot in 174dabf
+- chore(deps): update docker/build-push-action digest to bcafcac by @Renovate Bot in 64dac2e
+- chore(deps): update oras-project/setup-oras action to v2 by @Renovate Bot in 1efbf81
+- chore(deps): update quarkus-wiremock.version to v1.6.1 by @Renovate Bot in 0a58a4d
+- chore(deps): update quarkus.platform.version to v3.34.3 by @Renovate Bot in 8c2b299
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1775623882 by @Renovate Bot in 0ed31f5
+- chore: add zizmor for automated scan and mitigation for current issues by @Kacem Bechka in 4021f15
+- chore(deps): update quarkus.platform.version to v3.34.2 by @Renovate Bot in e3dd44e
+- chore(deps): update quarkus.platform.version to v3.34.1 by @Renovate Bot in bfa22af
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1773939694 by @Renovate Bot in c67b69a
+- chore(deps): update quarkus.platform.version to v3.32.4 by @Renovate Bot in a7453fc
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1773895075 by @Renovate Bot in 663f18b
+- chore(deps): update quarkus.platform.version to v3.32.3 by @Renovate Bot in 2c9fea4
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1773204619 by @Renovate Bot in 9136d95
+- chore(deps): update aquasecurity/trivy-action action to v0.35.0 by @Renovate Bot in 260d84e
+- chore(deps): update docker/metadata-action action to v6 by @Renovate Bot in 662075a
+- chore(deps): update docker/build-push-action action to v7 by @Renovate Bot in e3f6296
+- chore(deps): update quarkus.platform.version to v3.32.2 by @Renovate Bot in 87198bd
+- chore(deps): update docker/login-action action to v4 by @Renovate Bot in 014d4e7
+- chore(deps): update aquasecurity/trivy-action action to v0.34.2 by @Renovate Bot in e2a929b
+- doc: update CHANGELOG.md for v1.3.6 by @LNDS-Sysadmins in dcc0df2
+
+
+### Fixed
+- fix(deps): update quarkus-openapi-generator.version to v2.16.0-lts by @Renovate Bot in c8816e3
+- fix(deps): update dependency org.projectlombok:lombok to v1.18.46 by @Renovate Bot in 5f74bf6
+- fix(deps): update quarkus-openapi-generator.version to v2.16.0 by @Renovate Bot in e4b90ec
+- fix: actions by @Kacem Bechka in c2959a5
+- fix(deps): update dependency io.netty:netty-bom to v4.2.12.final by @Renovate Bot in 1574897
+- fix(deps): update dependency io.netty:netty-bom to v4.2.11.final by @Renovate Bot in c4b73c8
+- fix(deps): update dependency org.projectlombok:lombok to v1.18.44 by @Renovate Bot in af09a28
+
+
 ## [v1.3.6] - 2026-03-02
 
 ### Changed

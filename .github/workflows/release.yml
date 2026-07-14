@@ -135,7 +135,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up GraalVM JDK 21
-        uses: graalvm/setup-graalvm@6ceeefe947dedd393c9a1669609b6a3a545ad01e # v1
+        uses: graalvm/setup-graalvm@0def53c0fd8534bc13416c9469f5be45265824fd # v1
         with:
           java-version: "21"
 

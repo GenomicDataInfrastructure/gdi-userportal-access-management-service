@@ -4,12 +4,13 @@
 
 package io.github.genomicdatainfrastructure.daam.services;
 
-import static java.nio.file.Files.createTempFile;
-import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Files.write;
-
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
+import org.jboss.logging.Logger;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -25,10 +26,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response.Status;
-import lombok.SneakyThrows;
 
 @ApplicationScoped
 public class AttachFileToApplicationService {
+
+    private static final Logger LOG = Logger.getLogger(AttachFileToApplicationService.class);
 
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
@@ -55,12 +57,19 @@ public class AttachFileToApplicationService {
                 .build();
     }
 
-    @SneakyThrows
-    private File tempFile(String filename, File file) {
-        var tempFile = createTempFile(null, filename);
-        var content = readAllBytes(file.toPath());
-        write(tempFile, content);
-        return tempFile.toFile();
+    Path createTemporaryFile(String filename) throws IOException {
+        // Use only the basename: multipart filenames can contain client-side paths.
+        var basename = filename.replace('\\', '/');
+        basename = basename.substring(basename.lastIndexOf('/') + 1);
+        return Files.createTempFile("ams-attachment-", "-" + basename);
+    }
+
+    void copyToTemporaryFile(File source, Path target) throws IOException {
+        Files.copy(source.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    void deleteTemporaryFile(Path path) throws IOException {
+        Files.deleteIfExists(path);
     }
 
     private AttachFileResponse submitFileToRems(
@@ -73,20 +82,45 @@ public class AttachFileToApplicationService {
             throw new AttachmentIsNullException();
         }
 
-        var multipartForm = new ApiApplicationsAddAttachmentPostMultipartForm();
-        multipartForm._file = tempFile(filename, file);
+        Path temporaryFile = null;
+        var stage = "create temporary file";
         try {
+            temporaryFile = createTemporaryFile(filename);
+            stage = "copy upload to temporary file (read source/write destination)";
+            copyToTemporaryFile(file, temporaryFile);
+            var multipartForm = new ApiApplicationsAddAttachmentPostMultipartForm();
+            multipartForm._file = temporaryFile.toFile();
+            stage = "forward attachment to REMS";
             return remsApplicationCommandApi.apiApplicationsAddAttachmentPost(
                     multipartForm, applicationId, remsApiKey, userId
             );
         } catch (WebApplicationException e) {
+            LOG.errorf(e, "Attachment upload failed: applicationId=%s, stage=%s", applicationId,
+                    stage);
             if (e.getResponse().getStatus() == Status.REQUEST_ENTITY_TOO_LARGE.getStatusCode()) {
-                throw new AttachmentTooLargeException(multipartForm._file.getName());
+                throw new AttachmentTooLargeException(filename);
             }
             if (e.getResponse().getStatus() == Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode()) {
-                throw new AttachmentFormatNotAcceptedException(multipartForm._file.getName());
+                throw new AttachmentFormatNotAcceptedException(filename);
             }
-            throw e;
+            throw new IllegalStateException(
+                    "Unable to upload attachment. Please retry or contact support.", e);
+        } catch (IOException | RuntimeException e) {
+            LOG.errorf(e, "Attachment upload failed: applicationId=%s, stage=%s", applicationId,
+                    stage);
+            throw new IllegalStateException(
+                    "Unable to upload attachment. Please retry or contact support.", e);
+        } finally {
+            // The REST client is synchronous; it has finished consuming the file here.
+            if (temporaryFile != null) {
+                try {
+                    deleteTemporaryFile(temporaryFile);
+                } catch (IOException | RuntimeException cleanupError) {
+                    LOG.warnf(cleanupError,
+                            "Attachment cleanup failed: applicationId=%s, stage=delete temporary file",
+                            applicationId);
+                }
+            }
         }
     }
 }

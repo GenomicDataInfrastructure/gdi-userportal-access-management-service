@@ -27,7 +27,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
         var errorResponse = new ErrorResponse(
                 "Not expected exception",
                 INTERNAL_SERVER_ERROR.getStatusCode(),
-                "The request could not be completed. Please retry or contact support.",
+                "The request could not be completed. Check its outcome or contact support before trying again.",
                 List.of()
         );
 

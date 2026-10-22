@@ -8,7 +8,17 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.nio.file.attribute.FileAttribute;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 
 import org.jboss.logging.Logger;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -36,6 +46,41 @@ public class AttachFileToApplicationService {
     private final RemsApplicationCommandApi remsApplicationCommandApi;
     private final RemsApiQueryGateway gateway;
 
+    private final ConcurrentHashMap<Path, Long> pendingCleanup = new ConcurrentHashMap<>();
+    private final Set<Path> temporaryDirectories = ConcurrentHashMap.newKeySet();
+    private ScheduledExecutorService cleanupExecutor;
+
+    @PostConstruct
+    void startCleanupRetries() {
+        cleanupExecutor = Executors.newSingleThreadScheduledExecutor(task -> {
+            var thread = new Thread(task, "ams-attachment-cleanup");
+            thread.setDaemon(true);
+            return thread;
+        });
+        cleanupExecutor.scheduleWithFixedDelay(this::retryPendingCleanup, 1, 1, TimeUnit.MINUTES);
+    }
+
+    @PreDestroy
+    void stopCleanupRetries() {
+        if (cleanupExecutor != null) {
+            cleanupExecutor.shutdown();
+        }
+        retryPendingCleanup();
+    }
+
+    void retryPendingCleanup() {
+        pendingCleanup.forEach((path, applicationId) -> {
+            try {
+                deleteTemporaryFile(path);
+                pendingCleanup.remove(path, applicationId);
+            } catch (IOException | RuntimeException e) {
+                LOG.warnf(e,
+                        "Attachment cleanup retry failed: applicationId=%s, stage=delete temporary file",
+                        applicationId);
+            }
+        });
+    }
+
     @Inject
     public AttachFileToApplicationService(
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
@@ -57,19 +102,51 @@ public class AttachFileToApplicationService {
                 .build();
     }
 
-    Path createTemporaryFile(String filename) throws IOException {
-        // Use only the basename: multipart filenames can contain client-side paths.
-        var basename = filename.replace('\\', '/');
-        basename = basename.substring(basename.lastIndexOf('/') + 1);
-        return Files.createTempFile("ams-attachment-", "-" + basename);
+    Path createTemporaryFile(Long applicationId, String filename) throws IOException {
+        // A private directory protects the copy even on filesystems with permissive defaults.
+        FileAttribute<?>[] permissions = Path.of(System.getProperty("java.io.tmpdir"))
+                .getFileSystem().supportedFileAttributeViews().contains("posix")
+                        ? new FileAttribute<?>[]{PosixFilePermissions.asFileAttribute(
+                                PosixFilePermissions.fromString("rwx------"))}
+                        : new FileAttribute<?>[0];
+        var directory = Files.createTempDirectory("ams-attachment-", permissions);
+        temporaryDirectories.add(directory);
+        try {
+            var basename = filename.replace('\\', '/');
+            basename = basename.substring(basename.lastIndexOf('/') + 1);
+            // Bound bytes as well as characters, retaining the extension used by REMS.
+            basename = basename.replaceAll("[^a-zA-Z0-9._-]", "_");
+            basename = basename.substring(Math.max(0, basename.length() - 100));
+            return Files.createTempFile(directory, "upload-", "-" + basename);
+        } catch (IOException | RuntimeException e) {
+            try {
+                deleteTemporaryFile(directory);
+            } catch (IOException | RuntimeException cleanupError) {
+                e.addSuppressed(cleanupError);
+                // Creation failed before there was a file; retry removal of the directory.
+                pendingCleanup.put(directory, applicationId);
+            }
+            throw e;
+        }
     }
 
     void copyToTemporaryFile(File source, Path target) throws IOException {
-        Files.copy(source.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        // Write into the existing inode to preserve createTempFile's restrictive permissions.
+        try (var input = Files.newInputStream(source.toPath()); var output = Files.newOutputStream(
+                target, StandardOpenOption.WRITE,
+                StandardOpenOption.TRUNCATE_EXISTING)) {
+            input.transferTo(output);
+        }
     }
 
     void deleteTemporaryFile(Path path) throws IOException {
         Files.deleteIfExists(path);
+        temporaryDirectories.remove(path);
+        var directory = path.getParent();
+        if (temporaryDirectories.contains(directory)) {
+            Files.deleteIfExists(directory);
+            temporaryDirectories.remove(directory);
+        }
     }
 
     private AttachFileResponse submitFileToRems(
@@ -85,7 +162,7 @@ public class AttachFileToApplicationService {
         Path temporaryFile = null;
         var stage = "create temporary file";
         try {
-            temporaryFile = createTemporaryFile(filename);
+            temporaryFile = createTemporaryFile(applicationId, filename);
             stage = "copy upload to temporary file (read source/write destination)";
             copyToTemporaryFile(file, temporaryFile);
             var multipartForm = new ApiApplicationsAddAttachmentPostMultipartForm();
@@ -104,18 +181,21 @@ public class AttachFileToApplicationService {
                 throw new AttachmentFormatNotAcceptedException(filename);
             }
             throw new IllegalStateException(
-                    "Unable to upload attachment. Please retry or contact support.", e);
+                    "Unable to confirm attachment upload. Check the application attachments or contact support before uploading again.",
+                    e);
         } catch (IOException | RuntimeException e) {
             LOG.errorf(e, "Attachment upload failed: applicationId=%s, stage=%s", applicationId,
                     stage);
             throw new IllegalStateException(
-                    "Unable to upload attachment. Please retry or contact support.", e);
+                    "Unable to confirm attachment upload. Check the application attachments or contact support before uploading again.",
+                    e);
         } finally {
             // The REST client is synchronous; it has finished consuming the file here.
             if (temporaryFile != null) {
                 try {
                     deleteTemporaryFile(temporaryFile);
                 } catch (IOException | RuntimeException cleanupError) {
+                    pendingCleanup.put(temporaryFile, applicationId);
                     LOG.warnf(cleanupError,
                             "Attachment cleanup failed: applicationId=%s, stage=delete temporary file",
                             applicationId);

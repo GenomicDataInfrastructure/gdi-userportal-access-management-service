@@ -18,7 +18,7 @@ class GlobalExceptionMapperTest {
             assertThat(response.getStatus()).isEqualTo(500);
             var error = (ErrorResponse) response.getEntity();
             assertThat(error.getDetail()).isEqualTo(
-                    "The request could not be completed. Please retry or contact support.");
+                    "The request could not be completed. Check its outcome or contact support before trying again.");
         }
     }
 }

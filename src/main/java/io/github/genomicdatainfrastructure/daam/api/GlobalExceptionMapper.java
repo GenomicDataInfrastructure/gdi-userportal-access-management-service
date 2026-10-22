@@ -8,6 +8,8 @@ import static jakarta.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 import java.util.List;
 
+import org.jboss.logging.Logger;
+
 import io.github.genomicdatainfrastructure.daam.model.ErrorResponse;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -17,12 +19,15 @@ import jakarta.ws.rs.ext.Provider;
 @Provider
 public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
 
+    private static final Logger LOG = Logger.getLogger(GlobalExceptionMapper.class);
+
     @Override
     public Response toResponse(Exception exception) {
+        LOG.error("Unexpected request failure", exception);
         var errorResponse = new ErrorResponse(
                 "Not expected exception",
                 INTERNAL_SERVER_ERROR.getStatusCode(),
-                exception.getMessage(),
+                "The request could not be completed. Check its outcome or contact support before trying again.",
                 List.of()
         );
 

@@ -2,6 +2,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 FROM registry.access.redhat.com/ubi9-minimal:1784705645
+# Apply OS security fixes published after the pinned base image was built.
+RUN microdnf update -y \
+    && microdnf clean all
+
 WORKDIR /work/
 RUN chown 1001 /work \
     && chmod "g+rwX" /work \

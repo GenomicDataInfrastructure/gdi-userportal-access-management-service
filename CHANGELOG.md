@@ -12,6 +12,90 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [v1.4.1] - 2026-10-23
+
+### Changed
+- Fix/netty native image initialization (#299) by @aslam-mohammed-vp in 921164e
+- chore(deps): update quarkus.platform.version to v3.40.1.1 (#267) by @LNDS-Sysadmins in b9a0de1
+- Improved attachment upload diagnostics and temporary-file cleanup (#296) by @aslam-mohammed-vp in 8bf8de3
+- chore(deps): update graalvm/setup-graalvm digest to 27b360d by @Renovate Bot in 86066c4
+- chore(deps): update oras-project/setup-oras digest to 005458a by @Renovate Bot in b1f1588
+- chore(deps): update docker/build-push-action digest to c3c9e26 by @Renovate Bot in f30efe0
+- chore(deps): update graalvm/setup-graalvm digest to 0426e2e by @Renovate Bot in 3f16e0d
+- chore(deps): update graalvm/setup-graalvm digest to f60d4ea by @Renovate Bot in c063b75
+- chore(deps): update graalvm/setup-graalvm digest to 5298d94 by @Renovate Bot in fa1a3c2
+- chore(deps): update docker/login-action digest to dbcb813 by @Renovate Bot in 2324aec
+- chore(deps): update docker/login-action digest to 371161b by @Renovate Bot in 0a77607
+- chore(deps): update docker/login-action digest to abd2ef4 by @Renovate Bot in aede6bd
+- chore(deps): update docker/login-action digest to 06fb636 by @Renovate Bot in 69416f5
+- chore(deps): update quarkus.platform.version to v3.37.4 by @Renovate Bot in 36f9d34
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v1784705645 by @Renovate Bot in 5dc6a96
+- chore(deps): update quarkus.platform.version to v3.37.3 by @Renovate Bot in 3e2cb37
+- chore(deps): update actions/checkout action to v7.0.1 by @Renovate Bot in b3aa309
+- chore(deps): update actions/checkout digest to 3d3c42e by @Renovate Bot in 76c134e
+- chore(deps): update graalvm/setup-graalvm digest to 0def53c by @Renovate Bot in 14a840d
+- chore(deps): update oras-project/setup-oras digest to 1d808f7 by @Renovate Bot in ea59c39
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v1782797355 by @Renovate Bot in 6a7458c
+- chore(deps): update actions/checkout action to v7 by @Renovate Bot in 2963738
+- chore(deps): update actions/cache action to v6 by @Renovate Bot in bf199d2
+- chore(deps): update quarkus.platform.version to v3.37.2 by @Renovate Bot in bba0776
+- chore(deps): update astral-sh/setup-uv action to v8.3.2 by @Renovate Bot in 32bed60
+- chore(deps): update graalvm/setup-graalvm digest to 6ceeefe by @Renovate Bot in 9df8075
+- chore(deps): update graalvm/setup-graalvm digest to 186d049 by @Renovate Bot in 21132bc
+- chore(deps): update graalvm/setup-graalvm digest to 8c5543b by @Renovate Bot in 2bf102d
+- chore(deps): update graalvm/setup-graalvm digest to cabbb10 by @Renovate Bot in 614ac10
+- chore(deps): update docker/login-action digest to af1e73f by @Renovate Bot in f88709d
+- chore(deps): update docker/metadata-action digest to dc80280 by @Renovate Bot in 6efb62a
+- chore(deps): update docker/login-action digest to c99871d by @Renovate Bot in 1fe4d49
+- chore(deps): update docker/build-push-action digest to 53b7df9 by @Renovate Bot in 2abc30f
+- chore(deps): update actions/cache digest to caa2961 by @Renovate Bot in 9944c78
+- chore(deps): update quarkus.platform.version to v3.36.3 by @Renovate Bot in fce677a
+- chore(deps): update graalvm/setup-graalvm digest to 6f3fa03 by @Renovate Bot in 50dfd81
+- chore(deps): update graalvm/setup-graalvm digest to 809afe6 by @Renovate Bot in 8331535
+- chore(deps): update quarkus.platform.version to v3.36.2 by @Renovate Bot in 0c3eb21
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v1780379098 by @Renovate Bot in fe4ba40
+- chore(deps): update quarkus.platform.version to v3.36.1 by @Renovate Bot in a21014d
+- chore(deps): update dependency org.sonarsource.scanner.maven:sonar-maven-plugin to v5.7.0.6970 by @Renovate Bot in 6230008
+- chore(deps): update astral-sh/setup-uv action to v8.2.0 by @Renovate Bot in 19c477b
+- chore(deps): update dependency org.jacoco:jacoco-maven-plugin to v0.8.15 by @Renovate Bot in 9f4d91f
+- chore(deps): update actions/checkout digest to df4cb1c by @Renovate Bot in 3c24201
+- chore(deps): update actions/checkout action to v6.0.3 by @Renovate Bot in ed14935
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.8-1780378819 by @Renovate Bot in 52285ff
+- chore(deps): update surefire.version to v3.5.6 by @Renovate Bot in 55ed9f6
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.8-1779809423 by @Renovate Bot in e19800e
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.8-1779777572 by @Renovate Bot in bf2c3dc
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1779770818 by @Renovate Bot in 1df83a4
+- chore(deps): update docker/metadata-action digest to 80c7e94 by @Renovate Bot in aa759ce
+- chore(deps): update docker/login-action digest to 650006c by @Renovate Bot in 36ba59d
+- chore(deps): update docker/build-push-action digest to f9f3042 by @Renovate Bot in 8e0b6f5
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1778562320 by @Renovate Bot in 594c3cd
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1778461551 by @Renovate Bot in b2dd139
+- chore(deps): update registry.access.redhat.com/ubi9-minimal docker tag to v9.7-1778072020 by @Renovate Bot in 6a2e379
+- chore(deps): update graalvm/setup-graalvm digest to bef4b0e by @Renovate Bot in 864fb03
+- chore(deps): update quarkus-wiremock.version to v1.6.3 by @Renovate Bot in 093ba8b
+- chore(deps): update oss-review-toolkit/ort-ci-github-action digest to 086d928 by @Renovate Bot in be9e8d4
+- doc: update CHANGELOG.md for v1.4.0 by @LNDS-Sysadmins in eec1113
+- chore(deps): update quarkus.platform.version to v3.34.7 by @Renovate Bot in 27dcda7
+
+
+### Fixed
+- fix:container-os-vulnerabilities (#301) by @aslam-mohammed-vp in b59c92d
+- fix:netty-native-image-initialization and build fix (#300) by @aslam-mohammed-vp in c5905b0
+- fix: build failure fix (#297) by @aslam-mohammed-vp in 5e56b8d
+- fix(deps): update dependency io.netty:netty-bom to v4.2.19.final by @Renovate Bot in cd48aba
+- fix(deps): update dependency io.netty:netty-bom to v4.2.18.final by @Renovate Bot in 11b7a80
+- fix(deps): update dependency org.projectlombok:lombok to v1.18.48 by @Renovate Bot in 6379d21
+- fix(deps): update dependency io.netty:netty-bom to v4.2.17.final by @Renovate Bot in 5d67bb4
+- fix(deps): update dependency io.netty:netty-bom to v4.2.16.final by @Renovate Bot in 4e0f74a
+- fix(deps): update dependency io.netty:netty-bom to v4.2.15.final by @Renovate Bot in 3c37c27
+- fix(deps): update dependency io.netty:netty-bom to v4.2.14.final by @Renovate Bot in fe34bd6
+- fix(deps): update dependency io.netty:netty-bom to v4.2.13.final by @Renovate Bot in 1ca6ed1
+
+
+### Removed
+- remove azure deployment by @Kacem Bechka in 82474f1
+
+
 ## [v1.4.0] - 2026-05-05
 
 ### Changed

@@ -4,17 +4,19 @@
 
 # Curated Java trust store (CVE-2026-91403, RHSB-2026-012). The native binary otherwise keeps the
 # store baked in by GraalVM at build time. Built from the patched RHEL store (ca-certificates
-# 2026.2.92, RHSA-2026:88459); the build fails if emSign ECC Root CA - G3 or AAA Certificate Services
-# is present. The Temurin stage only provides keytool.
+# 2026.2.92, RHSA-2026:88459); the build fails if keytool fails, the store has fewer than 100 roots,
+# or emSign ECC Root CA - G3 or AAA Certificate Services is present. The Temurin stage only provides keytool.
 FROM registry.access.redhat.com/ubi9-minimal:1792742129 AS rhel-ca
 RUN microdnf update -y ca-certificates && microdnf clean all
 
 FROM eclipse-temurin:21-jdk@sha256:23cc5734ff46e776f51ce66eb9ee08444fd47caabec0a95b7eb6e94be2d3696d AS truststore
 COPY --from=rhel-ca /etc/pki/ca-trust/extracted/java/cacerts /tmp/cacerts
-RUN keytool -list -v -keystore /tmp/cacerts -storepass changeit \
-    | awk '/^Alias name: /{a=substr($0,13)} /^Owner: CN=(emSign ECC Root CA - G3|AAA Certificate Services),/{print a}' > /tmp/distrust \
+RUN keytool -list -v -keystore /tmp/cacerts -storepass changeit > /tmp/list \
+ && awk '/^Alias name: /{a=substr($0,13)} /^Owner: CN=(emSign ECC Root CA - G3|AAA Certificate Services),/{print a}' /tmp/list > /tmp/distrust \
  && while IFS= read -r a; do keytool -delete -keystore /tmp/cacerts -storepass changeit -alias "$a"; done < /tmp/distrust \
- && ! keytool -list -v -keystore /tmp/cacerts -storepass changeit | grep -qE "^Owner: CN=(emSign ECC Root CA - G3|AAA Certificate Services),"
+ && keytool -list -v -keystore /tmp/cacerts -storepass changeit > /tmp/list \
+ && [ "$(grep -c '^Alias name: ' /tmp/list)" -ge 100 ] \
+ && ! grep -qE "^Owner: CN=(emSign ECC Root CA - G3|AAA Certificate Services)," /tmp/list
 
 FROM registry.access.redhat.com/ubi9-minimal:1792742129
 # Apply OS security fixes published after the pinned base image was built.

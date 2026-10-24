@@ -12,6 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [v1.4.3] - 2026-10-24
+
+### Fixed
+- fix(deps): use brotli4j 1.24.0 instead of removing it (CVE-2026-111497) by @Bruno Pacheco in f749443
+
+
 ## [v1.4.0] - 2026-05-05
 
 ### Changed

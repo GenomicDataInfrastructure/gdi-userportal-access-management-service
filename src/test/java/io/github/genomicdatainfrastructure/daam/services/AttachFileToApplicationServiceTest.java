@@ -391,6 +391,57 @@ class AttachFileToApplicationServiceTest {
     }
 
     @Test
+    void fails_fast_when_configured_temp_root_is_not_a_directory() throws IOException {
+        var configuredRootFile = Files.createFile(temporaryDirectory.resolve(
+                "upload-staging-file"));
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.of(configuredRootFile.toString()),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        assertThatThrownBy(() -> underTest.createTemporaryFile(631L, "upload.pdf"))
+                .isInstanceOf(IOException.class);
+    }
+
+    @Test
+    void falls_back_to_user_home_temp_root_when_java_tmpdir_is_unavailable() throws IOException {
+        var originalTmpDir = System.getProperty("java.io.tmpdir");
+        var originalUserHome = System.getProperty("user.home");
+        var unavailableTmpRoot = Files.createFile(temporaryDirectory.resolve("not-a-directory"));
+        System.setProperty("java.io.tmpdir", unavailableTmpRoot.toString());
+        System.setProperty("user.home", temporaryDirectory.toString());
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.empty(),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        Path copy = null;
+        try {
+            copy = underTest.createTemporaryFile(631L, "upload.pdf");
+            assertThat(copy.startsWith(temporaryDirectory.resolve(".gdi").resolve(
+                    "ams-attachment-tmp"))).isTrue();
+        } finally {
+            if (copy != null) {
+                underTest.deleteTemporaryFile(copy);
+            }
+            if (originalTmpDir != null) {
+                System.setProperty("java.io.tmpdir", originalTmpDir);
+            } else {
+                System.clearProperty("java.io.tmpdir");
+            }
+            if (originalUserHome != null) {
+                System.setProperty("user.home", originalUserHome);
+            } else {
+                System.clearProperty("user.home");
+            }
+        }
+    }
+
+    @Test
     void cleanup_retry_removes_retained_copy_and_private_directory() throws IOException {
         underTest = spy(underTest);
         var copy = underTest.createTemporaryFile(631L, "upload.pdf");

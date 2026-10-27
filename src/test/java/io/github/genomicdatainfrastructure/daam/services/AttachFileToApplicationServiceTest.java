@@ -391,6 +391,26 @@ class AttachFileToApplicationServiceTest {
     }
 
     @Test
+    void blank_configured_temp_root_directory_falls_back_to_default_tmpdir() throws IOException {
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.of(" "),
+                remsApplicationCommandApi,
+                gateway
+        );
+        var expectedRoot = Path.of(System.getProperty("java.io.tmpdir")).toAbsolutePath()
+                .normalize();
+
+        var copy = underTest.createTemporaryFile(631L, "upload.pdf");
+        try {
+            var parentDirectory = copy.getParent().toAbsolutePath().normalize();
+            assertThat(parentDirectory.startsWith(expectedRoot)).isTrue();
+        } finally {
+            underTest.deleteTemporaryFile(copy);
+        }
+    }
+
+    @Test
     void fails_fast_when_configured_temp_root_is_not_a_directory() throws IOException {
         var configuredRootFile = Files.createFile(temporaryDirectory.resolve(
                 "upload-staging-file"));
@@ -428,6 +448,37 @@ class AttachFileToApplicationServiceTest {
             if (copy != null) {
                 underTest.deleteTemporaryFile(copy);
             }
+            if (originalTmpDir != null) {
+                System.setProperty("java.io.tmpdir", originalTmpDir);
+            } else {
+                System.clearProperty("java.io.tmpdir");
+            }
+            if (originalUserHome != null) {
+                System.setProperty("user.home", originalUserHome);
+            } else {
+                System.clearProperty("user.home");
+            }
+        }
+    }
+
+    @Test
+    void throws_last_failure_when_tmpdir_unavailable_and_user_home_is_blank() throws IOException {
+        var originalTmpDir = System.getProperty("java.io.tmpdir");
+        var originalUserHome = System.getProperty("user.home");
+        var unavailableTmpRoot = Files.createFile(temporaryDirectory.resolve("not-a-directory-2"));
+        System.setProperty("java.io.tmpdir", unavailableTmpRoot.toString());
+        System.setProperty("user.home", " ");
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.empty(),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        try {
+            assertThatThrownBy(() -> underTest.createTemporaryFile(631L, "upload.pdf"))
+                    .isInstanceOf(IOException.class);
+        } finally {
             if (originalTmpDir != null) {
                 System.setProperty("java.io.tmpdir", originalTmpDir);
             } else {

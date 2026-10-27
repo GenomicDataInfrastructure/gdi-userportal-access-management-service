@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -369,6 +370,24 @@ class AttachFileToApplicationServiceTest {
             underTest.deleteTemporaryFile(copy);
         }
         assertThat(copy.getParent()).doesNotExist();
+    }
+
+    @Test
+    void uses_configured_temp_root_directory() throws IOException {
+        var configuredRoot = Files.createDirectory(temporaryDirectory.resolve("upload-staging"));
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.of(configuredRoot.toString()),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        var copy = underTest.createTemporaryFile(631L, "upload.pdf");
+        try {
+            assertThat(copy.startsWith(configuredRoot)).isTrue();
+        } finally {
+            underTest.deleteTemporaryFile(copy);
+        }
     }
 
     @Test

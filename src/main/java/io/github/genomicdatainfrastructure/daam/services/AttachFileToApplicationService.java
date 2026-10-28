@@ -9,9 +9,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclEntryFlag;
+import java.nio.file.attribute.AclEntryPermission;
+import java.nio.file.attribute.AclEntryType;
+import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -99,7 +106,7 @@ public class AttachFileToApplicationService {
                 .map(Path::of);
     }
 
-    AttachFileToApplicationService(
+    public AttachFileToApplicationService(
             String remsApiKey,
             RemsApplicationCommandApi remsApplicationCommandApi,
             RemsApiQueryGateway apiQueryGateway
@@ -118,14 +125,7 @@ public class AttachFileToApplicationService {
     }
 
     Path createTemporaryFile(Long applicationId, String filename) throws IOException {
-        // A private directory protects the copy even on filesystems with permissive defaults.
-        FileAttribute<?>[] permissions = Path.of(System.getProperty("java.io.tmpdir"))
-                .getFileSystem().supportedFileAttributeViews().contains("posix")
-                        ? new FileAttribute<?>[]{PosixFilePermissions.asFileAttribute(
-                                PosixFilePermissions.fromString("rwx------"))}
-                        : new FileAttribute<?>[0];
-        var rootDirectory = selectAttachmentTempRootDirectory(applicationId, permissions);
-        var directory = Files.createTempDirectory(rootDirectory, "ams-attachment-", permissions);
+        var directory = createTemporaryDirectory(applicationId);
         temporaryDirectories.add(directory);
         try {
             var basename = filename.replace('\\', '/');
@@ -146,10 +146,7 @@ public class AttachFileToApplicationService {
         }
     }
 
-    private Path selectAttachmentTempRootDirectory(
-            Long applicationId,
-            FileAttribute<?>[] permissions
-    ) throws IOException {
+    private Path createTemporaryDirectory(Long applicationId) throws IOException {
         var candidates = new ArrayList<Path>();
         configuredAttachmentTempDirectory.ifPresent(candidates::add);
         candidates.add(Path.of(System.getProperty("java.io.tmpdir")));
@@ -160,8 +157,29 @@ public class AttachFileToApplicationService {
         IOException lastFailure = null;
         for (var candidate : candidates) {
             try {
+                var supportsPosix = candidate.getFileSystem().supportedFileAttributeViews()
+                        .contains(
+                                "posix");
+                FileAttribute<?>[] permissions = supportsPosix
+                        ? new FileAttribute<?>[]{PosixFilePermissions.asFileAttribute(
+                                PosixFilePermissions.fromString("rwx------"))}
+                        : new FileAttribute<?>[0];
                 Files.createDirectories(candidate, permissions);
-                return candidate;
+                var directory = Files.createTempDirectory(candidate, "ams-attachment-",
+                        permissions);
+                if (!supportsPosix) {
+                    try {
+                        enforcePrivateAccessForDirectory(directory);
+                    } catch (IOException aclError) {
+                        try {
+                            Files.deleteIfExists(directory);
+                        } catch (IOException cleanupError) {
+                            aclError.addSuppressed(cleanupError);
+                        }
+                        throw aclError;
+                    }
+                }
+                return directory;
             } catch (IOException e) {
                 LOG.warnf(e, "Attachment upload temp root unavailable: applicationId=%s, path=%s",
                         applicationId, candidate);
@@ -176,6 +194,22 @@ public class AttachFileToApplicationService {
             throw lastFailure;
         }
         throw new IOException("No attachment temp root directory candidates available");
+    }
+
+    private void enforcePrivateAccessForDirectory(Path directory) throws IOException {
+        var aclView = Files.getFileAttributeView(directory, AclFileAttributeView.class);
+        if (aclView == null) {
+            throw new IOException(
+                    "Unable to enforce private access on attachment staging directory without POSIX or ACL support");
+        }
+        var owner = aclView.getOwner();
+        var ownerOnlyAcl = AclEntry.newBuilder()
+                .setType(AclEntryType.ALLOW)
+                .setPrincipal(owner)
+                .setPermissions(EnumSet.allOf(AclEntryPermission.class))
+                .setFlags(AclEntryFlag.FILE_INHERIT, AclEntryFlag.DIRECTORY_INHERIT)
+                .build();
+        aclView.setAcl(List.of(ownerOnlyAcl));
     }
 
     void copyToTemporaryFile(File source, Path target) throws IOException {

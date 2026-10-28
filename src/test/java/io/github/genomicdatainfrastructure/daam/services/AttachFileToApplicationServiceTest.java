@@ -462,6 +462,50 @@ class AttachFileToApplicationServiceTest {
     }
 
     @Test
+    void falls_back_to_user_home_temp_root_when_java_tmpdir_exists_but_is_not_writable() throws IOException {
+        assumeTrue(temporaryDirectory.getFileSystem().supportedFileAttributeViews().contains(
+                "posix"));
+        var originalTmpDir = System.getProperty("java.io.tmpdir");
+        var originalUserHome = System.getProperty("user.home");
+        var unavailableTmpRoot = Files.createDirectory(temporaryDirectory.resolve(
+                "not-writable-tmp"));
+        Files.setPosixFilePermissions(unavailableTmpRoot, PosixFilePermissions.fromString(
+                "r-x------"));
+        assumeTrue(!Files.isWritable(unavailableTmpRoot));
+        System.setProperty("java.io.tmpdir", unavailableTmpRoot.toString());
+        System.setProperty("user.home", temporaryDirectory.toString());
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.empty(),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        Path copy = null;
+        try {
+            copy = underTest.createTemporaryFile(631L, "upload.pdf");
+            assertThat(copy.startsWith(temporaryDirectory.resolve(".gdi").resolve(
+                    "ams-attachment-tmp"))).isTrue();
+        } finally {
+            if (copy != null) {
+                underTest.deleteTemporaryFile(copy);
+            }
+            Files.setPosixFilePermissions(unavailableTmpRoot, PosixFilePermissions.fromString(
+                    "rwx------"));
+            if (originalTmpDir != null) {
+                System.setProperty("java.io.tmpdir", originalTmpDir);
+            } else {
+                System.clearProperty("java.io.tmpdir");
+            }
+            if (originalUserHome != null) {
+                System.setProperty("user.home", originalUserHome);
+            } else {
+                System.clearProperty("user.home");
+            }
+        }
+    }
+
+    @Test
     void throws_last_failure_when_tmpdir_unavailable_and_user_home_is_blank() throws IOException {
         var originalTmpDir = System.getProperty("java.io.tmpdir");
         var originalUserHome = System.getProperty("user.home");

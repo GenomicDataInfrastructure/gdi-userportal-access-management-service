@@ -9,16 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.AclEntry;
-import java.nio.file.attribute.AclEntryFlag;
-import java.nio.file.attribute.AclEntryPermission;
-import java.nio.file.attribute.AclEntryType;
-import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -161,25 +154,15 @@ public class AttachFileToApplicationService {
                 var supportsPosix = candidate.getFileSystem().supportedFileAttributeViews()
                         .contains(
                                 "posix");
-                FileAttribute<?>[] permissions = supportsPosix
-                        ? new FileAttribute<?>[]{PosixFilePermissions.asFileAttribute(
-                                PosixFilePermissions.fromString("rwx------"))}
-                        : new FileAttribute<?>[0];
+                if (!supportsPosix) {
+                    throw new IOException(
+                            "Unable to enforce private access on attachment staging directory");
+                }
+                FileAttribute<?>[] permissions = new FileAttribute<?>[]{PosixFilePermissions
+                        .asFileAttribute(PosixFilePermissions.fromString("rwx------"))};
                 Files.createDirectories(candidate, permissions);
                 var directory = Files.createTempDirectory(candidate, "ams-attachment-",
                         permissions);
-                if (!supportsPosix) {
-                    try {
-                        enforcePrivateAccessForDirectory(directory);
-                    } catch (IOException aclError) {
-                        try {
-                            Files.deleteIfExists(directory);
-                        } catch (IOException cleanupError) {
-                            aclError.addSuppressed(cleanupError);
-                        }
-                        throw aclError;
-                    }
-                }
                 return directory;
             } catch (IOException e) {
                 LOG.warnf(e, "Attachment upload temp root unavailable: applicationId=%s, path=%s",
@@ -192,22 +175,6 @@ public class AttachFileToApplicationService {
             }
         }
         throw lastFailure;
-    }
-
-    private void enforcePrivateAccessForDirectory(Path directory) throws IOException {
-        var aclView = Files.getFileAttributeView(directory, AclFileAttributeView.class);
-        if (aclView == null) {
-            throw new IOException(
-                    "Unable to enforce private access on attachment staging directory without POSIX or ACL support");
-        }
-        var owner = aclView.getOwner();
-        var ownerOnlyAcl = AclEntry.newBuilder()
-                .setType(AclEntryType.ALLOW)
-                .setPrincipal(owner)
-                .setPermissions(EnumSet.allOf(AclEntryPermission.class))
-                .setFlags(AclEntryFlag.FILE_INHERIT, AclEntryFlag.DIRECTORY_INHERIT)
-                .build();
-        aclView.setAcl(List.of(ownerOnlyAcl));
     }
 
     void copyToTemporaryFile(File source, Path target) throws IOException {

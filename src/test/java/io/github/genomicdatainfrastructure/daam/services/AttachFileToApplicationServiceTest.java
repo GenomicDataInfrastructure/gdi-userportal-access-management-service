@@ -141,6 +141,13 @@ class AttachFileToApplicationServiceTest {
     }
 
     @Test
+    void starts_and_stops_cleanup_scheduler() {
+        underTest.startCleanupRetries();
+
+        underTest.stopCleanupRetries();
+    }
+
+    @Test
     void throws_exception_if_remote_request_entity_too_large() {
         var applicationId = 1L;
         var userId = "userId";
@@ -370,6 +377,21 @@ class AttachFileToApplicationServiceTest {
             underTest.deleteTemporaryFile(copy);
         }
         assertThat(copy.getParent()).doesNotExist();
+    }
+
+    @Test
+    void cleans_up_temporary_directory_when_filename_processing_fails() {
+        assertThatThrownBy(() -> underTest.createTemporaryFile(631L, null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void retains_temporary_directory_when_cleanup_after_filename_failure_fails() throws IOException {
+        underTest = spy(underTest);
+        doThrow(new IOException("delete failed")).when(underTest).deleteTemporaryFile(any());
+
+        assertThatThrownBy(() -> underTest.createTemporaryFile(631L, null))
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test

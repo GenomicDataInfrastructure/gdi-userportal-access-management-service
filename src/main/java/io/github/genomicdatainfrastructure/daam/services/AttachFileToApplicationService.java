@@ -154,7 +154,8 @@ public class AttachFileToApplicationService {
         if (userHome != null && !userHome.isBlank()) {
             candidates.add(Path.of(userHome, ".gdi", "ams-attachment-tmp"));
         }
-        IOException lastFailure = null;
+        IOException lastFailure = new IOException(
+                "No attachment temp root directory candidates available");
         for (var candidate : candidates) {
             try {
                 var supportsPosix = candidate.getFileSystem().supportedFileAttributeViews()
@@ -190,10 +191,7 @@ public class AttachFileToApplicationService {
                 }
             }
         }
-        if (lastFailure != null) {
-            throw lastFailure;
-        }
-        throw new IOException("No attachment temp root directory candidates available");
+        throw lastFailure;
     }
 
     private void enforcePrivateAccessForDirectory(Path directory) throws IOException {

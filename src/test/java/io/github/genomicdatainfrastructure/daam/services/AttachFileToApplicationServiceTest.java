@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -137,6 +138,13 @@ class AttachFileToApplicationServiceTest {
         ));
 
         verify(gateway).checkIfApplicationIsEditableByUser(applicationId, userId);
+    }
+
+    @Test
+    void starts_and_stops_cleanup_scheduler() {
+        underTest.startCleanupRetries();
+
+        underTest.stopCleanupRetries();
     }
 
     @Test
@@ -369,6 +377,185 @@ class AttachFileToApplicationServiceTest {
             underTest.deleteTemporaryFile(copy);
         }
         assertThat(copy.getParent()).doesNotExist();
+    }
+
+    @Test
+    void cleans_up_temporary_directory_when_filename_processing_fails() {
+        assertThatThrownBy(() -> underTest.createTemporaryFile(631L, null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void retains_temporary_directory_when_cleanup_after_filename_failure_fails() throws IOException {
+        underTest = spy(underTest);
+        doThrow(new IOException("delete failed")).when(underTest).deleteTemporaryFile(any());
+
+        assertThatThrownBy(() -> underTest.createTemporaryFile(631L, null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void uses_configured_temp_root_directory() throws IOException {
+        var configuredRoot = Files.createDirectory(temporaryDirectory.resolve("upload-staging"));
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.of(configuredRoot.toString()),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        var copy = underTest.createTemporaryFile(631L, "upload.pdf");
+        try {
+            assertThat(copy.startsWith(configuredRoot)).isTrue();
+        } finally {
+            underTest.deleteTemporaryFile(copy);
+        }
+    }
+
+    @Test
+    void blank_configured_temp_root_directory_falls_back_to_default_tmpdir() throws IOException {
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.of(" "),
+                remsApplicationCommandApi,
+                gateway
+        );
+        var expectedRoot = Path.of(System.getProperty("java.io.tmpdir")).toAbsolutePath()
+                .normalize();
+
+        var copy = underTest.createTemporaryFile(631L, "upload.pdf");
+        try {
+            var parentDirectory = copy.getParent().toAbsolutePath().normalize();
+            assertThat(parentDirectory.startsWith(expectedRoot)).isTrue();
+        } finally {
+            underTest.deleteTemporaryFile(copy);
+        }
+    }
+
+    @Test
+    void fails_fast_when_configured_temp_root_is_not_a_directory() throws IOException {
+        var configuredRootFile = Files.createFile(temporaryDirectory.resolve(
+                "upload-staging-file"));
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.of(configuredRootFile.toString()),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        assertThatThrownBy(() -> underTest.createTemporaryFile(631L, "upload.pdf"))
+                .isInstanceOf(IOException.class);
+    }
+
+    @Test
+    void falls_back_to_user_home_temp_root_when_java_tmpdir_is_unavailable() throws IOException {
+        var originalTmpDir = System.getProperty("java.io.tmpdir");
+        var originalUserHome = System.getProperty("user.home");
+        var unavailableTmpRoot = Files.createFile(temporaryDirectory.resolve("not-a-directory"));
+        System.setProperty("java.io.tmpdir", unavailableTmpRoot.toString());
+        System.setProperty("user.home", temporaryDirectory.toString());
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.empty(),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        Path copy = null;
+        try {
+            copy = underTest.createTemporaryFile(631L, "upload.pdf");
+            assertThat(copy.startsWith(temporaryDirectory.resolve(".gdi").resolve(
+                    "ams-attachment-tmp"))).isTrue();
+        } finally {
+            if (copy != null) {
+                underTest.deleteTemporaryFile(copy);
+            }
+            if (originalTmpDir != null) {
+                System.setProperty("java.io.tmpdir", originalTmpDir);
+            } else {
+                System.clearProperty("java.io.tmpdir");
+            }
+            if (originalUserHome != null) {
+                System.setProperty("user.home", originalUserHome);
+            } else {
+                System.clearProperty("user.home");
+            }
+        }
+    }
+
+    @Test
+    void falls_back_to_user_home_temp_root_when_java_tmpdir_exists_but_is_not_writable() throws IOException {
+        assumeTrue(temporaryDirectory.getFileSystem().supportedFileAttributeViews().contains(
+                "posix"));
+        var originalTmpDir = System.getProperty("java.io.tmpdir");
+        var originalUserHome = System.getProperty("user.home");
+        var unavailableTmpRoot = Files.createDirectory(temporaryDirectory.resolve(
+                "not-writable-tmp"));
+        Files.setPosixFilePermissions(unavailableTmpRoot, PosixFilePermissions.fromString(
+                "r-x------"));
+        assumeTrue(!Files.isWritable(unavailableTmpRoot));
+        System.setProperty("java.io.tmpdir", unavailableTmpRoot.toString());
+        System.setProperty("user.home", temporaryDirectory.toString());
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.empty(),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        Path copy = null;
+        try {
+            copy = underTest.createTemporaryFile(631L, "upload.pdf");
+            assertThat(copy.startsWith(temporaryDirectory.resolve(".gdi").resolve(
+                    "ams-attachment-tmp"))).isTrue();
+        } finally {
+            if (copy != null) {
+                underTest.deleteTemporaryFile(copy);
+            }
+            Files.setPosixFilePermissions(unavailableTmpRoot, PosixFilePermissions.fromString(
+                    "rwx------"));
+            if (originalTmpDir != null) {
+                System.setProperty("java.io.tmpdir", originalTmpDir);
+            } else {
+                System.clearProperty("java.io.tmpdir");
+            }
+            if (originalUserHome != null) {
+                System.setProperty("user.home", originalUserHome);
+            } else {
+                System.clearProperty("user.home");
+            }
+        }
+    }
+
+    @Test
+    void throws_last_failure_when_tmpdir_unavailable_and_user_home_is_blank() throws IOException {
+        var originalTmpDir = System.getProperty("java.io.tmpdir");
+        var originalUserHome = System.getProperty("user.home");
+        var unavailableTmpRoot = Files.createFile(temporaryDirectory.resolve("not-a-directory-2"));
+        System.setProperty("java.io.tmpdir", unavailableTmpRoot.toString());
+        System.setProperty("user.home", " ");
+        underTest = new AttachFileToApplicationService(
+                REMS_API_KEY,
+                Optional.empty(),
+                remsApplicationCommandApi,
+                gateway
+        );
+
+        try {
+            assertThatThrownBy(() -> underTest.createTemporaryFile(631L, "upload.pdf"))
+                    .isInstanceOf(IOException.class);
+        } finally {
+            if (originalTmpDir != null) {
+                System.setProperty("java.io.tmpdir", originalTmpDir);
+            } else {
+                System.clearProperty("java.io.tmpdir");
+            }
+            if (originalUserHome != null) {
+                System.setProperty("user.home", originalUserHome);
+            } else {
+                System.clearProperty("user.home");
+            }
+        }
     }
 
     @Test

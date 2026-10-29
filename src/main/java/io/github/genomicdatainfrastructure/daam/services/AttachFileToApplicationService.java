@@ -11,6 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.nio.file.attribute.FileAttribute;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -45,6 +47,7 @@ public class AttachFileToApplicationService {
     private final String remsApiKey;
     private final RemsApplicationCommandApi remsApplicationCommandApi;
     private final RemsApiQueryGateway gateway;
+    private final Optional<Path> configuredAttachmentTempDirectory;
 
     private final ConcurrentHashMap<Path, Long> pendingCleanup = new ConcurrentHashMap<>();
     private final Set<Path> temporaryDirectories = ConcurrentHashMap.newKeySet();
@@ -84,12 +87,24 @@ public class AttachFileToApplicationService {
     @Inject
     public AttachFileToApplicationService(
             @ConfigProperty(name = "quarkus.rest-client.rems_yaml.api-key") String remsApiKey,
+            @ConfigProperty(name = "daam.attachment-upload.temp-directory") Optional<String> configuredAttachmentTempDirectory,
             @RestClient RemsApplicationCommandApi remsApplicationCommandApi,
             RemsApiQueryGateway apiQueryGateway
     ) {
         this.remsApiKey = remsApiKey;
         this.remsApplicationCommandApi = remsApplicationCommandApi;
         this.gateway = apiQueryGateway;
+        this.configuredAttachmentTempDirectory = configuredAttachmentTempDirectory
+                .filter(path -> !path.isBlank())
+                .map(Path::of);
+    }
+
+    public AttachFileToApplicationService(
+            String remsApiKey,
+            RemsApplicationCommandApi remsApplicationCommandApi,
+            RemsApiQueryGateway apiQueryGateway
+    ) {
+        this(remsApiKey, Optional.empty(), remsApplicationCommandApi, apiQueryGateway);
     }
 
     public AddedAttachment attach(Long applicationId, String userId, String filename, File file) {
@@ -103,13 +118,7 @@ public class AttachFileToApplicationService {
     }
 
     Path createTemporaryFile(Long applicationId, String filename) throws IOException {
-        // A private directory protects the copy even on filesystems with permissive defaults.
-        FileAttribute<?>[] permissions = Path.of(System.getProperty("java.io.tmpdir"))
-                .getFileSystem().supportedFileAttributeViews().contains("posix")
-                        ? new FileAttribute<?>[]{PosixFilePermissions.asFileAttribute(
-                                PosixFilePermissions.fromString("rwx------"))}
-                        : new FileAttribute<?>[0];
-        var directory = Files.createTempDirectory("ams-attachment-", permissions);
+        var directory = createTemporaryDirectory(applicationId);
         temporaryDirectories.add(directory);
         try {
             var basename = filename.replace('\\', '/');
@@ -128,6 +137,44 @@ public class AttachFileToApplicationService {
             }
             throw e;
         }
+    }
+
+    private Path createTemporaryDirectory(Long applicationId) throws IOException {
+        var candidates = new ArrayList<Path>();
+        configuredAttachmentTempDirectory.ifPresent(candidates::add);
+        candidates.add(Path.of(System.getProperty("java.io.tmpdir")));
+        var userHome = System.getProperty("user.home");
+        if (userHome != null && !userHome.isBlank()) {
+            candidates.add(Path.of(userHome, ".gdi", "ams-attachment-tmp"));
+        }
+        IOException lastFailure = new IOException(
+                "No attachment temp root directory candidates available");
+        for (var candidate : candidates) {
+            try {
+                var supportsPosix = candidate.getFileSystem().supportedFileAttributeViews()
+                        .contains(
+                                "posix");
+                if (!supportsPosix) {
+                    throw new IOException(
+                            "Unable to enforce private access on attachment staging directory");
+                }
+                FileAttribute<?>[] permissions = new FileAttribute<?>[]{PosixFilePermissions
+                        .asFileAttribute(PosixFilePermissions.fromString("rwx------"))};
+                Files.createDirectories(candidate, permissions);
+                var directory = Files.createTempDirectory(candidate, "ams-attachment-",
+                        permissions);
+                return directory;
+            } catch (IOException e) {
+                LOG.warnf(e, "Attachment upload temp root unavailable: applicationId=%s, path=%s",
+                        applicationId, candidate);
+                lastFailure = e;
+                if (configuredAttachmentTempDirectory.isPresent()
+                        && configuredAttachmentTempDirectory.get().equals(candidate)) {
+                    throw e;
+                }
+            }
+        }
+        throw lastFailure;
     }
 
     void copyToTemporaryFile(File source, Path target) throws IOException {

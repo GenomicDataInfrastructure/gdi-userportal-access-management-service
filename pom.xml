@@ -19,7 +19,7 @@
         <quarkus.platform.version>3.37.4</quarkus.platform.version>
         <skipITs>true</skipITs>
         <surefire.version>3.5.6</surefire.version>
-        <quarkus-wiremock.version>1.6.3</quarkus-wiremock.version>
+        <quarkus-wiremock.version>1.8.1</quarkus-wiremock.version>
         <jacoco-maven-plugin.version>0.8.16</jacoco-maven-plugin.version>
         <brotli4j.version>1.24.0</brotli4j.version>
         <netty.version>4.2.19.Final</netty.version>

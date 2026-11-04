@@ -12,6 +12,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [v1.4.4] - 2026-10-30
+
+### Changed
+- chore(deps): update oras-project/setup-oras digest to 5e2f248 by @Renovate Bot in 7142cd8
+- chore(deps): update dependency org.jacoco:jacoco-maven-plugin to v0.8.16 by @Renovate Bot in ebeb3e4
+- chore(deps): update graalvm/setup-graalvm digest to f70bc80 by @Renovate Bot in 098ba29
+- chore(deps): update eclipse-temurin docker tag to v21.0.12_8-jdk by @Renovate Bot in 917cedd
+- doc: update CHANGELOG.md for v1.4.1 by @LNDS-Sysadmins in 4476edf
+
+
+### Fixed
+- fix: support configurable temp staging dir for attachments (#309) by @aslam-mohammed-vp in 49d3231
+
+
 ## [v1.4.1] - 2026-10-23
 
 ### Changed
